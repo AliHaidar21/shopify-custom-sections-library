@@ -1,0 +1,315 @@
+{{ 'premium-faq-accordion.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="premium-faq-accordion premium-faq-accordion--{{ section.id }}"
+  data-premium-faq
+  data-single-open="{{ section.settings.only_one_open }}"
+  style="
+    --pfa-bg: {{ section.settings.section_background }};
+    --pfa-title: {{ section.settings.title_color }};
+    --pfa-text: {{ section.settings.text_color }};
+    --pfa-muted: {{ section.settings.muted_text_color }};
+    --pfa-card-bg: {{ section.settings.card_background }};
+    --pfa-border: {{ section.settings.border_color }};
+    --pfa-shadow-color: {{ section.settings.shadow_color }};
+    --pfa-shadow-opacity: {{ section.settings.shadow_opacity | divided_by: 100.0 }};
+    --pfa-radius: {{ section.settings.card_radius }}px;
+    --pfa-max-width: {{ section.settings.max_width }}px;
+    --pfa-padding-top: {{ section.settings.padding_top }}px;
+    --pfa-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="premium-faq-accordion__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="premium-faq-accordion__title">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.subheading != blank %}
+      <div class="premium-faq-accordion__subheading">
+        {{ section.settings.subheading }}
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="premium-faq-accordion__list">
+        {% for block in section.blocks %}
+          {% liquid
+            assign is_open = false
+
+            if section.settings.open_first_item and forloop.first
+              assign is_open = true
+            endif
+
+            assign question_id = 'PremiumFaqQuestion-' | append: section.id | append: '-' | append: forloop.index
+            assign answer_id = 'PremiumFaqAnswer-' | append: section.id | append: '-' | append: forloop.index
+          %}
+
+          <div
+            class="premium-faq-accordion__item {% if is_open %}is-active{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <button
+              id="{{ question_id }}"
+              class="premium-faq-accordion__question"
+              type="button"
+              aria-expanded="{% if is_open %}true{% else %}false{% endif %}"
+              aria-controls="{{ answer_id }}"
+            >
+              <span class="premium-faq-accordion__question-text">
+                {{ block.settings.question }}
+              </span>
+
+              <span
+                class="premium-faq-accordion__icon"
+                aria-hidden="true"
+                data-plus="{{ section.settings.plus_icon | escape }}"
+                data-minus="{{ section.settings.minus_icon | escape }}"
+              >
+                {% if is_open %}
+                  {{ section.settings.minus_icon }}
+                {% else %}
+                  {{ section.settings.plus_icon }}
+                {% endif %}
+              </span>
+            </button>
+
+            <div
+              id="{{ answer_id }}"
+              class="premium-faq-accordion__answer"
+              role="region"
+              aria-labelledby="{{ question_id }}"
+              {% unless is_open %}hidden{% endunless %}
+            >
+              <div class="premium-faq-accordion__answer-inner">
+                {{ block.settings.answer }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% elsif request.design_mode %}
+      <div class="premium-faq-accordion__empty">
+        Add FAQ blocks to build your accordion.
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script src="{{ 'premium-faq-accordion.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Premium FAQ accordion",
+  "tag": "section",
+  "class": "section-premium-faq-accordion",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Everything you need to know about your Anki experience</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first_item",
+      "label": "Open first FAQ by default",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "only_one_open",
+      "label": "Allow only one FAQ open at a time",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "plus_icon",
+      "label": "Closed icon",
+      "default": "+"
+    },
+    {
+      "type": "text",
+      "id": "minus_icon",
+      "label": "Open icon",
+      "default": "×"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 600,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 900
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card radius",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "shadow_opacity",
+      "label": "Shadow strength",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "default": 5
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#304D6D"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Question text color",
+      "default": "#304D6D"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Answer and subtitle color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Card border color",
+      "default": "#E4EAF0"
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Shadow color",
+      "default": "#304D6D"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is Studymote remote?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Studymote is a compact remote designed for flashcard app users that lets you control your flashcards effortlessly without using your keyboard.</p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 16,
+  "presets": [
+    {
+      "name": "Premium FAQ accordion",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What is Studymote remote?",
+            "answer": "<p>Studymote is a compact remote designed for flashcard app users that lets you control your flashcards effortlessly without using your keyboard.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How does it improve my studying?",
+            "answer": "<p>It reduces time per card, removes awkward shortcuts, improves posture, and lets you study anywhere — making your reviews faster and smoother.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Is it compatible with my device?",
+            "answer": "<p>Yes — Studymote works with Anki on laptops, tablets, and phones that support Bluetooth input.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Can I use it while lying down or walking?",
+            "answer": "<p>Absolutely. Studymote is designed so you can study comfortably anywhere — in bed, on the couch, or even while walking.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What are the product specifications?",
+            "answer": "<p>Dimensions: 73 × 36.5 × 14.7 mm. Weight: 20.7g — ultra-light and pocket-sized.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship inside Lebanon?",
+            "answer": "<p>Yes, we offer shipping across all regions in Lebanon.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Is it easy to use?",
+            "answer": "<p>Very easy — just connect via Bluetooth and start reviewing. No setup headaches.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
