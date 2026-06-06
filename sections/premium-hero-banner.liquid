@@ -1,0 +1,483 @@
+{{ 'premium-hero-banner.css' | asset_url | stylesheet_tag }}
+
+{% if section.settings.load_cinzel_font %}
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+{% endif %}
+
+{% liquid
+  assign cta_link = section.settings.cta_link
+  assign card_link = section.settings.card_link
+
+  if card_link == blank
+    assign card_link = cta_link
+  endif
+
+  assign overlay_desktop_strength = section.settings.overlay_desktop_strength | divided_by: 100.0
+  assign overlay_mobile_strength = section.settings.overlay_mobile_strength | divided_by: 100.0
+  assign card_opacity = section.settings.card_background_opacity | divided_by: 100.0
+%}
+
+<section
+  class="premium-hero-banner premium-hero-banner--{{ section.id }} {% if section.settings.full_bleed %}premium-hero-banner--full-bleed{% endif %}"
+  style="
+    --phb-bg-color: {{ section.settings.background_color }};
+    --phb-text-color: {{ section.settings.text_color }};
+    --phb-muted-text-color: {{ section.settings.muted_text_color }};
+    --phb-accent-color: {{ section.settings.accent_color }};
+    --phb-chip-bg: {{ section.settings.chip_background }};
+    --phb-chip-border: {{ section.settings.chip_border }};
+    --phb-button-start: {{ section.settings.button_gradient_start }};
+    --phb-button-end: {{ section.settings.button_gradient_end }};
+    --phb-button-text: {{ section.settings.button_text_color }};
+    --phb-card-bg-alpha: {{ card_opacity }};
+    --phb-desktop-min-height: {{ section.settings.desktop_min_height }}px;
+    --phb-desktop-max-height: {{ section.settings.desktop_max_height }}px;
+    --phb-mobile-header-offset: {{ section.settings.mobile_header_offset }}px;
+    --phb-overlay-desktop-strength: {{ overlay_desktop_strength }};
+    --phb-overlay-mobile-strength: {{ overlay_mobile_strength }};
+    --phb-bg-position: {{ section.settings.background_position }};
+  "
+>
+  <div class="premium-hero-banner__container">
+    <div
+      class="premium-hero-banner__media"
+      {% if section.settings.background_image != blank %}
+        style="--phb-bg-image: url('{{ section.settings.background_image | image_url: width: 2400 }}');"
+      {% endif %}
+    >
+      {% if section.settings.background_image != blank %}
+        {{
+          section.settings.background_image
+          | image_url: width: 1800
+          | image_tag:
+            class: 'premium-hero-banner__mobile-image',
+            loading: 'eager',
+            alt: section.settings.background_alt
+        }}
+      {% else %}
+        <div class="premium-hero-banner__placeholder">
+          Add a background image
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="premium-hero-banner__inner">
+      <div class="premium-hero-banner__copy">
+        {% if section.settings.eyebrow_highlight != blank or section.settings.eyebrow_text != blank %}
+          <div class="premium-hero-banner__eyebrow">
+            {% if section.settings.eyebrow_highlight != blank %}
+              <b>{{ section.settings.eyebrow_highlight }}</b>
+            {% endif %}
+            {% if section.settings.eyebrow_text != blank %}
+              <span>{{ section.settings.eyebrow_text }}</span>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if section.settings.heading_before != blank or section.settings.heading_highlight != blank or section.settings.heading_after != blank %}
+          <h1 class="premium-hero-banner__heading">
+            {{ section.settings.heading_before }}
+            {% if section.settings.heading_highlight != blank %}
+              <span>{{ section.settings.heading_highlight }}</span>
+            {% endif %}
+            {{ section.settings.heading_after }}
+          </h1>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <div class="premium-hero-banner__subheading">
+            {{ section.settings.subheading }}
+          </div>
+        {% endif %}
+
+        {% if section.blocks.size > 0 %}
+          <ul class="premium-hero-banner__chips" aria-label="{{ section.settings.chips_accessibility_label | escape }}">
+            {% for block in section.blocks %}
+              {% if block.type == 'chip' and block.settings.text != blank %}
+                <li class="premium-hero-banner__chip" {{ block.shopify_attributes }}>
+                  {{ block.settings.text }}
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if section.settings.cta_text != blank and cta_link != blank %}
+          <a
+            href="{{ cta_link }}"
+            class="premium-hero-banner__cta"
+            aria-label="{{ section.settings.cta_accessibility_label | escape }}"
+          >
+            {{ section.settings.cta_text }}
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        {% endif %}
+
+        {% if section.settings.trust_line != blank %}
+          <p class="premium-hero-banner__trust">
+            {{ section.settings.trust_line }}
+          </p>
+        {% endif %}
+      </div>
+
+      {% if section.settings.show_card %}
+        {% if card_link != blank %}
+          <a
+            href="{{ card_link }}"
+            class="premium-hero-banner__card-link"
+            aria-label="{{ section.settings.card_accessibility_label | escape }}"
+          >
+        {% else %}
+          <div class="premium-hero-banner__card-link premium-hero-banner__card-link--static">
+        {% endif %}
+
+          <div class="premium-hero-banner__card">
+            {% if section.settings.card_image != blank %}
+              {{
+                section.settings.card_image
+                | image_url: width: 900
+                | image_tag:
+                  class: 'premium-hero-banner__card-image',
+                  loading: 'lazy',
+                  alt: section.settings.card_image_alt
+              }}
+            {% else %}
+              <div class="premium-hero-banner__card-placeholder">
+                Add product card image
+              </div>
+            {% endif %}
+
+            {% if section.settings.card_title != blank %}
+              <div class="premium-hero-banner__card-body">
+                <p class="premium-hero-banner__card-title">
+                  {{ section.settings.card_title }}
+                </p>
+              </div>
+            {% endif %}
+          </div>
+
+        {% if card_link != blank %}
+          </a>
+        {% else %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Premium hero banner",
+  "tag": "section",
+  "class": "section-premium-hero-banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_bleed",
+      "label": "Make section full width",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "load_cinzel_font",
+      "label": "Load Cinzel font for premium heading",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "background_alt",
+      "label": "Background image alt text",
+      "default": "Premium product hero background"
+    },
+    {
+      "type": "select",
+      "id": "background_position",
+      "label": "Background position",
+      "default": "center center",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "center top",
+          "label": "Top"
+        },
+        {
+          "value": "center 30%",
+          "label": "Upper center"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "desktop_min_height",
+      "label": "Desktop minimum height",
+      "min": 500,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 620
+    },
+    {
+      "type": "range",
+      "id": "desktop_max_height",
+      "label": "Desktop maximum height",
+      "min": 700,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 920
+    },
+    {
+      "type": "range",
+      "id": "mobile_header_offset",
+      "label": "Mobile top spacing for sticky header",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "overlay_desktop_strength",
+      "label": "Desktop overlay strength",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "overlay_mobile_strength",
+      "label": "Mobile overlay strength",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_highlight",
+      "label": "Eyebrow highlighted text",
+      "default": "Free shipping"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow normal text",
+      "default": "on 2+ items"
+    },
+    {
+      "type": "text",
+      "id": "heading_before",
+      "label": "Heading before highlight",
+      "default": "The Secret to"
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Highlighted heading text",
+      "default": "Salon Level Texture"
+    },
+    {
+      "type": "text",
+      "id": "heading_after",
+      "label": "Heading after highlight",
+      "default": "at Home"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Premium texture, volume, and effortless styling in seconds.</p>"
+    },
+    {
+      "type": "text",
+      "id": "chips_accessibility_label",
+      "label": "Benefit chips accessibility label",
+      "default": "Product benefits"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_accessibility_label",
+      "label": "CTA accessibility label",
+      "default": "Shop the product"
+    },
+    {
+      "type": "text",
+      "id": "trust_line",
+      "label": "Trust line",
+      "default": "⭐ 4.8/5 rated by customers • Fast shipping • 30-day satisfaction guarantee"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_card",
+      "label": "Show product card",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_image",
+      "label": "Product card image"
+    },
+    {
+      "type": "text",
+      "id": "card_image_alt",
+      "label": "Product card image alt text",
+      "default": "Featured product"
+    },
+    {
+      "type": "text",
+      "id": "card_title",
+      "label": "Product card title",
+      "default": "Roux Body Works Texturizer"
+    },
+    {
+      "type": "url",
+      "id": "card_link",
+      "label": "Product card link"
+    },
+    {
+      "type": "text",
+      "id": "card_accessibility_label",
+      "label": "Product card accessibility label",
+      "default": "View featured product"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Fallback background color",
+      "default": "#0b1224"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Main text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Muted text color",
+      "default": "#e8edf5"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#38b6cc"
+    },
+    {
+      "type": "color",
+      "id": "chip_background",
+      "label": "Chip background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "chip_border",
+      "label": "Chip border",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_gradient_start",
+      "label": "Button gradient start",
+      "default": "#041f60"
+    },
+    {
+      "type": "color",
+      "id": "button_gradient_end",
+      "label": "Button gradient end",
+      "default": "#0a2b7a"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_background_opacity",
+      "label": "Product card glass opacity",
+      "min": 5,
+      "max": 35,
+      "step": 1,
+      "unit": "%",
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chip",
+      "name": "Benefit chip",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Chip text",
+          "default": "Touchable hold"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Premium hero banner",
+      "blocks": [
+        {
+          "type": "chip",
+          "settings": {
+            "text": "Adds grip for waves & updos"
+          }
+        },
+        {
+          "type": "chip",
+          "settings": {
+            "text": "Touchable hold, no crunch"
+          }
+        },
+        {
+          "type": "chip",
+          "settings": {
+            "text": "Defines without flakes"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
