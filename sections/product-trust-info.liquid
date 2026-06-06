@@ -1,0 +1,338 @@
+{{ 'product-trust-info.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="product-trust-info product-trust-info--{{ section.id }}"
+  style="
+    --pti-bg: {{ section.settings.section_background }};
+    --pti-text: {{ section.settings.text_color }};
+    --pti-accent: {{ section.settings.accent_color }};
+    --pti-muted-bg: {{ section.settings.muted_background }};
+    --pti-border: {{ section.settings.border_color }};
+    --pti-icon-bg: {{ section.settings.icon_background }};
+    --pti-icon-color: {{ section.settings.icon_color }};
+    --pti-max-width: {{ section.settings.max_width }}px;
+  "
+>
+  <div class="product-trust-info__inner">
+    {% if section.settings.show_delivery_bar %}
+      <div class="product-trust-info__delivery" role="note">
+        <span class="product-trust-info__delivery-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 7h11v8H3z"></path>
+            <path d="M14 10h3l3 3v2h-6z"></path>
+            <circle cx="7.5" cy="18.5" r="1.5"></circle>
+            <circle cx="17.5" cy="18.5" r="1.5"></circle>
+          </svg>
+        </span>
+
+        <span class="product-trust-info__delivery-text">
+          {{ section.settings.delivery_text }}
+          {% if section.settings.delivery_highlight != blank %}
+            <strong>{{ section.settings.delivery_highlight }}</strong>
+          {% endif %}
+          {{ section.settings.delivery_text_after }}
+        </span>
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="product-trust-info__trust-grid" aria-label="{{ section.settings.trust_accessibility_label | escape }}">
+        {% for block in section.blocks %}
+          {% if block.type == 'trust_item' %}
+            <div class="product-trust-info__trust-item" {{ block.shopify_attributes }}>
+              <div class="product-trust-info__trust-icon" aria-hidden="true">
+                {% case block.settings.icon %}
+                  {% when 'truck' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M3 7h11v8H3z"></path>
+                      <path d="M14 10h3l3 3v2h-6z"></path>
+                      <circle cx="7.5" cy="18.5" r="1.5"></circle>
+                      <circle cx="17.5" cy="18.5" r="1.5"></circle>
+                    </svg>
+                  {% when 'shield' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z"></path>
+                      <path d="M9 12l2 2 4-4"></path>
+                    </svg>
+                  {% when 'guarantee' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 8v5"></path>
+                      <path d="M12 16h.01"></path>
+                      <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  {% when 'star' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2 7.5 14 3 9.6l6.2-.9L12 3z"></path>
+                    </svg>
+                  {% else %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                {% endcase %}
+              </div>
+
+              {% if block.settings.title != blank %}
+                <p class="product-trust-info__trust-title">{{ block.settings.title }}</p>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if section.settings.proof_text != blank %}
+      <p class="product-trust-info__proof">{{ section.settings.proof_text }}</p>
+    {% endif %}
+
+    <div class="product-trust-info__collapsibles">
+      {% if section.settings.ingredients_title != blank %}
+        <div class="product-trust-info__collapsible">
+          <button
+            class="product-trust-info__collapsible-header"
+            type="button"
+            aria-expanded="false"
+          >
+            <span class="product-trust-info__collapsible-left">
+              <span class="product-trust-info__collapsible-symbol" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </span>
+              <span>{{ section.settings.ingredients_title }}</span>
+            </span>
+            <span class="product-trust-info__toggle-icon" aria-hidden="true">+</span>
+          </button>
+
+          <div class="product-trust-info__collapsible-content" hidden>
+            <div class="product-trust-info__collapsible-inner">
+              {{ section.settings.ingredients_content }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if section.settings.description_title != blank %}
+        <div class="product-trust-info__collapsible">
+          <button
+            class="product-trust-info__collapsible-header"
+            type="button"
+            aria-expanded="false"
+          >
+            <span class="product-trust-info__collapsible-left">
+              <span class="product-trust-info__collapsible-symbol" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 6h16M4 12h16M4 18h10"></path>
+                  <rect x="8" y="2" width="8" height="20" rx="1"></rect>
+                </svg>
+              </span>
+              <span>{{ section.settings.description_title }}</span>
+            </span>
+            <span class="product-trust-info__toggle-icon" aria-hidden="true">+</span>
+          </button>
+
+          <div class="product-trust-info__collapsible-content" hidden>
+            <div class="product-trust-info__collapsible-inner">
+              {{ section.settings.description_content }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'product-trust-info.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Product trust info",
+  "tag": "section",
+  "class": "section-product-trust-info",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_delivery_bar",
+      "label": "Show delivery bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "delivery_text",
+      "label": "Delivery text before highlight",
+      "default": "Order now to receive it in "
+    },
+    {
+      "type": "text",
+      "id": "delivery_highlight",
+      "label": "Delivery highlighted text",
+      "default": "2-4 days"
+    },
+    {
+      "type": "text",
+      "id": "delivery_text_after",
+      "label": "Delivery text after highlight",
+      "default": " in Lebanon"
+    },
+    {
+      "type": "text",
+      "id": "trust_accessibility_label",
+      "label": "Trust items accessibility label",
+      "default": "Product trust benefits"
+    },
+    {
+      "type": "text",
+      "id": "proof_text",
+      "label": "Proof or urgency text",
+      "default": "Very few packs left"
+    },
+    {
+      "type": "text",
+      "id": "ingredients_title",
+      "label": "Ingredients title",
+      "default": "INGREDIENTS"
+    },
+    {
+      "type": "richtext",
+      "id": "ingredients_content",
+      "label": "Ingredients content",
+      "default": "<p><strong>Silica:</strong> Helps give your hair more volume and a fuller look.</p><p><strong>Glycerin:</strong> Makes your hair feel soft and smooth.</p><p><strong>Corn starch:</strong> Removes extra oil to keep hair fresh.</p>"
+    },
+    {
+      "type": "text",
+      "id": "description_title",
+      "label": "Description title",
+      "default": "DESCRIPTION"
+    },
+    {
+      "type": "richtext",
+      "id": "description_content",
+      "label": "Description content",
+      "default": "<p>Our Hair Texturizer Powder gives your hair instant lift and natural texture in seconds. It is lightweight, mess free, and effortless to use.</p>"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 500,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 1050
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Main text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#041f60"
+    },
+    {
+      "type": "color",
+      "id": "muted_background",
+      "label": "Delivery bar background",
+      "default": "#f6f7f9"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Divider color",
+      "default": "#e2e5ec"
+    },
+    {
+      "type": "color",
+      "id": "icon_background",
+      "label": "Icon circle background",
+      "default": "#041f60"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "truck",
+          "options": [
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "guarantee",
+              "label": "Guarantee"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "check",
+              "label": "Check"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Text",
+          "default": "Free Delivery on 2+ items"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Product trust info",
+      "blocks": [
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "truck",
+            "title": "Free Delivery on 2+ items"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shield",
+            "title": "100% Natural Ingredients"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "guarantee",
+            "title": "7 Day Guarantee"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
