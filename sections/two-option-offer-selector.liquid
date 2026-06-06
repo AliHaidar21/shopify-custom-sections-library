@@ -1,0 +1,457 @@
+{{ 'two-option-offer-selector.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign selected_product = section.settings.product
+  assign fallback_variant_id = blank
+
+  if selected_product != blank
+    assign fallback_variant_id = selected_product.selected_or_first_available_variant.id
+  endif
+
+  assign regular_variant_id = section.settings.regular_variant_id
+  assign offer_variant_id = section.settings.offer_variant_id
+
+  if regular_variant_id == blank
+    assign regular_variant_id = fallback_variant_id
+  endif
+
+  if offer_variant_id == blank
+    assign offer_variant_id = fallback_variant_id
+  endif
+%}
+
+<section
+  class="two-option-offer two-option-offer--{{ section.id }}"
+  data-after-add="{{ section.settings.after_add_behavior }}"
+  data-open-drawer="{{ section.settings.try_open_cart_drawer }}"
+  style="
+    --too-bg: {{ section.settings.section_background }};
+    --too-text: {{ section.settings.text_color }};
+    --too-muted: {{ section.settings.muted_text_color }};
+    --too-accent: {{ section.settings.accent_color }};
+    --too-border: {{ section.settings.border_color }};
+    --too-card-bg: {{ section.settings.card_background }};
+    --too-selected-bg: {{ section.settings.selected_background }};
+    --too-button-bg: {{ section.settings.button_background }};
+    --too-button-text: {{ section.settings.button_text_color }};
+    --too-radius: {{ section.settings.card_radius }}px;
+    --too-max-width: {{ section.settings.max_width }}px;
+  "
+>
+  <div class="two-option-offer__inner">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="two-option-offer__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="two-option-offer__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <div class="two-option-offer__subheading">
+            {{ section.settings.subheading }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="two-option-offer__cards" aria-label="{{ section.settings.accessibility_label | escape }}">
+      <button
+        class="two-option-offer__card"
+        type="button"
+        data-offer-button
+        data-variant-id="{{ regular_variant_id }}"
+        data-quantity="{{ section.settings.regular_quantity }}"
+        data-discount-code=""
+        data-loading-text="{{ section.settings.loading_text | escape }}"
+        data-success-text="{{ section.settings.regular_success_message | escape }}"
+        {% if regular_variant_id == blank %}disabled{% endif %}
+      >
+        {% if section.settings.regular_badge != blank %}
+          <span class="two-option-offer__badge">{{ section.settings.regular_badge }}</span>
+        {% endif %}
+
+        <span class="two-option-offer__card-inner">
+          <span class="two-option-offer__radio" aria-hidden="true"></span>
+
+          <span class="two-option-offer__content">
+            <span class="two-option-offer__title">{{ section.settings.regular_title }}</span>
+
+            {% if section.settings.regular_subtitle != blank %}
+              <span class="two-option-offer__subtitle">{{ section.settings.regular_subtitle }}</span>
+            {% endif %}
+
+            {% if section.settings.regular_note != blank %}
+              <span class="two-option-offer__note">{{ section.settings.regular_note }}</span>
+            {% endif %}
+          </span>
+
+          <span class="two-option-offer__price-wrap">
+            {% if section.settings.regular_price_text != blank %}
+              <span class="two-option-offer__price">{{ section.settings.regular_price_text }}</span>
+            {% endif %}
+
+            {% if section.settings.regular_compare_text != blank %}
+              <span class="two-option-offer__compare">{{ section.settings.regular_compare_text }}</span>
+            {% endif %}
+          </span>
+        </span>
+      </button>
+
+      <button
+        class="two-option-offer__card two-option-offer__card--offer"
+        type="button"
+        data-offer-button
+        data-variant-id="{{ offer_variant_id }}"
+        data-quantity="{{ section.settings.offer_quantity }}"
+        data-discount-code="{{ section.settings.offer_discount_code | escape }}"
+        data-loading-text="{{ section.settings.loading_text | escape }}"
+        data-success-text="{{ section.settings.offer_success_message | escape }}"
+        {% if offer_variant_id == blank %}disabled{% endif %}
+      >
+        {% if section.settings.offer_badge != blank %}
+          <span class="two-option-offer__badge two-option-offer__badge--accent">{{ section.settings.offer_badge }}</span>
+        {% endif %}
+
+        <span class="two-option-offer__card-inner">
+          <span class="two-option-offer__radio" aria-hidden="true"></span>
+
+          <span class="two-option-offer__content">
+            <span class="two-option-offer__title">{{ section.settings.offer_title }}</span>
+
+            {% if section.settings.offer_subtitle != blank %}
+              <span class="two-option-offer__subtitle">{{ section.settings.offer_subtitle }}</span>
+            {% endif %}
+
+            {% if section.settings.offer_note != blank %}
+              <span class="two-option-offer__note">{{ section.settings.offer_note }}</span>
+            {% endif %}
+
+            {% if section.settings.offer_discount_code != blank and section.settings.show_discount_code %}
+              <span class="two-option-offer__discount-label">
+                Code applied: {{ section.settings.offer_discount_code }}
+              </span>
+            {% endif %}
+          </span>
+
+          <span class="two-option-offer__price-wrap">
+            {% if section.settings.offer_price_text != blank %}
+              <span class="two-option-offer__price">{{ section.settings.offer_price_text }}</span>
+            {% endif %}
+
+            {% if section.settings.offer_compare_text != blank %}
+              <span class="two-option-offer__compare">{{ section.settings.offer_compare_text }}</span>
+            {% endif %}
+          </span>
+        </span>
+      </button>
+    </div>
+
+    <p class="two-option-offer__message" data-offer-message aria-live="polite"></p>
+
+    {% if section.settings.help_text != blank %}
+      <div class="two-option-offer__help">
+        {{ section.settings.help_text }}
+      </div>
+    {% endif %}
+
+    {% if request.design_mode and fallback_variant_id == blank and section.settings.regular_variant_id == blank and section.settings.offer_variant_id == blank %}
+      <div class="two-option-offer__editor-warning">
+        Choose a product or add variant IDs so the buttons can add items to cart.
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script src="{{ 'two-option-offer-selector.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Two-option offer selector",
+  "tag": "section",
+  "class": "section-two-option-offer-selector",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Choose your offer"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Select the option that works best for you.</p>"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessibility label",
+      "default": "Product purchase options"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "If no variant ID is entered below, the section uses this product's first available variant."
+    },
+    {
+      "type": "header",
+      "content": "Regular option"
+    },
+    {
+      "type": "text",
+      "id": "regular_variant_id",
+      "label": "Regular option variant ID",
+      "info": "Optional. Leave blank to use the selected product's first available variant."
+    },
+    {
+      "type": "range",
+      "id": "regular_quantity",
+      "label": "Regular option quantity",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "text",
+      "id": "regular_title",
+      "label": "Regular option title",
+      "default": "BUY 1"
+    },
+    {
+      "type": "text",
+      "id": "regular_subtitle",
+      "label": "Regular option subtitle",
+      "default": "30 days supply"
+    },
+    {
+      "type": "text",
+      "id": "regular_note",
+      "label": "Regular option note",
+      "default": "+$3 Delivery"
+    },
+    {
+      "type": "text",
+      "id": "regular_price_text",
+      "label": "Regular option price text",
+      "default": "$19.99"
+    },
+    {
+      "type": "text",
+      "id": "regular_compare_text",
+      "label": "Regular option compare price text",
+      "default": "$29.99"
+    },
+    {
+      "type": "text",
+      "id": "regular_badge",
+      "label": "Regular option badge"
+    },
+    {
+      "type": "text",
+      "id": "regular_success_message",
+      "label": "Regular success message",
+      "default": "Regular option added to cart."
+    },
+    {
+      "type": "header",
+      "content": "Offer option"
+    },
+    {
+      "type": "text",
+      "id": "offer_variant_id",
+      "label": "Offer option variant ID",
+      "info": "Optional. Leave blank to use the selected product's first available variant."
+    },
+    {
+      "type": "range",
+      "id": "offer_quantity",
+      "label": "Offer option quantity",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "offer_title",
+      "label": "Offer option title",
+      "default": "BUY 2"
+    },
+    {
+      "type": "text",
+      "id": "offer_subtitle",
+      "label": "Offer option subtitle",
+      "default": "60 days supply"
+    },
+    {
+      "type": "text",
+      "id": "offer_note",
+      "label": "Offer option note",
+      "default": "Save more with this offer"
+    },
+    {
+      "type": "text",
+      "id": "offer_price_text",
+      "label": "Offer option price text",
+      "default": "$39.98"
+    },
+    {
+      "type": "text",
+      "id": "offer_compare_text",
+      "label": "Offer option compare price text",
+      "default": "$49.98"
+    },
+    {
+      "type": "text",
+      "id": "offer_badge",
+      "label": "Offer option badge",
+      "default": "Best offer"
+    },
+    {
+      "type": "text",
+      "id": "offer_discount_code",
+      "label": "Offer discount code",
+      "info": "This must match an active discount code created in Shopify Admin."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount_code",
+      "label": "Show discount code label on offer card",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "offer_success_message",
+      "label": "Offer success message",
+      "default": "Offer added to cart. Discount applied if eligible."
+    },
+    {
+      "type": "header",
+      "content": "Cart behavior"
+    },
+    {
+      "type": "select",
+      "id": "after_add_behavior",
+      "label": "After add behavior",
+      "default": "stay",
+      "options": [
+        {
+          "value": "stay",
+          "label": "Stay on page and update cart"
+        },
+        {
+          "value": "cart",
+          "label": "Go to cart page"
+        },
+        {
+          "value": "checkout",
+          "label": "Go to checkout"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "try_open_cart_drawer",
+      "label": "Try to open cart drawer",
+      "default": true,
+      "info": "Works on many themes, but some custom themes need theme-specific drawer code."
+    },
+    {
+      "type": "text",
+      "id": "loading_text",
+      "label": "Loading button text",
+      "default": "Adding..."
+    },
+    {
+      "type": "richtext",
+      "id": "help_text",
+      "label": "Small help text below buttons",
+      "default": "<p>Discounts are applied only when the Shopify discount code is active and the cart meets the discount rules.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 400,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "default": 760
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 8,
+      "max": 34,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "selected_background",
+      "label": "Selected/hover background",
+      "default": "#f4fbfd"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Main text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Muted text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#38B6CC"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Card border color",
+      "default": "#d8deea"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Primary dark color",
+      "default": "#041f60"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two-option offer selector"
+    }
+  ]
+}
+{% endschema %}
