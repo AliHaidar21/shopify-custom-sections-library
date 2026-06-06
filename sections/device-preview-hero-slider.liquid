@@ -1,325 +1,167 @@
 {{ 'device-preview-hero-slider.css' | asset_url | stylesheet_tag }}
 
-{% liquid
-  assign overlay_strength = section.settings.overlay_strength | divided_by: 100.0
-  assign phone_overlay_strength = section.settings.phone_overlay_strength | divided_by: 100.0
-%}
-
 <section
-  class="device-preview-hero-slider device-preview-hero-slider--{{ section.id }}"
-  data-device-preview-hero
-  data-autoplay="{{ section.settings.enable_autoplay }}"
-  data-autoplay-interval="{{ section.settings.autoplay_interval | times: 1000 }}"
+  class="feature-spotlight feature-spotlight--{{ section.id }}"
   style="
-    --dph-height-desktop: {{ section.settings.desktop_height }}px;
-    --dph-height-mobile: {{ section.settings.mobile_height }}px;
-    --dph-overlay: {{ overlay_strength }};
-    --dph-phone-overlay: {{ phone_overlay_strength }};
-    --dph-bg-position: {{ section.settings.background_position }};
-    --dph-content-width: {{ section.settings.content_width }}px;
-    --dph-text-color: {{ section.settings.text_color }};
-    --dph-soft-text-color: {{ section.settings.soft_text_color }};
-    --dph-accent-color: {{ section.settings.accent_color }};
-    --dph-button-primary: {{ section.settings.primary_button_color }};
-    --dph-button-primary-text: {{ section.settings.primary_button_text_color }};
-    --dph-button-secondary: {{ section.settings.secondary_button_color }};
-    --dph-button-secondary-text: {{ section.settings.secondary_button_text_color }};
-    --dph-pill-bg: {{ section.settings.pill_background }};
-    --dph-pill-text: {{ section.settings.pill_text_color }};
-    --dph-phone-width: {{ section.settings.phone_width }}px;
+    --fs-bg: {{ section.settings.section_bg }};
+    --fs-card: {{ section.settings.card_bg }};
+    --fs-text: {{ section.settings.text_color }};
+    --fs-muted: {{ section.settings.muted_color }};
+    --fs-accent: {{ section.settings.accent_color }};
+    --fs-button-bg: {{ section.settings.button_bg }};
+    --fs-button-text: {{ section.settings.button_text_color }};
+    --fs-button-alt-bg: {{ section.settings.secondary_button_bg }};
+    --fs-button-alt-text: {{ section.settings.secondary_button_text_color }};
+    --fs-radius: {{ section.settings.card_radius }}px;
+    --fs-image-radius: {{ section.settings.image_radius }}px;
+    --fs-top: {{ section.settings.padding_top }}px;
+    --fs-bottom: {{ section.settings.padding_bottom }}px;
+    --fs-image-position: {{ section.settings.image_position }};
   "
 >
-  {% if section.blocks.size > 0 %}
-    <div class="device-preview-hero-slider__slides" data-device-preview-slides>
-      {% for block in section.blocks %}
-        {% liquid
-          assign phone_image = block.settings.phone_image
-          if phone_image == blank
-            assign phone_image = block.settings.background_image
-          endif
-        %}
+  <div class="feature-spotlight__wrap page-width">
+    <div class="feature-spotlight__grid">
+      <div class="feature-spotlight__content">
+        {% if section.settings.badge_text != blank %}
+          <div class="feature-spotlight__badge">{{ section.settings.badge_text }}</div>
+        {% endif %}
 
-        <article
-          class="device-preview-hero-slider__slide {% if forloop.first %}is-active{% endif %}"
-          data-device-preview-slide
-          {{ block.shopify_attributes }}
-        >
-          <div
-            class="device-preview-hero-slider__background"
-            {% if block.settings.background_image != blank %}
-              style="background-image: url('{{ block.settings.background_image | image_url: width: 2400 }}');"
-            {% endif %}
-          >
-            {% if block.settings.background_image == blank %}
-              <div class="device-preview-hero-slider__placeholder">
-                Add slide background image
-              </div>
-            {% endif %}
-          </div>
+        {% if section.settings.heading != blank %}
+          <h2 class="feature-spotlight__heading">{{ section.settings.heading | newline_to_br }}</h2>
+        {% endif %}
 
-          <div class="device-preview-hero-slider__content">
-            <div class="device-preview-hero-slider__copy">
-              {% if block.settings.badge_text != blank %}
-                <span class="device-preview-hero-slider__badge">
-                  {{ block.settings.badge_text }}
-                </span>
-              {% endif %}
+        {% if section.settings.subheading != blank %}
+          <div class="feature-spotlight__subheading">{{ section.settings.subheading }}</div>
+        {% endif %}
 
-              {% if block.settings.heading_first != blank or block.settings.heading_italic != blank or block.settings.heading_last != blank %}
-                <h2 class="device-preview-hero-slider__heading">
-                  {% if block.settings.heading_first != blank %}
-                    <span>{{ block.settings.heading_first }}</span>
-                  {% endif %}
-
-                  {% if block.settings.heading_italic != blank %}
-                    <em>{{ block.settings.heading_italic }}</em>
-                  {% endif %}
-
-                  {% if block.settings.heading_last != blank %}
-                    <span>{{ block.settings.heading_last }}</span>
-                  {% endif %}
-                </h2>
-              {% endif %}
-
-              {% if block.settings.rating_text != blank %}
-                <div class="device-preview-hero-slider__rating">
-                  <span aria-hidden="true">{{ block.settings.rating_stars }}</span>
-                  <strong>{{ block.settings.rating_text }}</strong>
+        {% if section.blocks.size > 0 %}
+          <div class="feature-spotlight__features">
+            {% for block in section.blocks %}
+              {% if block.type == 'feature' and block.settings.text != blank %}
+                <div class="feature-spotlight__feature" {{ block.shopify_attributes }}>
+                  <span class="feature-spotlight__feature-icon">{{ section.settings.feature_icon }}</span>
+                  <span>{{ block.settings.text }}</span>
                 </div>
               {% endif %}
-
-              <div class="device-preview-hero-slider__benefits">
-                {% if block.settings.benefit_1 != blank %}
-                  <span>{{ block.settings.benefit_1 }}</span>
-                {% endif %}
-
-                {% if block.settings.benefit_2 != blank %}
-                  <span>{{ block.settings.benefit_2 }}</span>
-                {% endif %}
-
-                {% if block.settings.benefit_3 != blank %}
-                  <span>{{ block.settings.benefit_3 }}</span>
-                {% endif %}
-              </div>
-
-              <div class="device-preview-hero-slider__buttons">
-                {% if block.settings.primary_button_text != blank and block.settings.primary_button_link != blank %}
-                  <a class="device-preview-hero-slider__button device-preview-hero-slider__button--primary" href="{{ block.settings.primary_button_link }}">
-                    {{ block.settings.primary_button_text }}
-                  </a>
-                {% endif %}
-
-                {% if block.settings.secondary_button_text != blank and block.settings.secondary_button_link != blank %}
-                  <a class="device-preview-hero-slider__button device-preview-hero-slider__button--secondary" href="{{ block.settings.secondary_button_link }}">
-                    {{ block.settings.secondary_button_text }}
-                  </a>
-                {% endif %}
-              </div>
-
-              {% if block.settings.guarantee_text != blank %}
-                <p class="device-preview-hero-slider__guarantee">
-                  {{ block.settings.guarantee_text }}
-                </p>
-              {% endif %}
-            </div>
-
-            {% if section.settings.show_phone_mockup %}
-              <div class="device-preview-hero-slider__phone" aria-hidden="true">
-                <div
-                  class="device-preview-hero-slider__phone-screen"
-                  {% if phone_image != blank %}
-                    style="background-image: url('{{ phone_image | image_url: width: 1200 }}');"
-                  {% endif %}
-                >
-                  <span class="device-preview-hero-slider__phone-speaker"></span>
-
-                  <div class="device-preview-hero-slider__phone-copy">
-                    {% if block.settings.badge_text != blank %}
-                      <span class="device-preview-hero-slider__phone-badge">
-                        {{ block.settings.badge_text }}
-                      </span>
-                    {% endif %}
-
-                    <h3>
-                      {% if block.settings.heading_first != blank %}
-                        <span>{{ block.settings.heading_first }}</span>
-                      {% endif %}
-
-                      {% if block.settings.heading_italic != blank %}
-                        <em>{{ block.settings.heading_italic }}</em>
-                      {% endif %}
-
-                      {% if block.settings.heading_last != blank %}
-                        <span>{{ block.settings.heading_last }}</span>
-                      {% endif %}
-                    </h3>
-
-                    {% if block.settings.rating_text != blank %}
-                      <div class="device-preview-hero-slider__phone-rating">
-                        <span>{{ block.settings.rating_stars }}</span>
-                        <strong>{{ block.settings.rating_text }}</strong>
-                      </div>
-                    {% endif %}
-
-                    <div class="device-preview-hero-slider__phone-benefits">
-                      {% if block.settings.benefit_1 != blank %}
-                        <span>{{ block.settings.benefit_1 }}</span>
-                      {% endif %}
-                      {% if block.settings.benefit_2 != blank %}
-                        <span>{{ block.settings.benefit_2 }}</span>
-                      {% endif %}
-                      {% if block.settings.benefit_3 != blank %}
-                        <span>{{ block.settings.benefit_3 }}</span>
-                      {% endif %}
-                    </div>
-
-                    {% if block.settings.primary_button_text != blank %}
-                      <span class="device-preview-hero-slider__phone-button device-preview-hero-slider__phone-button--primary">
-                        {{ block.settings.primary_button_text }}
-                      </span>
-                    {% endif %}
-
-                    {% if block.settings.secondary_button_text != blank %}
-                      <span class="device-preview-hero-slider__phone-button device-preview-hero-slider__phone-button--secondary">
-                        {{ block.settings.secondary_button_text }}
-                      </span>
-                    {% endif %}
-
-                    {% if block.settings.guarantee_text != blank %}
-                      <span class="device-preview-hero-slider__phone-guarantee">
-                        {{ block.settings.guarantee_text }}
-                      </span>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            {% endif %}
+            {% endfor %}
           </div>
-        </article>
-      {% endfor %}
-    </div>
+        {% endif %}
 
-    {% if section.blocks.size > 1 %}
-      <button class="device-preview-hero-slider__arrow device-preview-hero-slider__arrow--prev" type="button" data-device-preview-prev aria-label="Previous slide">
-        ‹
-      </button>
+        <div class="feature-spotlight__actions">
+          {% if section.settings.primary_button_text != blank and section.settings.primary_button_link != blank %}
+            <a href="{{ section.settings.primary_button_link }}" class="feature-spotlight__button feature-spotlight__button--primary">
+              {{ section.settings.primary_button_text }}
+            </a>
+          {% endif %}
 
-      <button class="device-preview-hero-slider__arrow device-preview-hero-slider__arrow--next" type="button" data-device-preview-next aria-label="Next slide">
-        ›
-      </button>
+          {% if section.settings.secondary_button_text != blank and section.settings.secondary_button_link != blank %}
+            <a href="{{ section.settings.secondary_button_link }}" class="feature-spotlight__button feature-spotlight__button--secondary">
+              {{ section.settings.secondary_button_text }}
+            </a>
+          {% endif %}
+        </div>
 
-      <div class="device-preview-hero-slider__dots" data-device-preview-dots aria-label="Slider pagination">
-        {% for block in section.blocks %}
-          <button
-            class="device-preview-hero-slider__dot {% if forloop.first %}is-active{% endif %}"
-            type="button"
-            data-device-preview-dot="{{ forloop.index0 }}"
-            aria-label="Go to slide {{ forloop.index }}"
-          ></button>
-        {% endfor %}
+        {% if section.settings.note_text != blank %}
+          <div class="feature-spotlight__note">{{ section.settings.note_text }}</div>
+        {% endif %}
       </div>
-    {% endif %}
-  {% elsif request.design_mode %}
-    <div class="device-preview-hero-slider__empty">
-      Add slide blocks to build this hero slider.
-    </div>
-  {% endif %}
-</section>
 
-<script src="{{ 'device-preview-hero-slider.js' | asset_url }}" defer></script>
+      <div class="feature-spotlight__media">
+        {% if section.settings.hero_image != blank %}
+          {{
+            section.settings.hero_image
+            | image_url: width: 1800
+            | image_tag:
+              loading: 'lazy',
+              widths: '480, 720, 960, 1200, 1600, 1800',
+              class: 'feature-spotlight__image',
+              alt: section.settings.hero_image_alt
+          }}
+        {% else %}
+          <div class="feature-spotlight__placeholder">Add hero image</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
 
 {% schema %}
 {
-  "name": "Device hero slider",
+  "name": "Feature spotlight hero",
   "tag": "section",
-  "class": "section-device-preview-hero-slider",
+  "class": "section section-feature-spotlight",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "show_phone_mockup",
-      "label": "Show phone mockup",
-      "default": true
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "NOW ON SALE"
     },
     {
-      "type": "checkbox",
-      "id": "enable_autoplay",
-      "label": "Enable autoplay",
-      "default": false
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Reduce stress.\nSleep peacefully.\nCarry peace."
     },
     {
-      "type": "range",
-      "id": "autoplay_interval",
-      "label": "Autoplay speed",
-      "min": 3,
-      "max": 10,
-      "step": 1,
-      "unit": "s",
-      "default": 5
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "A cleaner, sharper hero section with one image only and a strong conversion-focused layout."
     },
     {
-      "type": "range",
-      "id": "desktop_height",
-      "label": "Desktop height",
-      "min": 520,
-      "max": 900,
-      "step": 20,
-      "unit": "px",
-      "default": 700
+      "type": "text",
+      "id": "note_text",
+      "label": "Small note",
+      "default": "30-Day Money-Back Guarantee"
     },
     {
-      "type": "range",
-      "id": "mobile_height",
-      "label": "Mobile height",
-      "min": 480,
-      "max": 760,
-      "step": 20,
-      "unit": "px",
-      "default": 620
+      "type": "text",
+      "id": "feature_icon",
+      "label": "Feature icon",
+      "default": "✦"
     },
     {
-      "type": "range",
-      "id": "content_width",
-      "label": "Content width",
-      "min": 1000,
-      "max": 1600,
-      "step": 50,
-      "unit": "px",
-      "default": 1300
+      "type": "paragraph",
+      "content": "Add button links below or the buttons will stay hidden."
     },
     {
-      "type": "range",
-      "id": "phone_width",
-      "label": "Phone mockup width",
-      "min": 260,
-      "max": 440,
-      "step": 20,
-      "unit": "px",
-      "default": 340
+      "type": "text",
+      "id": "primary_button_text",
+      "label": "Primary button text",
+      "default": "Shop now"
     },
     {
-      "type": "range",
-      "id": "overlay_strength",
-      "label": "Desktop overlay strength",
-      "min": 10,
-      "max": 80,
-      "step": 5,
-      "unit": "%",
-      "default": 45
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
     },
     {
-      "type": "range",
-      "id": "phone_overlay_strength",
-      "label": "Phone overlay strength",
-      "min": 10,
-      "max": 80,
-      "step": 5,
-      "unit": "%",
-      "default": 45
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary button text",
+      "default": "Learn more"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "hero_image_alt",
+      "label": "Hero image alt text",
+      "default": "Hero image"
     },
     {
       "type": "select",
-      "id": "background_position",
-      "label": "Background position",
+      "id": "image_position",
+      "label": "Image position",
       "default": "center center",
       "options": [
         { "value": "center center", "label": "Center" },
@@ -331,176 +173,117 @@
     },
     {
       "type": "color",
-      "id": "text_color",
-      "label": "Main text color",
+      "id": "section_bg",
+      "label": "Section background",
+      "default": "#eef2f7"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Content background",
       "default": "#ffffff"
     },
     {
       "type": "color",
-      "id": "soft_text_color",
-      "label": "Soft heading color",
-      "default": "#b9d8ff"
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted text color",
+      "default": "#5f6368"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
-      "default": "#2cb6f0"
+      "default": "#5e6ad2"
     },
     {
       "type": "color",
-      "id": "primary_button_color",
-      "label": "Primary button color",
-      "default": "#22a8e8"
+      "id": "button_bg",
+      "label": "Primary button background",
+      "default": "#111111"
     },
     {
       "type": "color",
-      "id": "primary_button_text_color",
+      "id": "button_text_color",
       "label": "Primary button text color",
       "default": "#ffffff"
     },
     {
       "type": "color",
-      "id": "secondary_button_color",
-      "label": "Secondary button color",
-      "default": "#082842"
+      "id": "secondary_button_bg",
+      "label": "Secondary button background",
+      "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "secondary_button_text_color",
       "label": "Secondary button text color",
-      "default": "#ffffff"
+      "default": "#111111"
     },
     {
-      "type": "color",
-      "id": "pill_background",
-      "label": "Pill background",
-      "default": "#7f9abb"
+      "type": "range",
+      "id": "card_radius",
+      "label": "Content radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 24
     },
     {
-      "type": "color",
-      "id": "pill_text_color",
-      "label": "Pill text color",
-      "default": "#ffffff"
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 72
     }
   ],
   "blocks": [
     {
-      "type": "slide",
-      "name": "Hero slide",
+      "type": "feature",
+      "name": "Feature",
       "settings": [
         {
-          "type": "image_picker",
-          "id": "background_image",
-          "label": "Desktop background image"
-        },
-        {
-          "type": "image_picker",
-          "id": "phone_image",
-          "label": "Phone mockup image",
-          "info": "Leave blank to reuse the desktop background image."
-        },
-        {
           "type": "text",
-          "id": "badge_text",
-          "label": "Badge text",
-          "default": "NOW ON SALE"
-        },
-        {
-          "type": "text",
-          "id": "heading_first",
-          "label": "Heading first part",
-          "default": "Reduce stress."
-        },
-        {
-          "type": "text",
-          "id": "heading_italic",
-          "label": "Heading italic part",
-          "default": "Sleep peacefully."
-        },
-        {
-          "type": "text",
-          "id": "heading_last",
-          "label": "Heading last part",
-          "default": "Carry peace."
-        },
-        {
-          "type": "text",
-          "id": "rating_stars",
-          "label": "Rating stars",
-          "default": "★★★★★"
-        },
-        {
-          "type": "text",
-          "id": "rating_text",
-          "label": "Rating text",
-          "default": "4.8/5 based on 115,130 reviews"
-        },
-        {
-          "type": "text",
-          "id": "benefit_1",
-          "label": "Benefit 1",
+          "id": "text",
+          "label": "Feature text",
           "default": "Balance nervous system"
-        },
-        {
-          "type": "text",
-          "id": "benefit_2",
-          "label": "Benefit 2",
-          "default": "Instant pain relief"
-        },
-        {
-          "type": "text",
-          "id": "benefit_3",
-          "label": "Benefit 3",
-          "default": "Clinically tested"
-        },
-        {
-          "type": "text",
-          "id": "primary_button_text",
-          "label": "Primary button text",
-          "default": "SHOP NOW"
-        },
-        {
-          "type": "url",
-          "id": "primary_button_link",
-          "label": "Primary button link",
-          "info": "Button appears only when both text and link are filled."
-        },
-        {
-          "type": "text",
-          "id": "secondary_button_text",
-          "label": "Secondary button text",
-          "default": "LEARN MORE"
-        },
-        {
-          "type": "url",
-          "id": "secondary_button_link",
-          "label": "Secondary button link",
-          "info": "Button appears only when both text and link are filled."
-        },
-        {
-          "type": "text",
-          "id": "guarantee_text",
-          "label": "Guarantee text",
-          "default": "30-Day Money-Back Guarantee"
         }
       ]
     }
   ],
-  "max_blocks": 6,
+  "max_blocks": 4,
   "presets": [
     {
-      "name": "Device hero slider",
+      "name": "Feature spotlight hero",
       "blocks": [
-        {
-          "type": "slide"
-        },
-        {
-          "type": "slide"
-        },
-        {
-          "type": "slide"
-        }
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" }
       ]
     }
   ]
