@@ -71,6 +71,7 @@
 
 {% schema %}
 
+
 {
   "name": "WhatsApp order button",
   "tag": "section",
@@ -80,43 +81,50 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "info": "Suggested text: Prefer ordering directly?"
+      "info": "Suggested text: Prefer ordering directly?",
+      "default": "Prefer ordering directly?"
     },
     {
       "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
-      "info": "Suggested text: Message us on WhatsApp and we will help you place your order."
+      "info": "Suggested text: Message us on WhatsApp and we will help you place your order.",
+      "default": "<p>Message us on WhatsApp and we will help you place your order.</p>"
     },
     {
       "type": "text",
       "id": "whatsapp_number",
       "label": "WhatsApp phone number",
-      "info": "Use country code without spaces. Example: 96181619174 Suggested text: 96181619174"
+      "info": "Use country code without spaces. Example: 96181619174 Suggested text: 96181619174",
+      "default": "96181619174"
     },
     {
       "type": "textarea",
       "id": "whatsapp_message",
       "label": "Pre-filled WhatsApp message",
-      "info": "Suggested text: Hello, I am interested in ordering ROUX Hair Texturizer."
+      "info": "Suggested text: Hello, I am interested in ordering ROUX Hair Texturizer.",
+      "default": "Hello, I am interested in ordering ROUX Hair Texturizer."
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Button text",
-      "info": "Suggested text: Order Through WhatsApp"
+      "info": "Suggested text: Order Through WhatsApp",
+      "default": "Order Through WhatsApp"
     },
     {
       "type": "text",
       "id": "accessibility_label",
       "label": "Accessibility label",
-      "info": "Suggested text: Order through WhatsApp"
+      "info": "Suggested text: Order through WhatsApp",
+      "default": "Order through WhatsApp"
     },
     {
       "type": "text",
       "id": "note",
       "label": "Small note below button",
-      "info": "Suggested text: Fast reply during working hours."
+      "info": "Suggested text: Fast reply during working hours.",
+      "default": "Fast reply during working hours."
     },
     {
       "type": "select",
@@ -186,7 +194,7 @@
       "type": "color",
       "id": "text_color",
       "label": "Text color",
-      "default": "#000000"
+      "default": "#041f60"
     },
     {
       "type": "color",
@@ -198,19 +206,19 @@
       "type": "color",
       "id": "gradient_start",
       "label": "Gradient start",
-      "default": "#000000"
+      "default": "#25D366"
     },
     {
       "type": "color",
       "id": "gradient_middle",
       "label": "Gradient middle",
-      "default": "#000000"
+      "default": "#128C7E"
     },
     {
       "type": "color",
       "id": "gradient_end",
       "label": "Gradient end",
-      "default": "#000000"
+      "default": "#075E54"
     }
   ],
   "presets": [
@@ -219,5 +227,6 @@
     }
   ]
 }
+
 
 {% endschema %}

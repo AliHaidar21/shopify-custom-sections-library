@@ -143,6 +143,7 @@
 {% schema %}
 
 
+
 {
   "name": "Editorial image collage",
   "tag": "section",
@@ -152,19 +153,22 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
-      "info": "Suggested text: STUDYMOTE"
+      "info": "Suggested text: STUDYMOTE",
+      "default": "STUDYMOTE"
     },
     {
       "type": "textarea",
       "id": "heading",
       "label": "Heading",
-      "info": "Suggested text: Designed for the modern student"
+      "info": "Suggested text: Designed for the modern student",
+      "default": "Designed for\nthe modern student"
     },
     {
       "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
-      "info": "Suggested text: Thoughtfully crafted tools that blend precision, comfort, and style helping you study smarter, not harder."
+      "info": "Suggested text: Thoughtfully crafted tools that blend precision, comfort, and style helping you study smarter, not harder.",
+      "default": "<p>Thoughtfully crafted tools that blend precision, comfort, and style helping you study smarter, not harder.</p>"
     },
     {
       "type": "checkbox",
@@ -176,7 +180,8 @@
       "type": "richtext",
       "id": "body_text",
       "label": "Body text",
-      "info": "Suggested text: Every detail is engineered to elevate your daily sessions. No distractions. No compromises. Just focused, effortless learning."
+      "info": "Suggested text: Every detail is engineered to elevate your daily sessions. No distractions. No compromises. Just focused, effortless learning.",
+      "default": "<p>Every detail is engineered to elevate your daily sessions. No distractions. No compromises. Just focused, effortless learning.</p>"
     },
     {
       "type": "text",
@@ -470,31 +475,31 @@
       "type": "color",
       "id": "text_color",
       "label": "Main text color",
-      "default": "#000000"
+      "default": "#1A1A1A"
     },
     {
       "type": "color",
       "id": "muted_text_color",
       "label": "Muted text color",
-      "default": "#000000"
+      "default": "#4A4A4A"
     },
     {
       "type": "color",
       "id": "eyebrow_color",
       "label": "Eyebrow color",
-      "default": "#000000"
+      "default": "#8B7D6B"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
-      "default": "#000000"
+      "default": "#C4B8A8"
     },
     {
       "type": "color",
       "id": "icon_background",
       "label": "Feature icon background",
-      "default": "#ffffff"
+      "default": "#1A1A1A"
     },
     {
       "type": "color",
@@ -506,7 +511,7 @@
       "type": "color",
       "id": "image_background",
       "label": "Image placeholder background",
-      "default": "#ffffff"
+      "default": "#F0EDE6"
     }
   ],
   "blocks": [
@@ -518,7 +523,8 @@
           "type": "text",
           "id": "text",
           "label": "Text",
-          "info": "Suggested text: Precision engineering"
+          "info": "Suggested text: Precision engineering",
+          "default": "Precision engineering"
         }
       ]
     }
@@ -531,25 +537,26 @@
         {
           "type": "feature",
           "settings": {
-            "text": ""
+            "text": "Precision engineering"
           }
         },
         {
           "type": "feature",
           "settings": {
-            "text": ""
+            "text": "Sustainable materials"
           }
         },
         {
           "type": "feature",
           "settings": {
-            "text": ""
+            "text": "Designed for longevity"
           }
         }
       ]
     }
   ]
 }
+
 
 
 {% endschema %}

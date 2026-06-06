@@ -129,6 +129,7 @@
 
 {% schema %}
 
+
 {
   "name": "Luxury FAQ accordion",
   "tag": "section",
@@ -144,19 +145,22 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "info": "Suggested text: FAQ"
+      "info": "Suggested text: FAQ",
+      "default": "FAQ"
     },
     {
       "type": "richtext",
       "id": "subtitle",
       "label": "Subtitle",
-      "info": "Suggested text: Everything you need to know about ROUX Hair Texture Powder"
+      "info": "Suggested text: Everything you need to know about ROUX Hair Texture Powder",
+      "default": "<p>Everything you need to know about ROUX Hair Texture Powder</p>"
     },
     {
       "type": "text",
       "id": "product_title",
       "label": "Product title",
-      "info": "Suggested text: Hair Texture Powder"
+      "info": "Suggested text: Hair Texture Powder",
+      "default": "Hair Texture Powder"
     },
     {
       "type": "checkbox",
@@ -180,7 +184,8 @@
       "type": "text",
       "id": "cta_text",
       "label": "CTA button text",
-      "info": "Suggested text: Shop Now"
+      "info": "Suggested text: Shop Now",
+      "default": "Shop Now"
     },
     {
       "type": "url",
@@ -244,31 +249,31 @@
       "type": "color",
       "id": "text_color",
       "label": "Main text color",
-      "default": "#000000"
+      "default": "#041f60"
     },
     {
       "type": "color",
       "id": "muted_text_color",
       "label": "Muted text color",
-      "default": "#000000"
+      "default": "#666666"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
-      "default": "#000000"
+      "default": "#38B6CC"
     },
     {
       "type": "color",
       "id": "item_background",
       "label": "FAQ item background",
-      "default": "#ffffff"
+      "default": "#F8F9FA"
     },
     {
       "type": "color",
       "id": "item_border_color",
       "label": "FAQ item border color",
-      "default": "#000000"
+      "default": "#E5EAF2"
     }
   ],
   "blocks": [
@@ -280,13 +285,15 @@
           "type": "text",
           "id": "question",
           "label": "Question",
-          "info": "Suggested text: What does this product do?"
+          "info": "Suggested text: What does this product do?",
+          "default": "What does this product do?"
         },
         {
           "type": "richtext",
           "id": "answer",
           "label": "Answer",
-          "info": "Suggested text: Add your FAQ answer here."
+          "info": "Suggested text: Add your FAQ answer here.",
+          "default": "<p>Add your FAQ answer here.</p>"
         }
       ]
     }
@@ -335,5 +342,6 @@
     }
   ]
 }
+
 
 {% endschema %}

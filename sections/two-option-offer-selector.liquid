@@ -165,6 +165,7 @@
 
 {% schema %}
 
+
 {
   "name": "Two-option offer selector",
   "tag": "section",
@@ -174,19 +175,22 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "info": "Suggested text: Choose your offer"
+      "info": "Suggested text: Choose your offer",
+      "default": "Choose your offer"
     },
     {
       "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
-      "info": "Suggested text: Select the option that works best for you."
+      "info": "Suggested text: Select the option that works best for you.",
+      "default": "<p>Select the option that works best for you.</p>"
     },
     {
       "type": "text",
       "id": "accessibility_label",
       "label": "Accessibility label",
-      "info": "Suggested text: Product purchase options"
+      "info": "Suggested text: Product purchase options",
+      "default": "Product purchase options"
     },
     {
       "type": "product",
@@ -217,31 +221,36 @@
       "type": "text",
       "id": "regular_title",
       "label": "Regular option title",
-      "info": "Suggested text: BUY 1"
+      "info": "Suggested text: BUY 1",
+      "default": "BUY 1"
     },
     {
       "type": "text",
       "id": "regular_subtitle",
       "label": "Regular option subtitle",
-      "info": "Suggested text: 30 days supply"
+      "info": "Suggested text: 30 days supply",
+      "default": "30 days supply"
     },
     {
       "type": "text",
       "id": "regular_note",
       "label": "Regular option note",
-      "info": "Suggested text: +$3 Delivery"
+      "info": "Suggested text: +$3 Delivery",
+      "default": "+$3 Delivery"
     },
     {
       "type": "text",
       "id": "regular_price_text",
       "label": "Regular option price text",
-      "info": "Suggested text: $19.99"
+      "info": "Suggested text: $19.99",
+      "default": "$19.99"
     },
     {
       "type": "text",
       "id": "regular_compare_text",
       "label": "Regular option compare price text",
-      "info": "Suggested text: $29.99"
+      "info": "Suggested text: $29.99",
+      "default": "$29.99"
     },
     {
       "type": "text",
@@ -252,7 +261,8 @@
       "type": "text",
       "id": "regular_success_message",
       "label": "Regular success message",
-      "info": "Suggested text: Regular option added to cart."
+      "info": "Suggested text: Regular option added to cart.",
+      "default": "Regular option added to cart."
     },
     {
       "type": "header",
@@ -277,37 +287,43 @@
       "type": "text",
       "id": "offer_title",
       "label": "Offer option title",
-      "info": "Suggested text: BUY 2"
+      "info": "Suggested text: BUY 2",
+      "default": "BUY 2"
     },
     {
       "type": "text",
       "id": "offer_subtitle",
       "label": "Offer option subtitle",
-      "info": "Suggested text: 60 days supply"
+      "info": "Suggested text: 60 days supply",
+      "default": "60 days supply"
     },
     {
       "type": "text",
       "id": "offer_note",
       "label": "Offer option note",
-      "info": "Suggested text: Save more with this offer"
+      "info": "Suggested text: Save more with this offer",
+      "default": "Save more with this offer"
     },
     {
       "type": "text",
       "id": "offer_price_text",
       "label": "Offer option price text",
-      "info": "Suggested text: $39.98"
+      "info": "Suggested text: $39.98",
+      "default": "$39.98"
     },
     {
       "type": "text",
       "id": "offer_compare_text",
       "label": "Offer option compare price text",
-      "info": "Suggested text: $49.98"
+      "info": "Suggested text: $49.98",
+      "default": "$49.98"
     },
     {
       "type": "text",
       "id": "offer_badge",
       "label": "Offer option badge",
-      "info": "Suggested text: Best offer"
+      "info": "Suggested text: Best offer",
+      "default": "Best offer"
     },
     {
       "type": "text",
@@ -325,7 +341,8 @@
       "type": "text",
       "id": "offer_success_message",
       "label": "Offer success message",
-      "info": "Suggested text: Offer added to cart. Discount applied if eligible."
+      "info": "Suggested text: Offer added to cart. Discount applied if eligible.",
+      "default": "Offer added to cart. Discount applied if eligible."
     },
     {
       "type": "header",
@@ -362,13 +379,15 @@
       "type": "text",
       "id": "loading_text",
       "label": "Loading button text",
-      "info": "Suggested text: Adding..."
+      "info": "Suggested text: Adding...",
+      "default": "Adding..."
     },
     {
       "type": "richtext",
       "id": "help_text",
       "label": "Small help text below buttons",
-      "info": "Suggested text: Discounts are applied only when the Shopify discount code is active and the cart meets the discount rules."
+      "info": "Suggested text: Discounts are applied only when the Shopify discount code is active and the cart meets the discount rules.",
+      "default": "<p>Discounts are applied only when the Shopify discount code is active and the cart meets the discount rules.</p>"
     },
     {
       "type": "header",
@@ -410,37 +429,37 @@
       "type": "color",
       "id": "selected_background",
       "label": "Selected/hover background",
-      "default": "#ffffff"
+      "default": "#f4fbfd"
     },
     {
       "type": "color",
       "id": "text_color",
       "label": "Main text color",
-      "default": "#000000"
+      "default": "#111111"
     },
     {
       "type": "color",
       "id": "muted_text_color",
       "label": "Muted text color",
-      "default": "#000000"
+      "default": "#666666"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
-      "default": "#000000"
+      "default": "#38B6CC"
     },
     {
       "type": "color",
       "id": "border_color",
       "label": "Card border color",
-      "default": "#000000"
+      "default": "#d8deea"
     },
     {
       "type": "color",
       "id": "button_background",
       "label": "Primary dark color",
-      "default": "#ffffff"
+      "default": "#041f60"
     },
     {
       "type": "color",
@@ -455,5 +474,6 @@
     }
   ]
 }
+
 
 {% endschema %}
