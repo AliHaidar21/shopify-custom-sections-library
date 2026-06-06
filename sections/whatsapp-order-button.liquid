@@ -1,0 +1,222 @@
+{{ 'whatsapp-order-button.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign whatsapp_number = section.settings.whatsapp_number
+  assign whatsapp_number = whatsapp_number | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.'
+
+  assign whatsapp_message = section.settings.whatsapp_message | url_encode
+  assign whatsapp_url = 'https://wa.me/' | append: whatsapp_number
+
+  if whatsapp_message != blank
+    assign whatsapp_url = whatsapp_url | append: '?text=' | append: whatsapp_message
+  endif
+%}
+
+<section
+  class="whatsapp-order-button whatsapp-order-button--{{ section.id }}"
+  style="
+    --wob-section-bg: {{ section.settings.section_background }};
+    --wob-text-color: {{ section.settings.text_color }};
+    --wob-button-text-color: {{ section.settings.button_text_color }};
+    --wob-gradient-start: {{ section.settings.gradient_start }};
+    --wob-gradient-middle: {{ section.settings.gradient_middle }};
+    --wob-gradient-end: {{ section.settings.gradient_end }};
+    --wob-radius: {{ section.settings.button_radius }}px;
+    --wob-max-width: {{ section.settings.max_width }}px;
+  "
+>
+  <div class="whatsapp-order-button__inner whatsapp-order-button__inner--{{ section.settings.alignment }}">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="whatsapp-order-button__content">
+        {% if section.settings.heading != blank %}
+          <h2 class="whatsapp-order-button__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <div class="whatsapp-order-button__subheading">
+            {{ section.settings.subheading }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <a
+      href="{{ whatsapp_url }}"
+      class="whatsapp-order-button__link {% if section.settings.full_width_button %}whatsapp-order-button__link--full{% endif %}"
+      {% if section.settings.open_new_tab %}
+        target="_blank"
+        rel="noopener noreferrer"
+      {% endif %}
+      aria-label="{{ section.settings.accessibility_label | escape }}"
+    >
+      {% if section.settings.show_icon %}
+        <span class="whatsapp-order-button__icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 3C9.383 3 4 8.383 4 15c0 2.225.6 4.384 1.742 6.287L4 29l7.94-1.698A11.93 11.93 0 0 0 16 27c6.617 0 12-5.383 12-12S22.617 3 16 3z"></path>
+            <path d="M21.86 18.38c-.29-.15-1.71-.84-1.98-.93-.27-.1-.47-.15-.66.15-.2.29-.76.93-.93 1.12-.17.2-.34.22-.63.08-.29-.15-1.22-.45-2.33-1.44-.86-.77-1.44-1.72-1.6-2.01-.17-.29-.02-.45.13-.6.13-.13.29-.34.43-.51.14-.17.2-.29.29-.49.1-.2.05-.37-.02-.52-.08-.15-.66-1.6-.91-2.19-.24-.58-.49-.5-.66-.5h-.56c-.2 0-.52.08-.79.37-.27.29-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.09 4.49.71.31 1.26.5 1.69.64.71.23 1.35.2 1.86.12.57-.09 1.71-.7 1.96-1.38.24-.68.24-1.26.17-1.38-.07-.12-.27-.2-.56-.35z"></path>
+          </svg>
+        </span>
+      {% endif %}
+
+      <span class="whatsapp-order-button__text">
+        {{ section.settings.button_text }}
+      </span>
+    </a>
+
+    {% if section.settings.note != blank %}
+      <p class="whatsapp-order-button__note">{{ section.settings.note }}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "WhatsApp order button",
+  "tag": "section",
+  "class": "section-whatsapp-order-button",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Prefer ordering directly?"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Message us on WhatsApp and we will help you place your order.</p>"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp phone number",
+      "default": "96181619174",
+      "info": "Use country code without spaces. Example: 96181619174"
+    },
+    {
+      "type": "textarea",
+      "id": "whatsapp_message",
+      "label": "Pre-filled WhatsApp message",
+      "default": "Hello, I am interested in ordering ROUX Hair Texturizer."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Order Through WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessibility label",
+      "default": "Order through WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Small note below button",
+      "default": "Fast reply during working hours."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Section alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width_button",
+      "label": "Make button full width",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show WhatsApp icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "open_new_tab",
+      "label": "Open WhatsApp in a new tab",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 280,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Button corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#041f60"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "gradient_start",
+      "label": "Gradient start",
+      "default": "#25D366"
+    },
+    {
+      "type": "color",
+      "id": "gradient_middle",
+      "label": "Gradient middle",
+      "default": "#128C7E"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end",
+      "label": "Gradient end",
+      "default": "#075E54"
+    }
+  ],
+  "presets": [
+    {
+      "name": "WhatsApp order button"
+    }
+  ]
+}
+{% endschema %}
