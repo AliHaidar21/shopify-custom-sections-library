@@ -1,0 +1,346 @@
+{{ 'brand-comparison-table.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="brand-comparison-table brand-comparison-table--{{ section.id }}"
+  style="
+    --bct-bg: {{ section.settings.section_background }};
+    --bct-text: {{ section.settings.text_color }};
+    --bct-brand-color: {{ section.settings.brand_color }};
+    --bct-accent: {{ section.settings.accent_color }};
+    --bct-border: {{ section.settings.border_color }};
+    --bct-row-hover: {{ section.settings.row_hover_background }};
+    --bct-check-bg: {{ section.settings.check_background }};
+    --bct-check-text: {{ section.settings.check_text_color }};
+    --bct-x-bg: {{ section.settings.x_background }};
+    --bct-x-text: {{ section.settings.x_text_color }};
+    --bct-max-width: {{ section.settings.max_width }}px;
+    --bct-padding-top: {{ section.settings.padding_top }}px;
+    --bct-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="brand-comparison-table__wrap">
+    <div class="brand-comparison-table__grid brand-comparison-table__head">
+      <div class="brand-comparison-table__title">
+        {% if section.settings.heading_before != blank or section.settings.heading_highlight != blank %}
+          <h2>
+            {% if section.settings.heading_before != blank %}
+              {{ section.settings.heading_before }}<br>
+            {% endif %}
+
+            {% if section.settings.heading_highlight != blank %}
+              <span>{{ section.settings.heading_highlight }}</span>
+            {% endif %}
+          </h2>
+        {% endif %}
+      </div>
+
+      <div class="brand-comparison-table__brand">
+        {{ section.settings.brand_label }}
+      </div>
+
+      <div class="brand-comparison-table__others">
+        {{ section.settings.others_label }}
+      </div>
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="brand-comparison-table__body">
+        {% for block in section.blocks %}
+          <div class="brand-comparison-table__grid brand-comparison-table__row" {{ block.shopify_attributes }}>
+            <div class="brand-comparison-table__feature">
+              {{ block.settings.feature }}
+            </div>
+
+            <div class="brand-comparison-table__value brand-comparison-table__value--{{ block.settings.brand_value }}">
+              {% if block.settings.brand_value == 'check' %}
+                <span class="brand-comparison-table__icon" aria-label="Yes">{{ section.settings.check_symbol }}</span>
+              {% elsif block.settings.brand_value == 'x' %}
+                <span class="brand-comparison-table__icon" aria-label="No">{{ section.settings.x_symbol }}</span>
+              {% elsif block.settings.brand_text != blank %}
+                <span class="brand-comparison-table__text-value">{{ block.settings.brand_text }}</span>
+              {% endif %}
+            </div>
+
+            <div class="brand-comparison-table__value brand-comparison-table__value--{{ block.settings.others_value }}">
+              {% if block.settings.others_value == 'check' %}
+                <span class="brand-comparison-table__icon" aria-label="Yes">{{ section.settings.check_symbol }}</span>
+              {% elsif block.settings.others_value == 'x' %}
+                <span class="brand-comparison-table__icon" aria-label="No">{{ section.settings.x_symbol }}</span>
+              {% elsif block.settings.others_text != blank %}
+                <span class="brand-comparison-table__text-value">{{ block.settings.others_text }}</span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% elsif request.design_mode %}
+      <div class="brand-comparison-table__empty">
+        Add comparison rows to build your table.
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand comparison table",
+  "tag": "section",
+  "class": "section-brand-comparison-table",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_before",
+      "label": "Heading first line",
+      "default": "Why choose"
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Heading highlighted line",
+      "default": "VELOURE?"
+    },
+    {
+      "type": "text",
+      "id": "brand_label",
+      "label": "Brand column label",
+      "default": "VELOURE"
+    },
+    {
+      "type": "text",
+      "id": "others_label",
+      "label": "Other brands column label",
+      "default": "Others"
+    },
+    {
+      "type": "text",
+      "id": "check_symbol",
+      "label": "Check symbol",
+      "default": "✓"
+    },
+    {
+      "type": "text",
+      "id": "x_symbol",
+      "label": "X symbol",
+      "default": "×"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Main text color",
+      "default": "#3a4a32"
+    },
+    {
+      "type": "color",
+      "id": "brand_color",
+      "label": "Brand label color",
+      "default": "#C2A86A"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Secondary label color",
+      "default": "#55654B"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Table border color",
+      "default": "#DDE3D8"
+    },
+    {
+      "type": "color",
+      "id": "row_hover_background",
+      "label": "Row hover background",
+      "default": "#FCFAF5"
+    },
+    {
+      "type": "color",
+      "id": "check_background",
+      "label": "Check circle background",
+      "default": "#C2A86A"
+    },
+    {
+      "type": "color",
+      "id": "check_text_color",
+      "label": "Check symbol color",
+      "default": "#1b1b1b"
+    },
+    {
+      "type": "color",
+      "id": "x_background",
+      "label": "X circle background",
+      "default": "#EEF1EC"
+    },
+    {
+      "type": "color",
+      "id": "x_text_color",
+      "label": "X symbol color",
+      "default": "#3a4a32"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "comparison_row",
+      "name": "Comparison row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature",
+          "label": "Feature",
+          "default": "No Parabens"
+        },
+        {
+          "type": "select",
+          "id": "brand_value",
+          "label": "Brand value",
+          "default": "check",
+          "options": [
+            {
+              "value": "check",
+              "label": "Check"
+            },
+            {
+              "value": "x",
+              "label": "X"
+            },
+            {
+              "value": "text",
+              "label": "Custom text"
+            },
+            {
+              "value": "blank",
+              "label": "Blank"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "brand_text",
+          "label": "Brand custom text"
+        },
+        {
+          "type": "select",
+          "id": "others_value",
+          "label": "Other brands value",
+          "default": "x",
+          "options": [
+            {
+              "value": "check",
+              "label": "Check"
+            },
+            {
+              "value": "x",
+              "label": "X"
+            },
+            {
+              "value": "text",
+              "label": "Custom text"
+            },
+            {
+              "value": "blank",
+              "label": "Blank"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "others_text",
+          "label": "Other brands custom text"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Brand comparison table",
+      "blocks": [
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "No Parabens",
+            "brand_value": "check",
+            "others_value": "x"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "No Sulfates",
+            "brand_value": "check",
+            "others_value": "x"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "No Phthalates",
+            "brand_value": "check",
+            "others_value": "x"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Full Ingredient Transparency",
+            "brand_value": "check",
+            "others_value": "x"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Dermatologist Tested",
+            "brand_value": "check",
+            "others_value": "x"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Suitable for Sensitive Skin",
+            "brand_value": "check",
+            "others_value": "x"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
