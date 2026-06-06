@@ -1,0 +1,543 @@
+{{ 'editorial-image-collage.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="editorial-image-collage editorial-image-collage--{{ section.id }}"
+  data-animate="{{ section.settings.enable_animation }}"
+  style="
+    --eic-bg: {{ section.settings.section_background }};
+    --eic-text: {{ section.settings.text_color }};
+    --eic-muted: {{ section.settings.muted_text_color }};
+    --eic-eyebrow: {{ section.settings.eyebrow_color }};
+    --eic-accent: {{ section.settings.accent_color }};
+    --eic-icon-bg: {{ section.settings.icon_background }};
+    --eic-icon-text: {{ section.settings.icon_text_color }};
+    --eic-image-bg: {{ section.settings.image_background }};
+    --eic-radius: {{ section.settings.image_radius }}px;
+    --eic-gap: {{ section.settings.image_gap }}px;
+    --eic-text-padding-left: {{ section.settings.text_padding_left }}%;
+    --eic-image-padding-right: {{ section.settings.image_padding_right }}%;
+    --eic-stack-width: {{ section.settings.stack_column_width }}%;
+    --eic-large-width: {{ 100 | minus: section.settings.stack_column_width }}%;
+    --eic-desktop-height: {{ section.settings.desktop_image_height }}px;
+    --eic-mobile-height: {{ section.settings.mobile_image_height }}px;
+    --eic-top-fit: {{ section.settings.top_image_fit }};
+    --eic-bottom-fit: {{ section.settings.bottom_image_fit }};
+    --eic-large-fit: {{ section.settings.large_image_fit }};
+    --eic-top-position: {{ section.settings.top_image_position }};
+    --eic-bottom-position: {{ section.settings.bottom_image_position }};
+    --eic-large-position: {{ section.settings.large_image_position }};
+  "
+>
+  <div class="editorial-image-collage__container">
+    <div class="editorial-image-collage__text">
+      <div class="editorial-image-collage__text-inner">
+        {% if section.settings.eyebrow != blank %}
+          <span class="editorial-image-collage__eyebrow">
+            {{ section.settings.eyebrow }}
+          </span>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h2 class="editorial-image-collage__heading">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <div class="editorial-image-collage__subheading">
+            {{ section.settings.subheading }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.show_divider %}
+          <div class="editorial-image-collage__divider"></div>
+        {% endif %}
+
+        {% if section.settings.body_text != blank %}
+          <div class="editorial-image-collage__body">
+            {{ section.settings.body_text }}
+          </div>
+        {% endif %}
+
+        {% if section.blocks.size > 0 %}
+          <div class="editorial-image-collage__features">
+            {% for block in section.blocks %}
+              {% if block.type == 'feature' and block.settings.text != blank %}
+                <div class="editorial-image-collage__feature" {{ block.shopify_attributes }}>
+                  <span class="editorial-image-collage__feature-icon" aria-hidden="true">
+                    {{ section.settings.feature_icon }}
+                  </span>
+                  <span>{{ block.settings.text }}</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if section.settings.cta_text != blank and section.settings.cta_link != blank %}
+          <a href="{{ section.settings.cta_link }}" class="editorial-image-collage__link">
+            {{ section.settings.cta_text }}
+
+            {% if section.settings.show_cta_arrow %}
+              <span class="editorial-image-collage__link-arrow" aria-hidden="true">→</span>
+            {% endif %}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="editorial-image-collage__media">
+      <div class="editorial-image-collage__stack">
+        <div class="editorial-image-collage__stack-item">
+          {% if section.settings.top_image != blank %}
+            {{
+              section.settings.top_image
+              | image_url: width: 900
+              | image_tag:
+                loading: 'lazy',
+                alt: section.settings.top_image_alt,
+                class: 'editorial-image-collage__image editorial-image-collage__image--top'
+            }}
+          {% else %}
+            <div class="editorial-image-collage__placeholder">Add top image</div>
+          {% endif %}
+        </div>
+
+        <div class="editorial-image-collage__stack-item">
+          {% if section.settings.bottom_image != blank %}
+            {{
+              section.settings.bottom_image
+              | image_url: width: 900
+              | image_tag:
+                loading: 'lazy',
+                alt: section.settings.bottom_image_alt,
+                class: 'editorial-image-collage__image editorial-image-collage__image--bottom'
+            }}
+          {% else %}
+            <div class="editorial-image-collage__placeholder">Add bottom image</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="editorial-image-collage__large">
+        {% if section.settings.large_image != blank %}
+          {{
+            section.settings.large_image
+            | image_url: width: 1200
+            | image_tag:
+              loading: 'lazy',
+              alt: section.settings.large_image_alt,
+              class: 'editorial-image-collage__image editorial-image-collage__image--large'
+          }}
+        {% else %}
+          <div class="editorial-image-collage__placeholder">Add large image</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'editorial-image-collage.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Editorial image collage",
+  "tag": "section",
+  "class": "section-editorial-image-collage",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "STUDYMOTE"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Designed for\nthe modern student"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Thoughtfully crafted tools that blend precision, comfort, and style helping you study smarter, not harder.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "body_text",
+      "label": "Body text",
+      "default": "<p>Every detail is engineered to elevate your daily sessions. No distractions. No compromises. Just focused, effortless learning.</p>"
+    },
+    {
+      "type": "text",
+      "id": "feature_icon",
+      "label": "Feature icon",
+      "default": "✓"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta_arrow",
+      "label": "Show CTA arrow",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "top_image",
+      "label": "Top stacked image"
+    },
+    {
+      "type": "text",
+      "id": "top_image_alt",
+      "label": "Top image alt text",
+      "default": "Product detail image"
+    },
+    {
+      "type": "select",
+      "id": "top_image_fit",
+      "label": "Top image fit",
+      "default": "cover",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "top_image_position",
+      "label": "Top image position",
+      "default": "center center",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "center top",
+          "label": "Top"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left center",
+          "label": "Left"
+        },
+        {
+          "value": "right center",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_image",
+      "label": "Bottom stacked image"
+    },
+    {
+      "type": "text",
+      "id": "bottom_image_alt",
+      "label": "Bottom image alt text",
+      "default": "Product lifestyle image"
+    },
+    {
+      "type": "select",
+      "id": "bottom_image_fit",
+      "label": "Bottom image fit",
+      "default": "cover",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "bottom_image_position",
+      "label": "Bottom image position",
+      "default": "center center",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "center top",
+          "label": "Top"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left center",
+          "label": "Left"
+        },
+        {
+          "value": "right center",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "large_image",
+      "label": "Large image"
+    },
+    {
+      "type": "text",
+      "id": "large_image_alt",
+      "label": "Large image alt text",
+      "default": "Main product image"
+    },
+    {
+      "type": "select",
+      "id": "large_image_fit",
+      "label": "Large image fit",
+      "default": "cover",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "large_image_position",
+      "label": "Large image position",
+      "default": "center center",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "center top",
+          "label": "Top"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left center",
+          "label": "Left"
+        },
+        {
+          "value": "right center",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "text_padding_left",
+      "label": "Desktop text left spacing",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "image_padding_right",
+      "label": "Desktop image right spacing",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "stack_column_width",
+      "label": "Stacked images column width",
+      "min": 25,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "desktop_image_height",
+      "label": "Desktop collage height",
+      "min": 420,
+      "max": 760,
+      "step": 20,
+      "unit": "px",
+      "default": 560
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_height",
+      "label": "Mobile collage height",
+      "min": 280,
+      "max": 560,
+      "step": 20,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "image_gap",
+      "label": "Image gap",
+      "min": 6,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image corner radius",
+      "min": 0,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable fade-in animation",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Main text color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Muted text color",
+      "default": "#4A4A4A"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow color",
+      "default": "#8B7D6B"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#C4B8A8"
+    },
+    {
+      "type": "color",
+      "id": "icon_background",
+      "label": "Feature icon background",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "icon_text_color",
+      "label": "Feature icon text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "image_background",
+      "label": "Image placeholder background",
+      "default": "#F0EDE6"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Precision engineering"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Editorial image collage",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "text": "Precision engineering"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "text": "Sustainable materials"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "text": "Designed for longevity"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
