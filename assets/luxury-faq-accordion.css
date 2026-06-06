@@ -1,0 +1,312 @@
+.luxury-faq-accordion {
+  width: 100%;
+  background: var(--lfa-section-bg);
+  color: var(--lfa-text-color);
+  padding: var(--lfa-padding-top) 24px var(--lfa-padding-bottom);
+  font-family: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.luxury-faq-accordion,
+.luxury-faq-accordion * {
+  box-sizing: border-box;
+}
+
+.luxury-faq-accordion__inner {
+  width: 100%;
+  max-width: var(--lfa-max-width);
+  margin: 0 auto;
+}
+
+.luxury-faq-accordion__header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.luxury-faq-accordion__title {
+  margin: 0 0 12px;
+  color: var(--lfa-text-color);
+  font-family: "Playfair Display", Montserrat, serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 300;
+  letter-spacing: 3px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.luxury-faq-accordion__subtitle {
+  margin: 0;
+  color: var(--lfa-muted-color);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.luxury-faq-accordion__subtitle p {
+  margin: 0;
+}
+
+.luxury-faq-accordion__product-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(4, 31, 96, 0.1);
+}
+
+.luxury-faq-accordion__product-title {
+  margin: 0;
+  color: var(--lfa-text-color);
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+}
+
+.luxury-faq-accordion__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.luxury-faq-accordion__item {
+  overflow: hidden;
+  border: 1px solid var(--lfa-item-border);
+  border-radius: var(--lfa-radius);
+  background: var(--lfa-item-bg);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.luxury-faq-accordion__item:hover {
+  border-color: rgba(56, 182, 204, 0.35);
+  box-shadow: 0 4px 20px rgba(4, 31, 96, 0.06);
+}
+
+.luxury-faq-accordion__question {
+  width: 100%;
+  padding: 20px 24px;
+  border: 0;
+  background: transparent;
+  color: var(--lfa-text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  transition: background 0.3s ease;
+}
+
+.luxury-faq-accordion__question:hover {
+  background: rgba(56, 182, 204, 0.04);
+}
+
+.luxury-faq-accordion__question:focus-visible {
+  outline: 3px solid rgba(56, 182, 204, 0.35);
+  outline-offset: -3px;
+}
+
+.luxury-faq-accordion__question-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.luxury-faq-accordion__arrow {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--lfa-text-color);
+  transition: transform 0.3s ease;
+}
+
+.luxury-faq-accordion__arrow svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.luxury-faq-accordion__item.is-active .luxury-faq-accordion__arrow {
+  transform: rotate(180deg);
+}
+
+.luxury-faq-accordion__answer {
+  padding: 0 24px 20px;
+}
+
+.luxury-faq-accordion__answer[hidden] {
+  display: none;
+}
+
+.luxury-faq-accordion__answer-content {
+  padding-top: 16px;
+  border-top: 1px solid rgba(4, 31, 96, 0.08);
+  color: #444444;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.luxury-faq-accordion__answer-content p {
+  margin: 12px 0;
+}
+
+.luxury-faq-accordion__answer-content p:first-child {
+  margin-top: 0;
+}
+
+.luxury-faq-accordion__answer-content p:last-child {
+  margin-bottom: 0;
+}
+
+.luxury-faq-accordion__answer-content strong {
+  color: var(--lfa-text-color);
+  font-weight: 700;
+}
+
+.luxury-faq-accordion__empty {
+  padding: 24px;
+  border: 1px dashed var(--lfa-item-border);
+  border-radius: var(--lfa-radius);
+  background: var(--lfa-item-bg);
+  color: var(--lfa-muted-color);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.luxury-faq-accordion__cta {
+  margin-top: 48px;
+  padding-top: 24px;
+  text-align: center;
+}
+
+.luxury-faq-accordion__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 40px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--lfa-text-color);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(4, 31, 96, 0.15);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.luxury-faq-accordion__button:hover {
+  background: var(--lfa-accent-color);
+  color: #ffffff;
+  box-shadow: 0 12px 28px rgba(56, 182, 204, 0.25);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.luxury-faq-accordion__button:focus-visible {
+  outline: 3px solid rgba(56, 182, 204, 0.35);
+  outline-offset: 4px;
+}
+
+.luxury-faq-accordion__button-arrow {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  transition: transform 0.3s ease;
+}
+
+.luxury-faq-accordion__button-arrow svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.luxury-faq-accordion__button:hover .luxury-faq-accordion__button-arrow {
+  transform: translateX(4px);
+}
+
+@media screen and (max-width: 768px) {
+  .luxury-faq-accordion {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .luxury-faq-accordion__header {
+    margin-bottom: 40px;
+  }
+
+  .luxury-faq-accordion__subtitle {
+    font-size: 14px;
+  }
+
+  .luxury-faq-accordion__question {
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+
+  .luxury-faq-accordion__answer {
+    padding: 0 20px 18px;
+  }
+
+  .luxury-faq-accordion__answer-content {
+    font-size: 14px;
+  }
+
+  .luxury-faq-accordion__button {
+    padding: 12px 32px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .luxury-faq-accordion {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .luxury-faq-accordion__header {
+    margin-bottom: 34px;
+  }
+
+  .luxury-faq-accordion__title {
+    letter-spacing: 2px;
+  }
+
+  .luxury-faq-accordion__product-header {
+    margin-bottom: 24px;
+  }
+
+  .luxury-faq-accordion__question {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+
+  .luxury-faq-accordion__answer {
+    padding: 0 16px 16px;
+  }
+
+  .luxury-faq-accordion__answer-content {
+    font-size: 13px;
+  }
+
+  .luxury-faq-accordion__button {
+    padding: 10px 28px;
+    font-size: 12px;
+  }
+}

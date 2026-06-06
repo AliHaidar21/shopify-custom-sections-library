@@ -1,0 +1,336 @@
+{{ 'luxury-faq-accordion.css' | asset_url | stylesheet_tag }}
+
+{% if section.settings.load_playfair_font %}
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+{% endif %}
+
+<section
+  class="luxury-faq-accordion luxury-faq-accordion--{{ section.id }}"
+  data-single-open="{{ section.settings.only_one_open }}"
+  style="
+    --lfa-section-bg: {{ section.settings.section_background }};
+    --lfa-text-color: {{ section.settings.text_color }};
+    --lfa-muted-color: {{ section.settings.muted_text_color }};
+    --lfa-accent-color: {{ section.settings.accent_color }};
+    --lfa-item-bg: {{ section.settings.item_background }};
+    --lfa-item-border: {{ section.settings.item_border_color }};
+    --lfa-max-width: {{ section.settings.max_width }}px;
+    --lfa-radius: {{ section.settings.item_radius }}px;
+    --lfa-padding-top: {{ section.settings.padding_top }}px;
+    --lfa-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="luxury-faq-accordion__inner">
+    {% if section.settings.heading != blank or section.settings.subtitle != blank %}
+      <div class="luxury-faq-accordion__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="luxury-faq-accordion__title">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.subtitle != blank %}
+          <div class="luxury-faq-accordion__subtitle">
+            {{ section.settings.subtitle }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if section.settings.product_title != blank %}
+      <div class="luxury-faq-accordion__product-header">
+        <h3 class="luxury-faq-accordion__product-title">
+          {{ section.settings.product_title }}
+        </h3>
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="luxury-faq-accordion__list">
+        {% for block in section.blocks %}
+          {% liquid
+            assign is_open = false
+
+            if section.settings.open_first_item and forloop.first
+              assign is_open = true
+            endif
+
+            assign question_id = 'LuxuryFaqQuestion-' | append: section.id | append: '-' | append: forloop.index
+            assign answer_id = 'LuxuryFaqAnswer-' | append: section.id | append: '-' | append: forloop.index
+          %}
+
+          <div
+            class="luxury-faq-accordion__item {% if is_open %}is-active{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <button
+              id="{{ question_id }}"
+              class="luxury-faq-accordion__question"
+              type="button"
+              aria-expanded="{% if is_open %}true{% else %}false{% endif %}"
+              aria-controls="{{ answer_id }}"
+            >
+              <span class="luxury-faq-accordion__question-text">
+                {{ block.settings.question }}
+              </span>
+
+              <span class="luxury-faq-accordion__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </button>
+
+            <div
+              id="{{ answer_id }}"
+              class="luxury-faq-accordion__answer"
+              role="region"
+              aria-labelledby="{{ question_id }}"
+              {% unless is_open %}hidden{% endunless %}
+            >
+              <div class="luxury-faq-accordion__answer-content">
+                {{ block.settings.answer }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% elsif request.design_mode %}
+      <div class="luxury-faq-accordion__empty">
+        Add FAQ blocks to build your accordion.
+      </div>
+    {% endif %}
+
+    {% if section.settings.show_cta and section.settings.cta_text != blank and section.settings.cta_link != blank %}
+      <div class="luxury-faq-accordion__cta">
+        <a
+          href="{{ section.settings.cta_link }}"
+          class="luxury-faq-accordion__button"
+          aria-label="{{ section.settings.cta_accessibility_label | escape }}"
+        >
+          {{ section.settings.cta_text }}
+
+          <span class="luxury-faq-accordion__button-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h14"></path>
+              <path d="M13 6l6 6-6 6"></path>
+            </svg>
+          </span>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script src="{{ 'luxury-faq-accordion.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Luxury FAQ accordion",
+  "tag": "section",
+  "class": "section-luxury-faq-accordion",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "load_playfair_font",
+      "label": "Load Playfair Display font",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "FAQ"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>Everything you need to know about ROUX Hair Texture Powder</p>"
+    },
+    {
+      "type": "text",
+      "id": "product_title",
+      "label": "Product title",
+      "default": "Hair Texture Powder"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first_item",
+      "label": "Open first FAQ by default",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "only_one_open",
+      "label": "Allow only one FAQ open at a time",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show CTA button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_accessibility_label",
+      "label": "CTA accessibility label",
+      "default": "Shop the product"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 600,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 900
+    },
+    {
+      "type": "range",
+      "id": "item_radius",
+      "label": "FAQ item corner radius",
+      "min": 0,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 24,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 24,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Main text color",
+      "default": "#041f60"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Muted text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#38B6CC"
+    },
+    {
+      "type": "color",
+      "id": "item_background",
+      "label": "FAQ item background",
+      "default": "#F8F9FA"
+    },
+    {
+      "type": "color",
+      "id": "item_border_color",
+      "label": "FAQ item border color",
+      "default": "#E5EAF2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What does this product do?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Add your FAQ answer here.</p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Luxury FAQ accordion",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What does ROUX Hair Texture Powder do?",
+            "answer": "<p>ROUX Hair Texture Powder gives your hair <strong>instant volume, natural lift, and effortless texture</strong> without making it stiff or heavy.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How do I use the texture powder?",
+            "answer": "<p>Apply a small amount to <strong>dry hair</strong>, focusing on the roots or areas where you want more texture. Massage gently with your fingertips, then style naturally.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Will it make my hair feel sticky or crunchy?",
+            "answer": "<p>Not at all. ROUX Hair Texture Powder is formulated to be <strong>lightweight with a matte finish</strong>, with no sticky residue or crunchiness.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Is it suitable for all hair types?",
+            "answer": "<p>Yes. ROUX Hair Texture Powder works on <strong>all hair types</strong>, including straight, wavy, curly, thick, or fine hair.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer free delivery?",
+            "answer": "<p>Yes. We offer <strong>free delivery on all orders of 2 or more items</strong> within Lebanon.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
