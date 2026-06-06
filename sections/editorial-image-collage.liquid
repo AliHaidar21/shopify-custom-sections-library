@@ -141,7 +141,6 @@
 <script src="{{ 'editorial-image-collage.js' | asset_url }}" defer></script>
 
 {% schema %}
-
 {
   "name": "Editorial image collage",
   "tag": "section",
@@ -181,7 +180,7 @@
       "type": "text",
       "id": "feature_icon",
       "label": "Feature icon",
-      "default": "\u2713"
+      "default": "✓"
     },
     {
       "type": "text",
@@ -191,7 +190,8 @@
     {
       "type": "url",
       "id": "cta_link",
-      "label": "CTA link"
+      "label": "CTA link",
+      "info": "CTA appears only when both CTA text and CTA link are filled."
     },
     {
       "type": "checkbox",
@@ -220,14 +220,8 @@
       "label": "Top image fit",
       "default": "cover",
       "options": [
-        {
-          "value": "cover",
-          "label": "Cover"
-        },
-        {
-          "value": "contain",
-          "label": "Contain"
-        }
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" }
       ]
     },
     {
@@ -236,26 +230,11 @@
       "label": "Top image position",
       "default": "center center",
       "options": [
-        {
-          "value": "center center",
-          "label": "Center"
-        },
-        {
-          "value": "center top",
-          "label": "Top"
-        },
-        {
-          "value": "center bottom",
-          "label": "Bottom"
-        },
-        {
-          "value": "left center",
-          "label": "Left"
-        },
-        {
-          "value": "right center",
-          "label": "Right"
-        }
+        { "value": "center center", "label": "Center" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
       ]
     },
     {
@@ -275,14 +254,8 @@
       "label": "Bottom image fit",
       "default": "cover",
       "options": [
-        {
-          "value": "cover",
-          "label": "Cover"
-        },
-        {
-          "value": "contain",
-          "label": "Contain"
-        }
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" }
       ]
     },
     {
@@ -291,26 +264,11 @@
       "label": "Bottom image position",
       "default": "center center",
       "options": [
-        {
-          "value": "center center",
-          "label": "Center"
-        },
-        {
-          "value": "center top",
-          "label": "Top"
-        },
-        {
-          "value": "center bottom",
-          "label": "Bottom"
-        },
-        {
-          "value": "left center",
-          "label": "Left"
-        },
-        {
-          "value": "right center",
-          "label": "Right"
-        }
+        { "value": "center center", "label": "Center" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
       ]
     },
     {
@@ -330,14 +288,8 @@
       "label": "Large image fit",
       "default": "cover",
       "options": [
-        {
-          "value": "cover",
-          "label": "Cover"
-        },
-        {
-          "value": "contain",
-          "label": "Contain"
-        }
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" }
       ]
     },
     {
@@ -346,26 +298,11 @@
       "label": "Large image position",
       "default": "center center",
       "options": [
-        {
-          "value": "center center",
-          "label": "Center"
-        },
-        {
-          "value": "center top",
-          "label": "Top"
-        },
-        {
-          "value": "center bottom",
-          "label": "Bottom"
-        },
-        {
-          "value": "left center",
-          "label": "Left"
-        },
-        {
-          "value": "right center",
-          "label": "Right"
-        }
+        { "value": "center center", "label": "Center" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
       ]
     },
     {
@@ -548,5 +485,4 @@
     }
   ]
 }
-
 {% endschema %}

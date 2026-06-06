@@ -223,11 +223,6 @@
   opacity: 0.18;
 }
 
-.premium-hero-banner__cta:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--phb-accent-color) 55%, transparent);
-  outline-offset: 4px;
-}
-
 .premium-hero-banner__cta span {
   position: absolute;
   pointer-events: none;
@@ -270,43 +265,23 @@
 }
 
 @keyframes premiumHeroBannerTop {
-  0% {
-    transform: translateX(100%);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
 }
 
 @keyframes premiumHeroBannerRight {
-  0% {
-    transform: translateY(100%);
-  }
-
-  100% {
-    transform: translateY(-100%);
-  }
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
 }
 
 @keyframes premiumHeroBannerBottom {
-  0% {
-    transform: translateX(-100%);
-  }
-
-  100% {
-    transform: translateX(100%);
-  }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 @keyframes premiumHeroBannerLeft {
-  0% {
-    transform: translateY(-100%);
-  }
-
-  100% {
-    transform: translateY(100%);
-  }
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
 }
 
 .premium-hero-banner__trust {
@@ -332,11 +307,6 @@
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.4);
   color: inherit;
   text-decoration: none;
-}
-
-.premium-hero-banner__card-link--static:hover {
-  transform: none;
-  box-shadow: none;
 }
 
 .premium-hero-banner__card {
@@ -425,22 +395,6 @@
     object-position: var(--phb-bg-position);
   }
 
-  .premium-hero-banner__media::after {
-    background:
-      radial-gradient(
-        800px 600px at 45% 35%,
-        rgba(0, 0, 0, calc(var(--phb-overlay-mobile-strength) * 0.12)),
-        rgba(0, 0, 0, var(--phb-overlay-mobile-strength))
-      ),
-      linear-gradient(
-        165deg,
-        rgba(5, 12, 28, var(--phb-overlay-mobile-strength)) 0%,
-        rgba(5, 12, 28, calc(var(--phb-overlay-mobile-strength) * 0.78)) 50%,
-        rgba(5, 12, 28, calc(var(--phb-overlay-mobile-strength) * 0.45)) 80%,
-        rgba(5, 12, 28, calc(var(--phb-overlay-mobile-strength) * 0.25)) 100%
-      );
-  }
-
   .premium-hero-banner__inner {
     width: min(1180px, calc(100% - 28px));
   }
@@ -453,31 +407,5 @@
   .premium-hero-banner__card-image,
   .premium-hero-banner__card-placeholder {
     height: 280px;
-  }
-
-  .premium-hero-banner__chip {
-    background: color-mix(in srgb, var(--phb-chip-bg) 12%, transparent);
-    backdrop-filter: blur(6px);
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .premium-hero-banner__eyebrow {
-    font-size: 0.85rem;
-  }
-
-  .premium-hero-banner__media::after {
-    background:
-      radial-gradient(
-        600px 500px at 50% 40%,
-        rgba(0, 0, 0, calc(var(--phb-overlay-mobile-strength) * 0.1)),
-        rgba(0, 0, 0, calc(var(--phb-overlay-mobile-strength) * 0.88))
-      ),
-      linear-gradient(
-        180deg,
-        rgba(5, 12, 28, var(--phb-overlay-mobile-strength)) 0%,
-        rgba(5, 12, 28, calc(var(--phb-overlay-mobile-strength) * 0.72)) 60%,
-        rgba(5, 12, 28, calc(var(--phb-overlay-mobile-strength) * 0.36)) 100%
-      );
   }
 }
