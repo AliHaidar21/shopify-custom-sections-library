@@ -1,0 +1,488 @@
+.device-preview-hero-slider,
+.device-preview-hero-slider *,
+.device-preview-hero-slider *::before,
+.device-preview-hero-slider *::after {
+  box-sizing: border-box;
+}
+
+.device-preview-hero-slider {
+  position: relative;
+  width: 100%;
+  height: var(--dph-height-desktop);
+  overflow: hidden;
+  background: #0c203a;
+  color: var(--dph-text-color);
+  isolation: isolate;
+}
+
+.device-preview-hero-slider__slides,
+.device-preview-hero-slider__slide,
+.device-preview-hero-slider__background {
+  position: absolute;
+  inset: 0;
+}
+
+.device-preview-hero-slider__slide {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.device-preview-hero-slider__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.device-preview-hero-slider__background {
+  background-size: cover;
+  background-position: var(--dph-bg-position);
+  background-repeat: no-repeat;
+  transform: scale(1.01);
+}
+
+.device-preview-hero-slider__background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(25, 46, 88, calc(var(--dph-overlay) + 0.16)) 0%,
+      rgba(30, 58, 105, var(--dph-overlay)) 38%,
+      rgba(30, 58, 105, calc(var(--dph-overlay) * 0.42)) 70%,
+      rgba(30, 58, 105, calc(var(--dph-overlay) * 0.2)) 100%
+    );
+}
+
+.device-preview-hero-slider__placeholder,
+.device-preview-hero-slider__empty {
+  min-height: 400px;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  background: #102a48;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.device-preview-hero-slider__content {
+  position: relative;
+  z-index: 2;
+  width: min(var(--dph-content-width), calc(100% - 80px));
+  height: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--dph-phone-width);
+  gap: 46px;
+  align-items: center;
+}
+
+.device-preview-hero-slider__copy {
+  max-width: 760px;
+  padding-left: 4px;
+}
+
+.device-preview-hero-slider__badge,
+.device-preview-hero-slider__phone-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 8px 17px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--dph-pill-bg) 72%, transparent);
+  color: var(--dph-pill-text);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.device-preview-hero-slider__heading {
+  margin: 22px 0 16px;
+  max-width: 880px;
+  color: var(--dph-soft-text-color);
+  font-size: clamp(44px, 5.8vw, 74px);
+  line-height: 1.07;
+  font-weight: 900;
+  letter-spacing: -0.055em;
+}
+
+.device-preview-hero-slider__heading span,
+.device-preview-hero-slider__heading em {
+  display: inline;
+}
+
+.device-preview-hero-slider__heading em {
+  color: var(--dph-text-color);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.035em;
+}
+
+.device-preview-hero-slider__rating {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--dph-pill-bg) 62%, transparent);
+  color: var(--dph-text-color);
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+}
+
+.device-preview-hero-slider__benefits,
+.device-preview-hero-slider__phone-benefits {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+}
+
+.device-preview-hero-slider__benefits {
+  margin-top: 28px;
+}
+
+.device-preview-hero-slider__benefits span,
+.device-preview-hero-slider__phone-benefits span {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.device-preview-hero-slider__benefits span::before,
+.device-preview-hero-slider__phone-benefits span::before,
+.device-preview-hero-slider__guarantee::before,
+.device-preview-hero-slider__phone-guarantee::before {
+  content: "✹";
+  width: 16px;
+  height: 16px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #315a87;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.device-preview-hero-slider__buttons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.device-preview-hero-slider__button {
+  min-width: 156px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  padding: 17px 30px;
+  border-radius: 10px;
+  color: #ffffff;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.22);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.device-preview-hero-slider__button:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.device-preview-hero-slider__button--primary {
+  background: var(--dph-button-primary);
+  color: var(--dph-button-primary-text);
+}
+
+.device-preview-hero-slider__button--secondary {
+  background: var(--dph-button-secondary);
+  color: var(--dph-button-secondary-text);
+}
+
+.device-preview-hero-slider__guarantee {
+  margin: 22px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 15px;
+  font-weight: 850;
+}
+
+.device-preview-hero-slider__phone {
+  justify-self: end;
+  width: var(--dph-phone-width);
+  max-width: 100%;
+  border: 10px solid #050608;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.42);
+  transform: translateY(36px);
+}
+
+.device-preview-hero-slider__phone-screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16.2;
+  min-height: 480px;
+  background-size: cover;
+  background-position: center center;
+  overflow: hidden;
+}
+
+.device-preview-hero-slider__phone-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(41, 83, 124, var(--dph-phone-overlay));
+}
+
+.device-preview-hero-slider__phone-speaker {
+  position: absolute;
+  z-index: 2;
+  top: 8px;
+  left: 50%;
+  width: 58px;
+  height: 6px;
+  border-radius: 999px;
+  background: #ffffff;
+  transform: translateX(-35%);
+}
+
+.device-preview-hero-slider__phone-speaker::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -16px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.device-preview-hero-slider__phone-copy {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 58px 28px 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.device-preview-hero-slider__phone-copy h3 {
+  margin: 24px 0 18px;
+  color: var(--dph-soft-text-color);
+  font-size: clamp(28px, 2.4vw, 39px);
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: -0.055em;
+}
+
+.device-preview-hero-slider__phone-copy h3 span,
+.device-preview-hero-slider__phone-copy h3 em {
+  display: block;
+}
+
+.device-preview-hero-slider__phone-copy h3 em {
+  color: var(--dph-text-color);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.device-preview-hero-slider__phone-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--dph-pill-bg) 54%, transparent);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.device-preview-hero-slider__phone-benefits {
+  justify-content: center;
+  gap: 12px 18px;
+  margin-top: 28px;
+}
+
+.device-preview-hero-slider__phone-benefits span {
+  font-size: 11px;
+}
+
+.device-preview-hero-slider__phone-button {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 18px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
+.device-preview-hero-slider__phone-button--primary {
+  background: var(--dph-button-primary);
+}
+
+.device-preview-hero-slider__phone-button--secondary {
+  background: var(--dph-button-secondary);
+}
+
+.device-preview-hero-slider__phone-guarantee {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.device-preview-hero-slider__arrow {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111111;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 52px;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.device-preview-hero-slider__arrow--prev {
+  left: -28px;
+}
+
+.device-preview-hero-slider__arrow--next {
+  right: -28px;
+}
+
+.device-preview-hero-slider__dots {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 18px;
+  display: flex;
+  gap: 16px;
+  transform: translateX(-50%);
+}
+
+.device-preview-hero-slider__dot {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #c8c8c8;
+  cursor: pointer;
+}
+
+.device-preview-hero-slider__dot.is-active {
+  background: #1d1d1d;
+}
+
+@media screen and (max-width: 1100px) {
+  .device-preview-hero-slider__content {
+    grid-template-columns: 1fr;
+  }
+
+  .device-preview-hero-slider__phone {
+    display: none;
+  }
+
+  .device-preview-hero-slider__copy {
+    max-width: 760px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .device-preview-hero-slider {
+    height: var(--dph-height-mobile);
+  }
+
+  .device-preview-hero-slider__content {
+    width: min(100% - 38px, 720px);
+    align-items: center;
+  }
+
+  .device-preview-hero-slider__copy {
+    text-align: center;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .device-preview-hero-slider__heading {
+    font-size: clamp(38px, 12vw, 58px);
+  }
+
+  .device-preview-hero-slider__badge,
+  .device-preview-hero-slider__rating {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .device-preview-hero-slider__benefits {
+    justify-content: center;
+  }
+
+  .device-preview-hero-slider__buttons {
+    justify-content: center;
+  }
+
+  .device-preview-hero-slider__button {
+    width: min(100%, 320px);
+  }
+
+  .device-preview-hero-slider__arrow {
+    width: 46px;
+    height: 46px;
+    font-size: 42px;
+  }
+
+  .device-preview-hero-slider__arrow--prev {
+    left: -22px;
+  }
+
+  .device-preview-hero-slider__arrow--next {
+    right: -22px;
+  }
+}

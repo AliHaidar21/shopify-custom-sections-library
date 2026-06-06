@@ -1,0 +1,313 @@
+{{ 'perfume-product-hero.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="perfume-product-hero perfume-product-hero--{{ section.id }} perfume-product-hero--image-{{ section.settings.image_position }}"
+  style="
+    --pph-bg: {{ section.settings.background_color }};
+    --pph-text: {{ section.settings.text_color }};
+    --pph-muted: {{ section.settings.muted_text_color }};
+    --pph-accent: {{ section.settings.accent_color }};
+    --pph-button-bg: {{ section.settings.button_background }};
+    --pph-button-text: {{ section.settings.button_text_color }};
+    --pph-max-width: {{ section.settings.max_width }}px;
+    --pph-height-desktop: {{ section.settings.desktop_height }}px;
+    --pph-height-mobile: {{ section.settings.mobile_height }}px;
+    --pph-bg-position: {{ section.settings.background_position }};
+    --pph-product-position: {{ section.settings.product_image_position }};
+  "
+>
+  <div
+    class="perfume-product-hero__background"
+    {% if section.settings.background_image != blank %}
+      style="--pph-bg-image: url('{{ section.settings.background_image | image_url: width: 2400 }}');"
+    {% endif %}
+  ></div>
+
+  <div class="perfume-product-hero__inner">
+    <div class="perfume-product-hero__product-wrap">
+      {% if section.settings.product_image != blank %}
+        {{
+          section.settings.product_image
+          | image_url: width: 1000
+          | image_tag:
+            class: 'perfume-product-hero__product-image',
+            loading: 'eager',
+            alt: section.settings.product_image_alt
+        }}
+      {% elsif request.design_mode %}
+        <div class="perfume-product-hero__product-placeholder">
+          Add product image
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="perfume-product-hero__copy">
+      {% if section.settings.rating_text != blank %}
+        <div class="perfume-product-hero__rating">
+          <span aria-hidden="true">{{ section.settings.rating_stars }}</span>
+          <strong>{{ section.settings.rating_text }}</strong>
+        </div>
+      {% endif %}
+
+      {% if section.settings.heading_italic != blank or section.settings.heading_main != blank %}
+        <h2 class="perfume-product-hero__heading">
+          {% if section.settings.heading_italic != blank %}
+            <em>{{ section.settings.heading_italic }}</em>
+          {% endif %}
+
+          {% if section.settings.heading_main != blank %}
+            <span>{{ section.settings.heading_main }}</span>
+          {% endif %}
+        </h2>
+      {% endif %}
+
+      {% if section.blocks.size > 0 %}
+        <div class="perfume-product-hero__benefits">
+          {% for block in section.blocks %}
+            {% if block.type == 'benefit' and block.settings.text != blank %}
+              <div class="perfume-product-hero__benefit" {{ block.shopify_attributes }}>
+                <span aria-hidden="true">{{ section.settings.benefit_icon }}</span>
+                <p>{{ block.settings.text }}</p>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if section.settings.cta_text != blank and section.settings.cta_link != blank %}
+        <a href="{{ section.settings.cta_link }}" class="perfume-product-hero__button">
+          {{ section.settings.cta_text }}
+        </a>
+      {% endif %}
+
+      {% if section.settings.guarantee_text != blank %}
+        <p class="perfume-product-hero__guarantee">
+          <span aria-hidden="true">{{ section.settings.guarantee_icon }}</span>
+          {{ section.settings.guarantee_text }}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Perfume product hero",
+  "tag": "section",
+  "class": "section-perfume-product-hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "background_position",
+      "label": "Background position",
+      "default": "center center",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image"
+    },
+    {
+      "type": "text",
+      "id": "product_image_alt",
+      "label": "Product image alt text",
+      "default": "Perfume bottle"
+    },
+    {
+      "type": "select",
+      "id": "product_image_position",
+      "label": "Product image crop position",
+      "default": "center center",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Product image side",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "rating_stars",
+      "label": "Rating stars",
+      "default": "★★★★★"
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating text",
+      "default": "4.7/5.0 | 2X Sell-out Viral Product"
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Italic heading line",
+      "default": "The Essence of"
+    },
+    {
+      "type": "text",
+      "id": "heading_main",
+      "label": "Main heading line",
+      "default": "Irresistible Presence"
+    },
+    {
+      "type": "text",
+      "id": "benefit_icon",
+      "label": "Benefit icon",
+      "default": "✹"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Unlock Your Signature Scent →"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA link",
+      "info": "CTA appears only when both CTA text and CTA link are filled."
+    },
+    {
+      "type": "text",
+      "id": "guarantee_icon",
+      "label": "Guarantee icon",
+      "default": "▣"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Guarantee text",
+      "default": "30-Day Money-back Guarantee"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 900,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 1300
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "min": 420,
+      "max": 760,
+      "step": 20,
+      "unit": "px",
+      "default": 560
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "min": 520,
+      "max": 820,
+      "step": 20,
+      "unit": "px",
+      "default": 660
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Fallback background color",
+      "default": "#f5e9ff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1b123f"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Muted text color",
+      "default": "#35215f"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#d292ff"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#d79cff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#1b123f"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Benefit text",
+          "default": "Boost your social battery and magnetic pull"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Perfume product hero",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Boost your social battery and magnetic pull"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Feel bold, calm, and collected in any crowd"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "A sophisticated blend crafted to captivate"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
