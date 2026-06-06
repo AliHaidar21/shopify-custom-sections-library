@@ -70,6 +70,7 @@
 </section>
 
 {% schema %}
+
 {
   "name": "WhatsApp order button",
   "tag": "section",
@@ -79,44 +80,43 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Prefer ordering directly?"
+      "info": "Suggested text: Prefer ordering directly?"
     },
     {
       "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
-      "default": "<p>Message us on WhatsApp and we will help you place your order.</p>"
+      "info": "Suggested text: Message us on WhatsApp and we will help you place your order."
     },
     {
       "type": "text",
       "id": "whatsapp_number",
       "label": "WhatsApp phone number",
-      "default": "96181619174",
-      "info": "Use country code without spaces. Example: 96181619174"
+      "info": "Use country code without spaces. Example: 96181619174 Suggested text: 96181619174"
     },
     {
       "type": "textarea",
       "id": "whatsapp_message",
       "label": "Pre-filled WhatsApp message",
-      "default": "Hello, I am interested in ordering ROUX Hair Texturizer."
+      "info": "Suggested text: Hello, I am interested in ordering ROUX Hair Texturizer."
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Button text",
-      "default": "Order Through WhatsApp"
+      "info": "Suggested text: Order Through WhatsApp"
     },
     {
       "type": "text",
       "id": "accessibility_label",
       "label": "Accessibility label",
-      "default": "Order through WhatsApp"
+      "info": "Suggested text: Order through WhatsApp"
     },
     {
       "type": "text",
       "id": "note",
       "label": "Small note below button",
-      "default": "Fast reply during working hours."
+      "info": "Suggested text: Fast reply during working hours."
     },
     {
       "type": "select",
@@ -186,7 +186,7 @@
       "type": "color",
       "id": "text_color",
       "label": "Text color",
-      "default": "#041f60"
+      "default": "#000000"
     },
     {
       "type": "color",
@@ -198,19 +198,19 @@
       "type": "color",
       "id": "gradient_start",
       "label": "Gradient start",
-      "default": "#25D366"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "gradient_middle",
       "label": "Gradient middle",
-      "default": "#128C7E"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "gradient_end",
       "label": "Gradient end",
-      "default": "#075E54"
+      "default": "#000000"
     }
   ],
   "presets": [
@@ -219,4 +219,5 @@
     }
   ]
 }
+
 {% endschema %}

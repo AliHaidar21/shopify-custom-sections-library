@@ -229,6 +229,14 @@
   transform: translateY(0);
 }
 
+
+@media screen and (min-width: 969px) {
+  .editorial-image-collage[data-match-text-height="true"] .editorial-image-collage__media {
+    height: var(--eic-matched-height, var(--eic-desktop-height));
+    align-self: center;
+  }
+}
+
 @media screen and (max-width: 968px) {
   .editorial-image-collage {
     padding: 60px 0;
