@@ -1,90 +1,98 @@
 {{ 'perfume-product-hero.css' | asset_url | stylesheet_tag }}
 
 <section
-  class="perfume-product-hero perfume-product-hero--{{ section.id }} perfume-product-hero--image-{{ section.settings.image_position }}"
+  class="product-spotlight product-spotlight--{{ section.id }}"
   style="
-    --pph-bg: {{ section.settings.background_color }};
-    --pph-text: {{ section.settings.text_color }};
-    --pph-muted: {{ section.settings.muted_text_color }};
-    --pph-accent: {{ section.settings.accent_color }};
-    --pph-button-bg: {{ section.settings.button_background }};
-    --pph-button-text: {{ section.settings.button_text_color }};
-    --pph-max-width: {{ section.settings.max_width }}px;
-    --pph-height-desktop: {{ section.settings.desktop_height }}px;
-    --pph-height-mobile: {{ section.settings.mobile_height }}px;
-    --pph-bg-position: {{ section.settings.background_position }};
-    --pph-product-position: {{ section.settings.product_image_position }};
+    --ps-bg: {{ section.settings.section_bg }};
+    --ps-overlay: {{ section.settings.overlay_color }};
+    --ps-card: {{ section.settings.card_bg }};
+    --ps-text: {{ section.settings.text_color }};
+    --ps-muted: {{ section.settings.muted_color }};
+    --ps-accent: {{ section.settings.accent_color }};
+    --ps-button-bg: {{ section.settings.button_bg }};
+    --ps-button-text: {{ section.settings.button_text_color }};
+    --ps-radius: {{ section.settings.card_radius }}px;
+    --ps-media-radius: {{ section.settings.media_radius }}px;
+    --ps-top: {{ section.settings.padding_top }}px;
+    --ps-bottom: {{ section.settings.padding_bottom }}px;
+    --ps-product-position: {{ section.settings.product_image_position }};
   "
 >
-  <div
-    class="perfume-product-hero__background"
-    {% if section.settings.background_image != blank %}
-      style="--pph-bg-image: url('{{ section.settings.background_image | image_url: width: 2400 }}');"
-    {% endif %}
-  ></div>
-
-  <div class="perfume-product-hero__inner">
-    <div class="perfume-product-hero__product-wrap">
-      {% if section.settings.product_image != blank %}
-        {{
-          section.settings.product_image
-          | image_url: width: 1000
-          | image_tag:
-            class: 'perfume-product-hero__product-image',
-            loading: 'eager',
-            alt: section.settings.product_image_alt
-        }}
-      {% elsif request.design_mode %}
-        <div class="perfume-product-hero__product-placeholder">
-          Add product image
-        </div>
-      {% endif %}
+  {% if section.settings.background_image != blank %}
+    <div class="product-spotlight__background">
+      {{
+        section.settings.background_image
+        | image_url: width: 2200
+        | image_tag:
+          loading: 'lazy',
+          widths: '480, 720, 960, 1200, 1600, 2000, 2200',
+          class: 'product-spotlight__background-image',
+          alt: section.settings.background_alt
+      }}
     </div>
+  {% endif %}
 
-    <div class="perfume-product-hero__copy">
-      {% if section.settings.rating_text != blank %}
-        <div class="perfume-product-hero__rating">
-          <span aria-hidden="true">{{ section.settings.rating_stars }}</span>
-          <strong>{{ section.settings.rating_text }}</strong>
-        </div>
+  <div class="product-spotlight__overlay"></div>
+
+  <div class="product-spotlight__wrap page-width">
+    <div class="product-spotlight__card">
+      {% if section.settings.eyebrow != blank %}
+        <div class="product-spotlight__eyebrow">{{ section.settings.eyebrow }}</div>
       {% endif %}
 
-      {% if section.settings.heading_italic != blank or section.settings.heading_main != blank %}
-        <h2 class="perfume-product-hero__heading">
-          {% if section.settings.heading_italic != blank %}
-            <em>{{ section.settings.heading_italic }}</em>
-          {% endif %}
+      {% if section.settings.accent_heading != blank %}
+        <div class="product-spotlight__accent-heading">{{ section.settings.accent_heading }}</div>
+      {% endif %}
 
-          {% if section.settings.heading_main != blank %}
-            <span>{{ section.settings.heading_main }}</span>
-          {% endif %}
-        </h2>
+      {% if section.settings.main_heading != blank %}
+        <h2 class="product-spotlight__heading">{{ section.settings.main_heading | newline_to_br }}</h2>
+      {% endif %}
+
+      <div class="product-spotlight__media">
+        {% if section.settings.product_image != blank %}
+          {{
+            section.settings.product_image
+            | image_url: width: 1200
+            | image_tag:
+              loading: 'lazy',
+              widths: '320, 480, 720, 960, 1200',
+              class: 'product-spotlight__product-image',
+              alt: section.settings.product_alt
+          }}
+        {% else %}
+          <div class="product-spotlight__placeholder">Add product image</div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.rating_text != blank %}
+        <div class="product-spotlight__rating-text">{{ section.settings.rating_text }}</div>
+      {% endif %}
+
+      {% if section.settings.rating_stars != blank %}
+        <div class="product-spotlight__stars">{{ section.settings.rating_stars }}</div>
       {% endif %}
 
       {% if section.blocks.size > 0 %}
-        <div class="perfume-product-hero__benefits">
+        <div class="product-spotlight__benefits">
           {% for block in section.blocks %}
             {% if block.type == 'benefit' and block.settings.text != blank %}
-              <div class="perfume-product-hero__benefit" {{ block.shopify_attributes }}>
-                <span aria-hidden="true">{{ section.settings.benefit_icon }}</span>
-                <p>{{ block.settings.text }}</p>
+              <div class="product-spotlight__benefit" {{ block.shopify_attributes }}>
+                <span class="product-spotlight__benefit-icon">{{ section.settings.benefit_icon }}</span>
+                <span>{{ block.settings.text }}</span>
               </div>
             {% endif %}
           {% endfor %}
         </div>
       {% endif %}
 
-      {% if section.settings.cta_text != blank and section.settings.cta_link != blank %}
-        <a href="{{ section.settings.cta_link }}" class="perfume-product-hero__button">
-          {{ section.settings.cta_text }}
+      {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="product-spotlight__button">
+          {{ section.settings.button_text }}
         </a>
       {% endif %}
 
       {% if section.settings.guarantee_text != blank %}
-        <p class="perfume-product-hero__guarantee">
-          <span aria-hidden="true">{{ section.settings.guarantee_icon }}</span>
-          {{ section.settings.guarantee_text }}
-        </p>
+        <div class="product-spotlight__guarantee">{{ section.settings.guarantee_text }}</div>
       {% endif %}
     </div>
   </div>
@@ -92,27 +100,38 @@
 
 {% schema %}
 {
-  "name": "Perfume product hero",
+  "name": "Product spotlight hero",
   "tag": "section",
-  "class": "section-perfume-product-hero",
+  "class": "section section-product-spotlight",
   "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small top text",
+      "default": "Customer favorite"
+    },
+    {
+      "type": "text",
+      "id": "accent_heading",
+      "label": "Italic heading line",
+      "default": "The Essence of"
+    },
+    {
+      "type": "textarea",
+      "id": "main_heading",
+      "label": "Main heading",
+      "default": "Irresistible Presence"
+    },
     {
       "type": "image_picker",
       "id": "background_image",
       "label": "Background image"
     },
     {
-      "type": "select",
-      "id": "background_position",
-      "label": "Background position",
-      "default": "center center",
-      "options": [
-        { "value": "center center", "label": "Center" },
-        { "value": "center top", "label": "Top" },
-        { "value": "center bottom", "label": "Bottom" },
-        { "value": "left center", "label": "Left" },
-        { "value": "right center", "label": "Right" }
-      ]
+      "type": "text",
+      "id": "background_alt",
+      "label": "Background alt text",
+      "default": "Background image"
     },
     {
       "type": "image_picker",
@@ -121,14 +140,14 @@
     },
     {
       "type": "text",
-      "id": "product_image_alt",
+      "id": "product_alt",
       "label": "Product image alt text",
-      "default": "Perfume bottle"
+      "default": "Product image"
     },
     {
       "type": "select",
       "id": "product_image_position",
-      "label": "Product image crop position",
+      "label": "Product image position",
       "default": "center center",
       "options": [
         { "value": "center center", "label": "Center" },
@@ -137,22 +156,6 @@
         { "value": "left center", "label": "Left" },
         { "value": "right center", "label": "Right" }
       ]
-    },
-    {
-      "type": "select",
-      "id": "image_position",
-      "label": "Product image side",
-      "default": "left",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "right", "label": "Right" }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "rating_stars",
-      "label": "Rating stars",
-      "default": "★★★★★"
     },
     {
       "type": "text",
@@ -162,39 +165,30 @@
     },
     {
       "type": "text",
-      "id": "heading_italic",
-      "label": "Italic heading line",
-      "default": "The Essence of"
-    },
-    {
-      "type": "text",
-      "id": "heading_main",
-      "label": "Main heading line",
-      "default": "Irresistible Presence"
+      "id": "rating_stars",
+      "label": "Stars",
+      "default": "★★★★★"
     },
     {
       "type": "text",
       "id": "benefit_icon",
       "label": "Benefit icon",
-      "default": "✹"
+      "default": "✦"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add a button link below or the button will stay hidden."
     },
     {
       "type": "text",
-      "id": "cta_text",
-      "label": "CTA text",
-      "default": "Unlock Your Signature Scent →"
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Unlock your signature scent →"
     },
     {
       "type": "url",
-      "id": "cta_link",
-      "label": "CTA link",
-      "info": "CTA appears only when both CTA text and CTA link are filled."
-    },
-    {
-      "type": "text",
-      "id": "guarantee_icon",
-      "label": "Guarantee icon",
-      "default": "▣"
+      "id": "button_link",
+      "label": "Button link"
     },
     {
       "type": "text",
@@ -203,70 +197,88 @@
       "default": "30-Day Money-back Guarantee"
     },
     {
-      "type": "range",
-      "id": "max_width",
-      "label": "Maximum width",
-      "min": 900,
-      "max": 1600,
-      "step": 50,
-      "unit": "px",
-      "default": 1300
-    },
-    {
-      "type": "range",
-      "id": "desktop_height",
-      "label": "Desktop height",
-      "min": 420,
-      "max": 760,
-      "step": 20,
-      "unit": "px",
-      "default": 560
-    },
-    {
-      "type": "range",
-      "id": "mobile_height",
-      "label": "Mobile height",
-      "min": 520,
-      "max": 820,
-      "step": 20,
-      "unit": "px",
-      "default": 660
+      "type": "color",
+      "id": "section_bg",
+      "label": "Fallback background",
+      "default": "#f4eefc"
     },
     {
       "type": "color",
-      "id": "background_color",
-      "label": "Fallback background color",
-      "default": "#f5e9ff"
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card background",
+      "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "text_color",
       "label": "Text color",
-      "default": "#1b123f"
+      "default": "#1a1333"
     },
     {
       "type": "color",
-      "id": "muted_text_color",
+      "id": "muted_color",
       "label": "Muted text color",
-      "default": "#35215f"
+      "default": "#6d6388"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
-      "default": "#d292ff"
+      "default": "#6d3fd1"
     },
     {
       "type": "color",
-      "id": "button_background",
+      "id": "button_bg",
       "label": "Button background",
-      "default": "#d79cff"
+      "default": "#d8b6ff"
     },
     {
       "type": "color",
       "id": "button_text_color",
       "label": "Button text color",
-      "default": "#1b123f"
+      "default": "#23153f"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "media_radius",
+      "label": "Image radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 72
     }
   ],
   "blocks": [
@@ -286,26 +298,11 @@
   "max_blocks": 5,
   "presets": [
     {
-      "name": "Perfume product hero",
+      "name": "Product spotlight hero",
       "blocks": [
-        {
-          "type": "benefit",
-          "settings": {
-            "text": "Boost your social battery and magnetic pull"
-          }
-        },
-        {
-          "type": "benefit",
-          "settings": {
-            "text": "Feel bold, calm, and collected in any crowd"
-          }
-        },
-        {
-          "type": "benefit",
-          "settings": {
-            "text": "A sophisticated blend crafted to captivate"
-          }
-        }
+        { "type": "benefit" },
+        { "type": "benefit" },
+        { "type": "benefit" }
       ]
     }
   ]

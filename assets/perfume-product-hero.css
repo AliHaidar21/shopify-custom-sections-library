@@ -1,275 +1,191 @@
-.perfume-product-hero,
-.perfume-product-hero *,
-.perfume-product-hero *::before,
-.perfume-product-hero *::after {
+.product-spotlight {
+  position: relative;
+  overflow: hidden;
+  background: var(--ps-bg);
+  padding-top: var(--ps-top);
+  padding-bottom: var(--ps-bottom);
+}
+
+.product-spotlight,
+.product-spotlight * {
   box-sizing: border-box;
 }
 
-.perfume-product-hero {
-  position: relative;
+.product-spotlight__background,
+.product-spotlight__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.product-spotlight__background-image {
   width: 100%;
-  min-height: var(--pph-height-desktop);
-  overflow: hidden;
-  background: var(--pph-bg);
-  color: var(--pph-text);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-}
-
-.perfume-product-hero__background {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 35% 45%, rgba(255, 255, 255, 0.8), transparent 34%),
-    linear-gradient(90deg, #f3ecff 0%, #f7e8ff 45%, #ffffff 100%);
-  background-image: var(--pph-bg-image);
-  background-size: cover;
-  background-position: var(--pph-bg-position);
-  background-repeat: no-repeat;
-}
-
-.perfume-product-hero__background::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 246, 255, 0.08) 48%, rgba(255, 255, 255, 0.72) 100%);
-  pointer-events: none;
-}
-
-.perfume-product-hero__inner {
-  position: relative;
-  z-index: 1;
-  width: min(var(--pph-max-width), calc(100% - 48px));
-  min-height: var(--pph-height-desktop);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 0.92fr 1.08fr;
-  align-items: center;
-  gap: 56px;
-}
-
-.perfume-product-hero--image-right .perfume-product-hero__product-wrap {
-  order: 2;
-}
-
-.perfume-product-hero--image-right .perfume-product-hero__copy {
-  order: 1;
-}
-
-.perfume-product-hero__product-wrap {
-  position: relative;
-  min-height: 380px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.perfume-product-hero__product-image {
-  width: min(100%, 520px);
-  max-height: 520px;
-  object-fit: contain;
-  object-position: var(--pph-product-position);
-  filter: drop-shadow(0 28px 35px rgba(58, 25, 91, 0.18));
-  transform: rotate(-13deg);
-}
-
-.perfume-product-hero__product-placeholder {
-  width: min(100%, 460px);
-  min-height: 360px;
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.55);
-  display: grid;
-  place-items: center;
-  color: rgba(27, 18, 63, 0.55);
-  font-size: 15px;
-  font-weight: 800;
-}
-
-.perfume-product-hero__copy {
-  max-width: 650px;
-  padding: 58px 0;
-}
-
-.perfume-product-hero__rating {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #d6a000;
-  font-size: 15px;
-  line-height: 1.2;
-  font-weight: 900;
-  margin-bottom: 14px;
-}
-
-.perfume-product-hero__rating strong {
-  color: color-mix(in srgb, var(--pph-text) 78%, #b47b00);
-  font-size: 14px;
-  font-weight: 900;
-}
-
-.perfume-product-hero__heading {
-  margin: 0 0 26px;
-  color: var(--pph-text);
-  font-size: clamp(46px, 5vw, 72px);
-  line-height: 1.04;
-  letter-spacing: -0.045em;
-  font-weight: 900;
-}
-
-.perfume-product-hero__heading em,
-.perfume-product-hero__heading span {
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
-.perfume-product-hero__heading em {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 800;
+.product-spotlight__overlay {
+  background: color-mix(in srgb, var(--ps-overlay) 70%, transparent);
+}
+
+.product-spotlight__wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.product-spotlight__card {
+  max-width: 760px;
+  margin: 0 auto;
+  background: color-mix(in srgb, var(--ps-card) 86%, transparent);
+  backdrop-filter: blur(8px);
+  border-radius: var(--ps-radius);
+  padding: 36px 28px 34px;
+  text-align: center;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.10);
+  color: var(--ps-text);
+}
+
+.product-spotlight__eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ps-muted);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.product-spotlight__accent-heading {
+  margin-bottom: 6px;
+  color: var(--ps-accent);
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.02;
   font-style: italic;
-  color: color-mix(in srgb, var(--pph-text) 82%, #7a2fd9);
+  font-family: Georgia, "Times New Roman", serif;
 }
 
-.perfume-product-hero__heading span {
-  color: var(--pph-text);
+.product-spotlight__heading {
+  margin: 0 0 20px;
+  color: var(--ps-text);
+  font-size: clamp(34px, 4.6vw, 64px);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
 }
 
-.perfume-product-hero__benefits {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin: 0 0 28px;
+.product-spotlight__media {
+  margin: 0 auto 20px;
 }
 
-.perfume-product-hero__benefit {
+.product-spotlight__product-image,
+.product-spotlight__placeholder {
+  width: min(100%, 320px);
+  margin: 0 auto;
+  display: block;
+  border-radius: var(--ps-media-radius);
+  object-fit: contain;
+  object-position: var(--ps-product-position);
+}
+
+.product-spotlight__placeholder {
+  min-height: 320px;
+  background: rgba(255, 255, 255, 0.75);
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: var(--pph-muted);
-  font-size: 19px;
-  line-height: 1.35;
-  font-weight: 800;
+  justify-content: center;
+  color: var(--ps-muted);
+  font-weight: 600;
 }
 
-.perfume-product-hero__benefit span {
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--pph-text) 88%, var(--pph-accent));
-  color: #ffffff;
-  display: grid;
-  place-items: center;
-  font-size: 11px;
+.product-spotlight__rating-text {
+  color: var(--ps-muted);
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.product-spotlight__stars {
+  color: #f0b331;
+  font-size: 20px;
+  letter-spacing: 0.22em;
   line-height: 1;
-  font-weight: 900;
+  margin-bottom: 22px;
 }
 
-.perfume-product-hero__benefit p {
-  margin: 0;
+.product-spotlight__benefits {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+  text-align: left;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.perfume-product-hero__button {
+.product-spotlight__benefit {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  color: var(--ps-text);
+  font-size: 17px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.product-spotlight__benefit-icon {
+  color: var(--ps-accent);
+  margin-top: 2px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.product-spotlight__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 300px;
-  min-height: 62px;
-  padding: 18px 34px;
-  border-radius: 10px;
-  background: var(--pph-button-bg);
-  color: var(--pph-button-text);
-  box-shadow: 0 15px 30px rgba(151, 70, 210, 0.24);
+  min-height: 54px;
+  padding: 0 28px;
+  border-radius: 14px;
+  background: var(--ps-button-bg);
+  color: var(--ps-button-text);
   text-decoration: none;
-  font-size: 17px;
-  line-height: 1;
-  font-weight: 900;
-  transition: transform 0.24s ease, box-shadow 0.24s ease;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.perfume-product-hero__button:hover {
-  color: var(--pph-button-text);
+.product-spotlight__button:hover {
+  transform: translateY(-1px);
+  opacity: 0.96;
+  color: var(--ps-button-text);
   text-decoration: none;
-  transform: translateY(-2px);
-  box-shadow: 0 20px 36px rgba(151, 70, 210, 0.3);
 }
 
-.perfume-product-hero__guarantee {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 18px 0 0;
-  color: var(--pph-muted);
-  font-size: 15px;
-  line-height: 1.35;
-  font-weight: 800;
-}
-
-.perfume-product-hero__guarantee span {
-  color: var(--pph-text);
+.product-spotlight__guarantee {
+  color: var(--ps-muted);
   font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
 }
 
-@media screen and (max-width: 980px) {
-  .perfume-product-hero__inner {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    min-height: var(--pph-mobile-height);
-    padding: 42px 0;
+@media screen and (max-width: 749px) {
+  .product-spotlight__card {
+    padding: 28px 18px 26px;
   }
 
-  .perfume-product-hero--image-right .perfume-product-hero__product-wrap,
-  .perfume-product-hero--image-right .perfume-product-hero__copy {
-    order: initial;
+  .product-spotlight__heading {
+    font-size: 42px;
   }
 
-  .perfume-product-hero__product-wrap {
-    min-height: 280px;
+  .product-spotlight__accent-heading {
+    font-size: 28px;
   }
 
-  .perfume-product-hero__product-image {
-    max-height: 330px;
+  .product-spotlight__benefit {
+    font-size: 15px;
   }
 
-  .perfume-product-hero__copy {
-    max-width: 720px;
-    padding: 0;
-    text-align: center;
-    margin: 0 auto;
-  }
-
-  .perfume-product-hero__rating,
-  .perfume-product-hero__guarantee {
-    justify-content: center;
-  }
-
-  .perfume-product-hero__benefit {
-    justify-content: center;
-  }
-
-  .perfume-product-hero__button {
-    min-width: min(100%, 340px);
-  }
-}
-
-@media screen and (max-width: 640px) {
-  .perfume-product-hero {
-    min-height: var(--pph-mobile-height);
-  }
-
-  .perfume-product-hero__inner {
-    width: min(100% - 32px, 620px);
-  }
-
-  .perfume-product-hero__heading {
-    font-size: clamp(38px, 12vw, 56px);
-  }
-
-  .perfume-product-hero__benefit {
-    font-size: 16px;
-    text-align: left;
-    justify-content: flex-start;
-  }
-
-  .perfume-product-hero__rating {
-    flex-wrap: wrap;
+  .product-spotlight__button {
+    width: 100%;
   }
 }
