@@ -3,6 +3,7 @@
 <section
   class="editorial-image-collage editorial-image-collage--{{ section.id }}"
   data-animate="{{ section.settings.enable_animation }}"
+  data-match-text-height="{{ section.settings.match_text_height }}"
   style="
     --eic-bg: {{ section.settings.section_background }};
     --eic-text: {{ section.settings.text_color }};
@@ -140,6 +141,8 @@
 <script src="{{ 'editorial-image-collage.js' | asset_url }}" defer></script>
 
 {% schema %}
+
+
 {
   "name": "Editorial image collage",
   "tag": "section",
@@ -149,19 +152,19 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
-      "default": "STUDYMOTE"
+      "info": "Suggested text: STUDYMOTE"
     },
     {
       "type": "textarea",
       "id": "heading",
       "label": "Heading",
-      "default": "Designed for\nthe modern student"
+      "info": "Suggested text: Designed for the modern student"
     },
     {
       "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
-      "default": "<p>Thoughtfully crafted tools that blend precision, comfort, and style helping you study smarter, not harder.</p>"
+      "info": "Suggested text: Thoughtfully crafted tools that blend precision, comfort, and style helping you study smarter, not harder."
     },
     {
       "type": "checkbox",
@@ -173,13 +176,13 @@
       "type": "richtext",
       "id": "body_text",
       "label": "Body text",
-      "default": "<p>Every detail is engineered to elevate your daily sessions. No distractions. No compromises. Just focused, effortless learning.</p>"
+      "info": "Suggested text: Every detail is engineered to elevate your daily sessions. No distractions. No compromises. Just focused, effortless learning."
     },
     {
       "type": "text",
       "id": "feature_icon",
       "label": "Feature icon",
-      "default": "✓"
+      "default": "\u2713"
     },
     {
       "type": "text",
@@ -189,7 +192,8 @@
     {
       "type": "url",
       "id": "cta_link",
-      "label": "CTA link"
+      "label": "CTA link",
+      "info": "CTA appears only when both CTA text and CTA link are filled."
     },
     {
       "type": "checkbox",
@@ -210,7 +214,7 @@
       "type": "text",
       "id": "top_image_alt",
       "label": "Top image alt text",
-      "default": "Product detail image"
+      "info": "Suggested text: Product detail image"
     },
     {
       "type": "select",
@@ -265,7 +269,7 @@
       "type": "text",
       "id": "bottom_image_alt",
       "label": "Bottom image alt text",
-      "default": "Product lifestyle image"
+      "info": "Suggested text: Product lifestyle image"
     },
     {
       "type": "select",
@@ -320,7 +324,7 @@
       "type": "text",
       "id": "large_image_alt",
       "label": "Large image alt text",
-      "default": "Main product image"
+      "info": "Suggested text: Main product image"
     },
     {
       "type": "select",
@@ -421,6 +425,12 @@
       "default": 400
     },
     {
+      "type": "checkbox",
+      "id": "match_text_height",
+      "label": "Match collage height to text height on desktop",
+      "default": true
+    },
+    {
       "type": "range",
       "id": "image_gap",
       "label": "Image gap",
@@ -460,31 +470,31 @@
       "type": "color",
       "id": "text_color",
       "label": "Main text color",
-      "default": "#1A1A1A"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "muted_text_color",
       "label": "Muted text color",
-      "default": "#4A4A4A"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "eyebrow_color",
       "label": "Eyebrow color",
-      "default": "#8B7D6B"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
-      "default": "#C4B8A8"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "icon_background",
       "label": "Feature icon background",
-      "default": "#1A1A1A"
+      "default": "#ffffff"
     },
     {
       "type": "color",
@@ -496,7 +506,7 @@
       "type": "color",
       "id": "image_background",
       "label": "Image placeholder background",
-      "default": "#F0EDE6"
+      "default": "#ffffff"
     }
   ],
   "blocks": [
@@ -508,7 +518,7 @@
           "type": "text",
           "id": "text",
           "label": "Text",
-          "default": "Precision engineering"
+          "info": "Suggested text: Precision engineering"
         }
       ]
     }
@@ -521,23 +531,25 @@
         {
           "type": "feature",
           "settings": {
-            "text": "Precision engineering"
+            "text": ""
           }
         },
         {
           "type": "feature",
           "settings": {
-            "text": "Sustainable materials"
+            "text": ""
           }
         },
         {
           "type": "feature",
           "settings": {
-            "text": "Designed for longevity"
+            "text": ""
           }
         }
       ]
     }
   ]
 }
+
+
 {% endschema %}

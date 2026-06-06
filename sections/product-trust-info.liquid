@@ -64,6 +64,44 @@
                     <svg viewBox="0 0 24 24">
                       <path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2 7.5 14 3 9.6l6.2-.9L12 3z"></path>
                     </svg>
+                  {% when 'leaf' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 19c8 0 14-6 14-14-8 0-14 6-14 14z"></path>
+                      <path d="M5 19l9-9"></path>
+                    </svg>
+                  {% when 'heart' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"></path>
+                    </svg>
+                  {% when 'clock' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      <path d="M12 7v5l3 2"></path>
+                    </svg>
+                  {% when 'package' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M21 16V8l-9-5-9 5v8l9 5 9-5z"></path>
+                      <path d="M3.3 7.5L12 12l8.7-4.5"></path>
+                      <path d="M12 22V12"></path>
+                    </svg>
+                  {% when 'droplet' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 2s7 7.2 7 12a7 7 0 01-14 0c0-4.8 7-12 7-12z"></path>
+                    </svg>
+                  {% when 'sparkle' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 3l1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3z"></path>
+                      <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z"></path>
+                    </svg>
+                  {% when 'recycle' %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M7 19h8.5a3 3 0 002.6-4.5l-1-1.7"></path>
+                      <path d="M17 16l1 3 3-1"></path>
+                      <path d="M16 5l-4.2 7.3"></path>
+                      <path d="M13 5h3l1.5 2.6"></path>
+                      <path d="M6.5 8.5L3.2 14A3 3 0 005.8 18H8"></path>
+                      <path d="M5 12l-2 2 2 2"></path>
+                    </svg>
                   {% else %}
                     <svg viewBox="0 0 24 24">
                       <path d="M20 6L9 17l-5-5"></path>
@@ -145,6 +183,8 @@
 <script src="{{ 'product-trust-info.js' | asset_url }}" defer></script>
 
 {% schema %}
+
+
 {
   "name": "Product trust info",
   "tag": "section",
@@ -160,55 +200,55 @@
       "type": "text",
       "id": "delivery_text",
       "label": "Delivery text before highlight",
-      "default": "Order now to receive it in "
+      "info": "Suggested text: Order now to receive it in"
     },
     {
       "type": "text",
       "id": "delivery_highlight",
       "label": "Delivery highlighted text",
-      "default": "2-4 days"
+      "info": "Suggested text: 2-4 days"
     },
     {
       "type": "text",
       "id": "delivery_text_after",
       "label": "Delivery text after highlight",
-      "default": " in Lebanon"
+      "info": "Suggested text: in Lebanon"
     },
     {
       "type": "text",
       "id": "trust_accessibility_label",
       "label": "Trust items accessibility label",
-      "default": "Product trust benefits"
+      "info": "Suggested text: Product trust benefits"
     },
     {
       "type": "text",
       "id": "proof_text",
       "label": "Proof or urgency text",
-      "default": "Very few packs left"
+      "info": "Suggested text: Very few packs left"
     },
     {
       "type": "text",
       "id": "ingredients_title",
       "label": "Ingredients title",
-      "default": "INGREDIENTS"
+      "info": "Suggested text: INGREDIENTS"
     },
     {
       "type": "richtext",
       "id": "ingredients_content",
       "label": "Ingredients content",
-      "default": "<p><strong>Silica:</strong> Helps give your hair more volume and a fuller look.</p><p><strong>Glycerin:</strong> Makes your hair feel soft and smooth.</p><p><strong>Corn starch:</strong> Removes extra oil to keep hair fresh.</p>"
+      "info": "Suggested text: Silica: Helps give your hair more volume and a fuller look. Glycerin: Makes your hair feel soft and smooth. Corn starch: Removes extra oil to keep hair fresh."
     },
     {
       "type": "text",
       "id": "description_title",
       "label": "Description title",
-      "default": "DESCRIPTION"
+      "info": "Suggested text: DESCRIPTION"
     },
     {
       "type": "richtext",
       "id": "description_content",
       "label": "Description content",
-      "default": "<p>Our Hair Texturizer Powder gives your hair instant lift and natural texture in seconds. It is lightweight, mess free, and effortless to use.</p>"
+      "info": "Suggested text: Our Hair Texturizer Powder gives your hair instant lift and natural texture in seconds. It is lightweight, mess free, and effortless to use."
     },
     {
       "type": "range",
@@ -230,37 +270,37 @@
       "type": "color",
       "id": "text_color",
       "label": "Main text color",
-      "default": "#111111"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
-      "default": "#041f60"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "muted_background",
       "label": "Delivery bar background",
-      "default": "#f6f7f9"
+      "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "border_color",
       "label": "Divider color",
-      "default": "#e2e5ec"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "icon_background",
       "label": "Icon circle background",
-      "default": "#041f60"
+      "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "icon_color",
       "label": "Icon color",
-      "default": "#ffffff"
+      "default": "#000000"
     }
   ],
   "blocks": [
@@ -293,6 +333,34 @@
             {
               "value": "check",
               "label": "Check"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "package",
+              "label": "Package"
+            },
+            {
+              "value": "droplet",
+              "label": "Droplet"
+            },
+            {
+              "value": "sparkle",
+              "label": "Sparkle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
             }
           ]
         },
@@ -300,7 +368,7 @@
           "type": "text",
           "id": "title",
           "label": "Text",
-          "default": "Free Delivery on 2+ items"
+          "info": "Suggested text: Free Delivery on 2+ items"
         }
       ]
     }
@@ -313,26 +381,28 @@
         {
           "type": "trust_item",
           "settings": {
-            "icon": "truck",
-            "title": "Free Delivery on 2+ items"
+            "icon": "",
+            "title": ""
           }
         },
         {
           "type": "trust_item",
           "settings": {
-            "icon": "shield",
-            "title": "100% Natural Ingredients"
+            "icon": "",
+            "title": ""
           }
         },
         {
           "type": "trust_item",
           "settings": {
-            "icon": "guarantee",
-            "title": "7 Day Guarantee"
+            "icon": "",
+            "title": ""
           }
         }
       ]
     }
   ]
 }
+
+
 {% endschema %}

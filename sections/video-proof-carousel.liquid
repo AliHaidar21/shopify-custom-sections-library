@@ -91,6 +91,7 @@
 <script src="{{ 'video-proof-carousel.js' | asset_url }}" defer></script>
 
 {% schema %}
+
 {
   "name": "Video proof carousel",
   "tag": "section",
@@ -100,25 +101,25 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow text",
-      "default": "Real customer results"
+      "info": "Suggested text: Real customer results"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "See it in action"
+      "info": "Suggested text: See it in action"
     },
     {
       "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
-      "default": "<p>Short autoplay videos that show the product experience.</p>"
+      "info": "Suggested text: Short autoplay videos that show the product experience."
     },
     {
       "type": "text",
       "id": "accessibility_label",
       "label": "Carousel accessibility label",
-      "default": "Customer video previews"
+      "info": "Suggested text: Customer video previews"
     },
     {
       "type": "select",
@@ -224,7 +225,7 @@
       "type": "color",
       "id": "text_color",
       "label": "Text color",
-      "default": "#041f60"
+      "default": "#000000"
     }
   ],
   "blocks": [
@@ -251,7 +252,7 @@
           "type": "text",
           "id": "video_label",
           "label": "Video accessibility label",
-          "default": "Customer product video"
+          "info": "Suggested text: Customer product video"
         },
         {
           "type": "text",
@@ -279,4 +280,5 @@
     }
   ]
 }
+
 {% endschema %}

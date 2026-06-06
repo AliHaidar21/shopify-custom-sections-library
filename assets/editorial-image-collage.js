@@ -1,6 +1,33 @@
 (function () {
+  function syncEditorialHeight(section) {
+    if (!section || section.dataset.matchTextHeight !== 'true') {
+      return;
+    }
+
+    if (window.innerWidth <= 968) {
+      section.style.removeProperty('--eic-matched-height');
+      return;
+    }
+
+    const textInner = section.querySelector('.editorial-image-collage__text-inner');
+
+    if (!textInner) {
+      return;
+    }
+
+    const height = Math.ceil(textInner.getBoundingClientRect().height);
+    section.style.setProperty('--eic-matched-height', height + 'px');
+  }
+
   function initEditorialImageCollage(section) {
-    if (!section || section.dataset.animate !== 'true') {
+    if (!section) {
+      return;
+    }
+
+    syncEditorialHeight(section);
+
+    if (section.dataset.animate !== 'true') {
+      section.classList.add('is-visible');
       return;
     }
 
@@ -36,6 +63,17 @@
     });
   }
 
+  let resizeTimer = null;
+
+  window.addEventListener('resize', function () {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(function () {
+      document.querySelectorAll('.editorial-image-collage').forEach(function (section) {
+        syncEditorialHeight(section);
+      });
+    }, 120);
+  });
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAllEditorialImageCollages);
   } else {
@@ -47,6 +85,14 @@
 
     if (section) {
       initEditorialImageCollage(section);
+    }
+  });
+
+  document.addEventListener('shopify:block:select', function (event) {
+    const section = event.target.closest('.editorial-image-collage');
+
+    if (section) {
+      syncEditorialHeight(section);
     }
   });
 })();

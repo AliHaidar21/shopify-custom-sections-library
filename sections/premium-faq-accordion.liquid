@@ -100,6 +100,7 @@
 <script src="{{ 'premium-faq-accordion.js' | asset_url }}" defer></script>
 
 {% schema %}
+
 {
   "name": "Premium FAQ accordion",
   "tag": "section",
@@ -109,13 +110,13 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Frequently Asked Questions"
+      "info": "Suggested text: Frequently Asked Questions"
     },
     {
       "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
-      "default": "<p>Everything you need to know about your Anki experience</p>"
+      "info": "Suggested text: Everything you need to know about your Anki experience"
     },
     {
       "type": "checkbox",
@@ -139,7 +140,7 @@
       "type": "text",
       "id": "minus_icon",
       "label": "Open icon",
-      "default": "×"
+      "default": "\u00d7"
     },
     {
       "type": "range",
@@ -201,19 +202,19 @@
       "type": "color",
       "id": "title_color",
       "label": "Title color",
-      "default": "#304D6D"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "text_color",
       "label": "Question text color",
-      "default": "#304D6D"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "muted_text_color",
       "label": "Answer and subtitle color",
-      "default": "#666666"
+      "default": "#000000"
     },
     {
       "type": "color",
@@ -225,13 +226,13 @@
       "type": "color",
       "id": "border_color",
       "label": "Card border color",
-      "default": "#E4EAF0"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "shadow_color",
       "label": "Shadow color",
-      "default": "#304D6D"
+      "default": "#000000"
     }
   ],
   "blocks": [
@@ -243,13 +244,13 @@
           "type": "text",
           "id": "question",
           "label": "Question",
-          "default": "What is Studymote remote?"
+          "info": "Suggested text: What is Studymote remote?"
         },
         {
           "type": "richtext",
           "id": "answer",
           "label": "Answer",
-          "default": "<p>Studymote is a compact remote designed for flashcard app users that lets you control your flashcards effortlessly without using your keyboard.</p>"
+          "info": "Suggested text: Studymote is a compact remote designed for flashcard app users that lets you control your flashcards effortlessly without using your keyboard."
         }
       ]
     }
@@ -262,54 +263,55 @@
         {
           "type": "faq",
           "settings": {
-            "question": "What is Studymote remote?",
-            "answer": "<p>Studymote is a compact remote designed for flashcard app users that lets you control your flashcards effortlessly without using your keyboard.</p>"
+            "question": "",
+            "answer": ""
           }
         },
         {
           "type": "faq",
           "settings": {
-            "question": "How does it improve my studying?",
-            "answer": "<p>It reduces time per card, removes awkward shortcuts, improves posture, and lets you study anywhere — making your reviews faster and smoother.</p>"
+            "question": "",
+            "answer": ""
           }
         },
         {
           "type": "faq",
           "settings": {
-            "question": "Is it compatible with my device?",
-            "answer": "<p>Yes — Studymote works with Anki on laptops, tablets, and phones that support Bluetooth input.</p>"
+            "question": "",
+            "answer": ""
           }
         },
         {
           "type": "faq",
           "settings": {
-            "question": "Can I use it while lying down or walking?",
-            "answer": "<p>Absolutely. Studymote is designed so you can study comfortably anywhere — in bed, on the couch, or even while walking.</p>"
+            "question": "",
+            "answer": ""
           }
         },
         {
           "type": "faq",
           "settings": {
-            "question": "What are the product specifications?",
-            "answer": "<p>Dimensions: 73 × 36.5 × 14.7 mm. Weight: 20.7g — ultra-light and pocket-sized.</p>"
+            "question": "",
+            "answer": ""
           }
         },
         {
           "type": "faq",
           "settings": {
-            "question": "Do you ship inside Lebanon?",
-            "answer": "<p>Yes, we offer shipping across all regions in Lebanon.</p>"
+            "question": "",
+            "answer": ""
           }
         },
         {
           "type": "faq",
           "settings": {
-            "question": "Is it easy to use?",
-            "answer": "<p>Very easy — just connect via Bluetooth and start reviewing. No setup headaches.</p>"
+            "question": "",
+            "answer": ""
           }
         }
       ]
     }
   ]
 }
+
 {% endschema %}
