@@ -83,6 +83,7 @@
 
 {% schema %}
 
+
 {
   "name": "Brand comparison table",
   "tag": "section",
@@ -92,25 +93,29 @@
       "type": "text",
       "id": "heading_before",
       "label": "Heading first line",
-      "info": "Suggested text: Why choose"
+      "info": "Suggested text: Why choose",
+      "default": "Why choose"
     },
     {
       "type": "text",
       "id": "heading_highlight",
       "label": "Heading highlighted line",
-      "info": "Suggested text: VELOURE?"
+      "info": "Suggested text: VELOURE?",
+      "default": "VELOURE?"
     },
     {
       "type": "text",
       "id": "brand_label",
       "label": "Brand column label",
-      "info": "Suggested text: VELOURE"
+      "info": "Suggested text: VELOURE",
+      "default": "VELOURE"
     },
     {
       "type": "text",
       "id": "others_label",
       "label": "Other brands column label",
-      "info": "Suggested text: Others"
+      "info": "Suggested text: Others",
+      "default": "Others"
     },
     {
       "type": "text",
@@ -164,55 +169,55 @@
       "type": "color",
       "id": "text_color",
       "label": "Main text color",
-      "default": "#000000"
+      "default": "#3a4a32"
     },
     {
       "type": "color",
       "id": "brand_color",
       "label": "Brand label color",
-      "default": "#000000"
+      "default": "#C2A86A"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "Secondary label color",
-      "default": "#000000"
+      "default": "#55654B"
     },
     {
       "type": "color",
       "id": "border_color",
       "label": "Table border color",
-      "default": "#000000"
+      "default": "#DDE3D8"
     },
     {
       "type": "color",
       "id": "row_hover_background",
       "label": "Row hover background",
-      "default": "#ffffff"
+      "default": "#FCFAF5"
     },
     {
       "type": "color",
       "id": "check_background",
       "label": "Check circle background",
-      "default": "#ffffff"
+      "default": "#C2A86A"
     },
     {
       "type": "color",
       "id": "check_text_color",
       "label": "Check symbol color",
-      "default": "#ffffff"
+      "default": "#1b1b1b"
     },
     {
       "type": "color",
       "id": "x_background",
       "label": "X circle background",
-      "default": "#ffffff"
+      "default": "#EEF1EC"
     },
     {
       "type": "color",
       "id": "x_text_color",
       "label": "X symbol color",
-      "default": "#000000"
+      "default": "#3a4a32"
     }
   ],
   "blocks": [
@@ -224,7 +229,8 @@
           "type": "text",
           "id": "feature",
           "label": "Feature",
-          "info": "Suggested text: No Parabens"
+          "info": "Suggested text: No Parabens",
+          "default": "No Parabens"
         },
         {
           "type": "select",
@@ -344,5 +350,6 @@
     }
   ]
 }
+
 
 {% endschema %}

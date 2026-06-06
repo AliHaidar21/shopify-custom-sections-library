@@ -101,6 +101,7 @@
 
 {% schema %}
 
+
 {
   "name": "Premium FAQ accordion",
   "tag": "section",
@@ -110,13 +111,15 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "info": "Suggested text: Frequently Asked Questions"
+      "info": "Suggested text: Frequently Asked Questions",
+      "default": "Frequently Asked Questions"
     },
     {
       "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
-      "info": "Suggested text: Everything you need to know about your Anki experience"
+      "info": "Suggested text: Everything you need to know about your Anki experience",
+      "default": "<p>Everything you need to know about your Anki experience</p>"
     },
     {
       "type": "checkbox",
@@ -202,19 +205,19 @@
       "type": "color",
       "id": "title_color",
       "label": "Title color",
-      "default": "#000000"
+      "default": "#304D6D"
     },
     {
       "type": "color",
       "id": "text_color",
       "label": "Question text color",
-      "default": "#000000"
+      "default": "#304D6D"
     },
     {
       "type": "color",
       "id": "muted_text_color",
       "label": "Answer and subtitle color",
-      "default": "#000000"
+      "default": "#666666"
     },
     {
       "type": "color",
@@ -226,13 +229,13 @@
       "type": "color",
       "id": "border_color",
       "label": "Card border color",
-      "default": "#000000"
+      "default": "#E4EAF0"
     },
     {
       "type": "color",
       "id": "shadow_color",
       "label": "Shadow color",
-      "default": "#000000"
+      "default": "#304D6D"
     }
   ],
   "blocks": [
@@ -244,13 +247,15 @@
           "type": "text",
           "id": "question",
           "label": "Question",
-          "info": "Suggested text: What is Studymote remote?"
+          "info": "Suggested text: What is Studymote remote?",
+          "default": "What is Studymote remote?"
         },
         {
           "type": "richtext",
           "id": "answer",
           "label": "Answer",
-          "info": "Suggested text: Studymote is a compact remote designed for flashcard app users that lets you control your flashcards effortlessly without using your keyboard."
+          "info": "Suggested text: Studymote is a compact remote designed for flashcard app users that lets you control your flashcards effortlessly without using your keyboard.",
+          "default": "<p>Studymote is a compact remote designed for flashcard app users that lets you control your flashcards effortlessly without using your keyboard.</p>"
         }
       ]
     }
@@ -263,55 +268,28 @@
         {
           "type": "faq",
           "settings": {
-            "question": "",
-            "answer": ""
+            "question": "What is Studymote remote?",
+            "answer": "<p>Studymote is a compact remote designed for flashcard app users that lets you control your flashcards effortlessly without using your keyboard.</p>"
           }
         },
         {
           "type": "faq",
           "settings": {
-            "question": "",
-            "answer": ""
+            "question": "How does it improve my studying?",
+            "answer": "<p>It reduces time per card, removes awkward shortcuts, improves posture, and lets you study anywhere \u2014 making your reviews faster and smoother.</p>"
           }
         },
         {
           "type": "faq",
           "settings": {
-            "question": "",
-            "answer": ""
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "",
-            "answer": ""
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "",
-            "answer": ""
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "",
-            "answer": ""
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "",
-            "answer": ""
+            "question": "Is it compatible with my device?",
+            "answer": "<p>Yes \u2014 Studymote works with Anki on laptops, tablets, and phones that support Bluetooth input.</p>"
           }
         }
       ]
     }
   ]
 }
+
 
 {% endschema %}

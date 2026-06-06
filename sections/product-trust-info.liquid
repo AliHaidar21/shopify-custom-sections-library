@@ -185,6 +185,7 @@
 {% schema %}
 
 
+
 {
   "name": "Product trust info",
   "tag": "section",
@@ -200,55 +201,64 @@
       "type": "text",
       "id": "delivery_text",
       "label": "Delivery text before highlight",
-      "info": "Suggested text: Order now to receive it in"
+      "info": "Suggested text: Order now to receive it in",
+      "default": "Order now to receive it in "
     },
     {
       "type": "text",
       "id": "delivery_highlight",
       "label": "Delivery highlighted text",
-      "info": "Suggested text: 2-4 days"
+      "info": "Suggested text: 2-4 days",
+      "default": "2-4 days"
     },
     {
       "type": "text",
       "id": "delivery_text_after",
       "label": "Delivery text after highlight",
-      "info": "Suggested text: in Lebanon"
+      "info": "Suggested text: in Lebanon",
+      "default": " in Lebanon"
     },
     {
       "type": "text",
       "id": "trust_accessibility_label",
       "label": "Trust items accessibility label",
-      "info": "Suggested text: Product trust benefits"
+      "info": "Suggested text: Product trust benefits",
+      "default": "Product trust benefits"
     },
     {
       "type": "text",
       "id": "proof_text",
       "label": "Proof or urgency text",
-      "info": "Suggested text: Very few packs left"
+      "info": "Suggested text: Very few packs left",
+      "default": "Very few packs left"
     },
     {
       "type": "text",
       "id": "ingredients_title",
       "label": "Ingredients title",
-      "info": "Suggested text: INGREDIENTS"
+      "info": "Suggested text: INGREDIENTS",
+      "default": "INGREDIENTS"
     },
     {
       "type": "richtext",
       "id": "ingredients_content",
       "label": "Ingredients content",
-      "info": "Suggested text: Silica: Helps give your hair more volume and a fuller look. Glycerin: Makes your hair feel soft and smooth. Corn starch: Removes extra oil to keep hair fresh."
+      "info": "Suggested text: Silica: Helps give your hair more volume and a fuller look. Glycerin: Makes your hair feel soft and smooth. Corn starch: Removes extra oil to keep hair fresh.",
+      "default": "<p><strong>Silica:</strong> Helps give your hair more volume and a fuller look.</p><p><strong>Glycerin:</strong> Makes your hair feel soft and smooth.</p><p><strong>Corn starch:</strong> Removes extra oil to keep hair fresh.</p>"
     },
     {
       "type": "text",
       "id": "description_title",
       "label": "Description title",
-      "info": "Suggested text: DESCRIPTION"
+      "info": "Suggested text: DESCRIPTION",
+      "default": "DESCRIPTION"
     },
     {
       "type": "richtext",
       "id": "description_content",
       "label": "Description content",
-      "info": "Suggested text: Our Hair Texturizer Powder gives your hair instant lift and natural texture in seconds. It is lightweight, mess free, and effortless to use."
+      "info": "Suggested text: Our Hair Texturizer Powder gives your hair instant lift and natural texture in seconds. It is lightweight, mess free, and effortless to use.",
+      "default": "<p>Our Hair Texturizer Powder gives your hair instant lift and natural texture in seconds. It is lightweight, mess free, and effortless to use.</p>"
     },
     {
       "type": "range",
@@ -270,37 +280,37 @@
       "type": "color",
       "id": "text_color",
       "label": "Main text color",
-      "default": "#000000"
+      "default": "#111111"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
-      "default": "#000000"
+      "default": "#041f60"
     },
     {
       "type": "color",
       "id": "muted_background",
       "label": "Delivery bar background",
-      "default": "#ffffff"
+      "default": "#f6f7f9"
     },
     {
       "type": "color",
       "id": "border_color",
       "label": "Divider color",
-      "default": "#000000"
+      "default": "#e2e5ec"
     },
     {
       "type": "color",
       "id": "icon_background",
       "label": "Icon circle background",
-      "default": "#ffffff"
+      "default": "#041f60"
     },
     {
       "type": "color",
       "id": "icon_color",
       "label": "Icon color",
-      "default": "#000000"
+      "default": "#ffffff"
     }
   ],
   "blocks": [
@@ -368,7 +378,8 @@
           "type": "text",
           "id": "title",
           "label": "Text",
-          "info": "Suggested text: Free Delivery on 2+ items"
+          "info": "Suggested text: Free Delivery on 2+ items",
+          "default": "Free Delivery on 2+ items"
         }
       ]
     }
@@ -403,6 +414,7 @@
     }
   ]
 }
+
 
 
 {% endschema %}
