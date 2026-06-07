@@ -929,3 +929,83 @@
     font-size: 11px;
   }
 }
+
+
+.featured-product-builder__summary-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.featured-product-builder__summary-text small {
+  color: var(--fpb-muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.featured-product-builder__whatsapp.is-missing-number {
+  opacity: 0.82;
+}
+
+.featured-product-builder__whatsapp-note {
+  margin: 8px 0 0;
+  color: var(--fpb-muted);
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: center;
+  font-weight: 700;
+}
+
+.featured-product-builder__video-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  border-radius: 20px;
+  background:
+    linear-gradient(145deg, rgba(4, 31, 96, 0.08), rgba(56, 182, 204, 0.08)),
+    #f0f2f5;
+  color: var(--fpb-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.featured-product-builder__form-message,
+.featured-product-builder__cart-message {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fpb-accent);
+  text-align: center;
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: 0.25s ease;
+}
+
+.featured-product-builder__form-message.is-visible,
+.featured-product-builder__cart-message.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.featured-product-builder__form-message.is-error,
+.featured-product-builder__cart-message.is-error {
+  color: #d60017;
+}
+
+.featured-product-builder__compare.is-hidden,
+.featured-product-builder__save-badge.is-hidden {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .featured-product-builder__video-placeholder {
+    border-radius: 18px;
+    font-size: 11px;
+  }
+}
