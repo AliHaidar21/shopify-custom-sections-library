@@ -1,20 +1,41 @@
 (function () {
   function formatMoney(cents, moneyFormat) {
-    if (typeof cents === 'string') {
-      cents = cents.replace('.', '');
-    }
+    const numericCents = Number(cents || 0);
+    const value = numericCents / 100;
+    const amount = value.toFixed(2);
+    const amountNoDecimals = Math.round(value).toString();
 
-    const value = Number(cents || 0) / 100;
-    const formatted = value.toFixed(2);
-
-    if (!moneyFormat) {
-      return '$' + formatted;
+    if (!moneyFormat || moneyFormat.indexOf('{{') === -1) {
+      return '$' + amount;
     }
 
     return moneyFormat
-      .replace(/\{\{\s*amount\s*\}\}/, formatted)
-      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, Math.round(value).toString())
-      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, formatted.replace('.', ','));
+      .replace(/\{\{\s*amount\s*\}\}/g, amount)
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/g, amountNoDecimals)
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/g, amount.replace('.', ','));
+  }
+
+  function showMessage(messageEl, text, isError) {
+    if (!messageEl) {
+      return;
+    }
+
+    messageEl.textContent = text;
+    messageEl.classList.toggle('is-error', Boolean(isError));
+    messageEl.classList.add('is-visible');
+
+    window.setTimeout(function () {
+      messageEl.classList.remove('is-visible', 'is-error');
+    }, 2200);
+  }
+
+  function dispatchCartEvents() {
+    document.dispatchEvent(new CustomEvent('cart:refresh'));
+    document.dispatchEvent(new CustomEvent('cart:updated'));
+    document.dispatchEvent(new CustomEvent('cart:change'));
+    window.dispatchEvent(new CustomEvent('cart:refresh'));
+    window.dispatchEvent(new CustomEvent('cart:updated'));
+    window.dispatchEvent(new CustomEvent('cart:change'));
   }
 
   function initFeaturedProductBuilder(section) {
@@ -31,9 +52,16 @@
       return;
     }
 
-    const product = JSON.parse(productScript.textContent);
-    const moneyFormat = form.dataset.moneyFormat || '${{amount}}';
+    let product;
 
+    try {
+      product = JSON.parse(productScript.textContent);
+    } catch (error) {
+      console.error('Featured product builder product JSON error:', error);
+      return;
+    }
+
+    const moneyFormat = form.dataset.moneyFormat || '${{amount}}';
     const mainImage = section.querySelector('[data-fpb-main-image]');
     const dots = Array.prototype.slice.call(section.querySelectorAll('[data-fpb-gallery-dot]'));
     const prev = section.querySelector('[data-fpb-prev]');
@@ -47,11 +75,23 @@
     const quantityInput = section.querySelector('[data-fpb-quantity]');
     const messageEl = section.querySelector('[data-fpb-cart-message]');
     const whatsappLink = section.querySelector('[data-fpb-whatsapp]');
+    const selectedOptionsText = section.querySelector('[data-fpb-selected-options]');
 
     let galleryIndex = 0;
+
     let selectedVariant = product.variants.find(function (variant) {
-      return String(variant.id) === String(variantInput ? variantInput.value : '');
+      return variantInput && String(variant.id) === String(variantInput.value);
     }) || product.variants[0];
+
+    function getQuantity() {
+      if (!quantityInput) {
+        return 1;
+      }
+
+      const quantity = Math.max(1, Number(quantityInput.value || 1));
+      quantityInput.value = quantity;
+      return quantity;
+    }
 
     function showGalleryImage(index) {
       if (!dots.length || !mainImage) {
@@ -61,9 +101,15 @@
       galleryIndex = (index + dots.length) % dots.length;
 
       const dot = dots[galleryIndex];
-      mainImage.src = dot.dataset.src;
-      mainImage.srcset = '';
-      mainImage.alt = dot.dataset.alt || product.title;
+
+      if (dot.dataset.src) {
+        mainImage.src = dot.dataset.src;
+        mainImage.srcset = '';
+      }
+
+      if (dot.dataset.alt) {
+        mainImage.alt = dot.dataset.alt;
+      }
 
       dots.forEach(function (item, itemIndex) {
         item.classList.toggle('is-active', itemIndex === galleryIndex);
@@ -77,13 +123,15 @@
     });
 
     if (prev) {
-      prev.addEventListener('click', function () {
+      prev.addEventListener('click', function (event) {
+        event.preventDefault();
         showGalleryImage(galleryIndex - 1);
       });
     }
 
     if (next) {
-      next.addEventListener('click', function () {
+      next.addEventListener('click', function (event) {
+        event.preventDefault();
         showGalleryImage(galleryIndex + 1);
       });
     }
@@ -105,20 +153,21 @@
     }
 
     function getSelectedOptions() {
-      const groups = {};
+      const selectedOptions = [];
 
-      optionInputs.forEach(function (input) {
-        if (input.checked) {
-          const fieldset = input.closest('[data-fpb-option-index]');
-          if (fieldset) {
-            groups[fieldset.dataset.fpbOptionIndex] = input.value;
-          }
+      const optionGroups = section.querySelectorAll('[data-fpb-option-index]');
+
+      optionGroups.forEach(function (group) {
+        const checkedInput = group.querySelector('[data-fpb-option]:checked');
+
+        if (checkedInput) {
+          selectedOptions[Number(group.dataset.fpbOptionIndex)] = checkedInput.value;
         }
       });
 
-      return Object.keys(groups)
-        .sort(function (a, b) { return Number(a) - Number(b); })
-        .map(function (key) { return groups[key]; });
+      return selectedOptions.filter(function (value) {
+        return typeof value !== 'undefined';
+      });
     }
 
     function findVariantFromOptions() {
@@ -135,17 +184,45 @@
       });
     }
 
+    function updateSelectedOptionsLabel() {
+      if (!selectedOptionsText) {
+        return;
+      }
+
+      const selectedOptions = getSelectedOptions();
+
+      if (selectedOptions.length) {
+        selectedOptionsText.textContent = 'Selected: ' + selectedOptions.join(' / ');
+      } else if (selectedVariant && selectedVariant.title && selectedVariant.title !== 'Default Title') {
+        selectedOptionsText.textContent = 'Selected: ' + selectedVariant.title;
+      } else {
+        selectedOptionsText.textContent = '';
+      }
+    }
+
     function updateWhatsAppLink() {
       if (!whatsappLink || !selectedVariant) {
         return;
       }
 
-      const number = whatsappLink.dataset.number || '';
-      const baseMessage = whatsappLink.dataset.message || 'Hello, I am interested in this product.';
-      const quantity = quantityInput ? Math.max(1, Number(quantityInput.value || 1)) : 1;
+      const number = (whatsappLink.dataset.number || '').replace(/[^\d]/g, '');
+      const baseMessage = whatsappLink.dataset.message || 'Hello, I am interested in';
+      const quantity = getQuantity();
+      const totalPrice = formatMoney(selectedVariant.price * quantity, moneyFormat);
+      const variantText = selectedVariant.title && selectedVariant.title !== 'Default Title'
+        ? ' - ' + selectedVariant.title
+        : '';
 
-      const fullMessage = baseMessage + '\n\nProduct: ' + product.title + '\nVariant: ' + selectedVariant.title + '\nQuantity: ' + quantity;
-      whatsappLink.href = 'https://wa.me/' + encodeURIComponent(number) + '?text=' + encodeURIComponent(fullMessage);
+      const fullMessage = baseMessage + ' ' + product.title + variantText + ' quantity ' + quantity + ' for ' + totalPrice;
+
+      if (!number) {
+        whatsappLink.href = '#';
+        whatsappLink.classList.add('is-missing-number');
+        return;
+      }
+
+      whatsappLink.classList.remove('is-missing-number');
+      whatsappLink.href = 'https://wa.me/' + number + '?text=' + encodeURIComponent(fullMessage);
     }
 
     function updateVariantUI() {
@@ -160,6 +237,7 @@
           addText.textContent = 'Unavailable';
         }
 
+        updateSelectedOptionsLabel();
         return;
       }
 
@@ -183,8 +261,10 @@
         addButton.disabled = !variant.available;
       }
 
-      if (addText) {
-        addText.textContent = variant.available ? 'Add to Bag →' : 'Sold out';
+      if (addText && addButton) {
+        addText.textContent = variant.available
+          ? (addButton.dataset.defaultText || 'Add to Bag →')
+          : (addButton.dataset.soldOutText || 'Sold out');
       }
 
       if (variant.featured_image && mainImage) {
@@ -193,6 +273,7 @@
         mainImage.alt = variant.featured_image.alt || product.title;
       }
 
+      updateSelectedOptionsLabel();
       updateWhatsAppLink();
     }
 
@@ -200,29 +281,70 @@
       input.addEventListener('change', updateVariantUI);
     });
 
-    section.querySelectorAll('[data-fpb-qty-minus]').forEach(function (button) {
-      button.addEventListener('click', function () {
-        if (!quantityInput) {
-          return;
+    section.addEventListener('click', function (event) {
+      const minus = event.target.closest('[data-fpb-qty-minus]');
+      const plus = event.target.closest('[data-fpb-qty-plus]');
+      const collapsibleButton = event.target.closest('[data-fpb-collapsible-button]');
+      const reviewButton = event.target.closest('[data-fpb-review-link]');
+      const whatsappButton = event.target.closest('[data-fpb-whatsapp]');
+
+      if (minus) {
+        event.preventDefault();
+
+        if (quantityInput) {
+          quantityInput.value = Math.max(1, Number(quantityInput.value || 1) - 1);
+          updateWhatsAppLink();
         }
 
-        quantityInput.value = Math.max(1, Number(quantityInput.value || 1) - 1);
-        updateWhatsAppLink();
-      });
-    });
+        return;
+      }
 
-    section.querySelectorAll('[data-fpb-qty-plus]').forEach(function (button) {
-      button.addEventListener('click', function () {
-        if (!quantityInput) {
-          return;
+      if (plus) {
+        event.preventDefault();
+
+        if (quantityInput) {
+          quantityInput.value = Math.max(1, Number(quantityInput.value || 1) + 1);
+          updateWhatsAppLink();
         }
 
-        quantityInput.value = Math.max(1, Number(quantityInput.value || 1) + 1);
-        updateWhatsAppLink();
-      });
+        return;
+      }
+
+      if (collapsibleButton) {
+        event.preventDefault();
+
+        const content = collapsibleButton.parentElement.querySelector('[data-fpb-collapsible-content]');
+        const isOpen = collapsibleButton.getAttribute('aria-expanded') === 'true';
+
+        collapsibleButton.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+
+        if (content) {
+          content.hidden = isOpen;
+        }
+
+        return;
+      }
+
+      if (reviewButton) {
+        event.preventDefault();
+
+        const targetSelector = reviewButton.dataset.target || '#shopify-product-reviews';
+        const target = document.querySelector(targetSelector) || document.querySelector('[data-reviews]');
+
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        return;
+      }
+
+      if (whatsappButton && whatsappButton.classList.contains('is-missing-number')) {
+        event.preventDefault();
+      }
     });
 
     if (quantityInput) {
+      quantityInput.addEventListener('input', updateWhatsAppLink);
       quantityInput.addEventListener('change', function () {
         quantityInput.value = Math.max(1, Number(quantityInput.value || 1));
         updateWhatsAppLink();
@@ -231,18 +353,19 @@
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
+      event.stopPropagation();
 
       if (!selectedVariant || !selectedVariant.available || !addButton) {
-        return;
+        return false;
       }
 
       const originalText = addText ? addText.textContent : '';
-      const quantity = quantityInput ? Math.max(1, Number(quantityInput.value || 1)) : 1;
+      const quantity = getQuantity();
 
       addButton.disabled = true;
 
       if (addText) {
-        addText.textContent = 'Adding...';
+        addText.textContent = addButton.dataset.loadingText || 'Adding...';
       }
 
       if (messageEl) {
@@ -268,62 +391,44 @@
 
           return response.json();
         })
-        .then(function (item) {
-          if (messageEl) {
-            messageEl.textContent = item.product_title + ' added to cart successfully!';
-            messageEl.classList.add('is-visible');
+        .then(function () {
+          showMessage(messageEl, addButton.dataset.successText || 'Item added to cart successfully!', false);
+          dispatchCartEvents();
+
+          return fetch('/cart.js', {
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+        })
+        .then(function (response) {
+          return response && response.ok ? response.json() : null;
+        })
+        .then(function (cart) {
+          if (!cart) {
+            return;
           }
 
-          document.dispatchEvent(new CustomEvent('cart:refresh'));
-          document.dispatchEvent(new CustomEvent('cart:updated'));
-          window.dispatchEvent(new CustomEvent('cart:refresh'));
-          window.dispatchEvent(new CustomEvent('cart:updated'));
+          document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: cart } }));
+          window.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: cart } }));
         })
         .catch(function () {
-          if (messageEl) {
-            messageEl.textContent = 'Error adding to cart. Please try again.';
-            messageEl.classList.add('is-visible', 'is-error');
-          }
+          showMessage(messageEl, addButton.dataset.errorText || 'Error adding to cart. Please try again.', true);
         })
         .finally(function () {
           window.setTimeout(function () {
             addButton.disabled = !selectedVariant.available;
 
             if (addText) {
-              addText.textContent = selectedVariant.available ? originalText : 'Sold out';
+              addText.textContent = selectedVariant.available
+                ? (addButton.dataset.defaultText || originalText || 'Add to Bag →')
+                : (addButton.dataset.soldOutText || 'Sold out');
             }
-
-            if (messageEl) {
-              messageEl.classList.remove('is-visible', 'is-error');
-            }
-          }, 1800);
+          }, 900);
         });
-    });
 
-    section.querySelectorAll('[data-fpb-collapsible-button]').forEach(function (button) {
-      const content = button.parentElement.querySelector('[data-fpb-collapsible-content]');
-
-      button.addEventListener('click', function () {
-        const isOpen = button.getAttribute('aria-expanded') === 'true';
-
-        button.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-
-        if (content) {
-          content.hidden = isOpen;
-        }
-      });
-    });
-
-    section.querySelectorAll('[data-fpb-review-link]').forEach(function (button) {
-      button.addEventListener('click', function () {
-        const targetSelector = button.dataset.target || '#shopify-product-reviews';
-        const target = document.querySelector(targetSelector) || document.querySelector('[data-reviews]');
-
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
+      return false;
+    }, true);
 
     section.querySelectorAll('.featured-product-builder__video').forEach(function (video) {
       video.muted = true;
@@ -346,6 +451,10 @@
         });
       }
     });
+
+    if (dots.length) {
+      showGalleryImage(0);
+    }
 
     updateVariantUI();
     updateWhatsAppLink();
