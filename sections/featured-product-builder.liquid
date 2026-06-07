@@ -396,14 +396,20 @@
     var amount = value.toFixed(2);
     var amountNoDecimals = Math.round(value).toString();
 
-    if (!moneyFormat || moneyFormat.indexOf('{{') === -1) {
+    if (!moneyFormat) {
       return '$' + amount;
     }
 
-    return moneyFormat
-      .replace(/\{\{\s*amount\s*\}\}/g, amount)
-      .replace(/\{\{\s*amount_no_decimals\s*\}\}/g, amountNoDecimals)
-      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/g, amount.replace('.', ','));
+    var amountPattern = new RegExp(String.fromCharCode(123, 123) + '\s*amount\s*' + String.fromCharCode(125, 125), 'g');
+    var amountNoDecimalsPattern = new RegExp(String.fromCharCode(123, 123) + '\s*amount_no_decimals\s*' + String.fromCharCode(125, 125), 'g');
+    var amountCommaPattern = new RegExp(String.fromCharCode(123, 123) + '\s*amount_with_comma_separator\s*' + String.fromCharCode(125, 125), 'g');
+
+    var formatted = moneyFormat
+      .replace(amountPattern, amount)
+      .replace(amountNoDecimalsPattern, amountNoDecimals)
+      .replace(amountCommaPattern, amount.replace('.', ','));
+
+    return formatted || ('$' + amount);
   }
 
   function fpbShowMessage(messageEl, text, isError) {
@@ -444,7 +450,7 @@
       return;
     }
 
-    var moneyFormat = form.getAttribute('data-money-format') || '${{amount}}';
+    var moneyFormat = form.getAttribute('data-money-format') || '';
 
     var mainImage = section.querySelector('[data-fpb-main-image]');
     var dots = Array.prototype.slice.call(section.querySelectorAll('[data-fpb-gallery-dot]'));
