@@ -73,6 +73,7 @@
 
 .where-to-find-us__card {
   appearance: none;
+  text-decoration: none;
   border: 1px solid var(--wtfu-card-border);
   flex: 0 0 var(--wtfu-card-width);
   min-height: 230px;
@@ -90,6 +91,7 @@
 
 .where-to-find-us__card:hover,
 .where-to-find-us__card.is-active {
+  text-decoration: none;
   transform: translateY(-8px) scale(1.02);
   background: var(--wtfu-card-hover-bg);
   border-color: var(--wtfu-card-hover-border);
@@ -152,6 +154,7 @@
   text-align: left;
 }
 
+.where-to-find-us__card:hover .where-to-find-us__detail,
 .where-to-find-us__card.is-active .where-to-find-us__detail {
   max-height: 170px;
   opacity: 1;
