@@ -82,6 +82,7 @@
         method="post"
         action="/cart/add"
         data-fpb-product-form
+        onsubmit="return false;"
         data-money-format="{{ shop.money_format | escape }}"
         data-fpb-success-text=""
         novalidate
@@ -156,7 +157,7 @@
                   <details class="featured-product-builder__variant-details" {% if block.settings.open_by_default %}open{% endif %}>
                     <summary>
                       <span class="featured-product-builder__summary-text">
-                        <span>{{ block.settings.heading }}</span>
+                        <span data-fpb-summary-label data-default-heading="{{ block.settings.heading | escape }}">{{ block.settings.heading }}</span>
                         <small data-fpb-selected-options></small>
                       </span>
                       <span class="featured-product-builder__summary-icon">+</span>
@@ -209,7 +210,7 @@
               <div class="featured-product-builder__block featured-product-builder__cta-wrap" {{ block.shopify_attributes }}>
                 <button
                   class="featured-product-builder__add"
-                  type="submit"
+                  type="button"
                   data-fpb-add-button
                   data-default-text="{{ block.settings.button_text | escape }}"
                   data-loading-text="{{ block.settings.loading_text | escape }}"
@@ -386,7 +387,7 @@
   {% endif %}
 </section>
 
-<script src="{{ 'featured-product-builder.js' | asset_url }}" defer></script>
+<script src="{{ 'featured-product-builder-v2.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
