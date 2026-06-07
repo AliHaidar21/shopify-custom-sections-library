@@ -83,6 +83,8 @@
         action="/cart/add"
         data-fpb-product-form
         data-money-format="{{ shop.money_format | escape }}"
+        data-fpb-success-text=""
+        novalidate
       >
         <input type="hidden" name="id" value="{{ current_variant.id }}" data-fpb-variant-id>
 
@@ -153,7 +155,10 @@
                 <div class="featured-product-builder__block" {{ block.shopify_attributes }}>
                   <details class="featured-product-builder__variant-details" {% if block.settings.open_by_default %}open{% endif %}>
                     <summary>
-                      <span>{{ block.settings.heading }}</span>
+                      <span class="featured-product-builder__summary-text">
+                        <span>{{ block.settings.heading }}</span>
+                        <small data-fpb-selected-options></small>
+                      </span>
                       <span class="featured-product-builder__summary-icon">+</span>
                     </summary>
 
@@ -206,6 +211,11 @@
                   class="featured-product-builder__add"
                   type="submit"
                   data-fpb-add-button
+                  data-default-text="{{ block.settings.button_text | escape }}"
+                  data-loading-text="{{ block.settings.loading_text | escape }}"
+                  data-success-text="{{ block.settings.success_text | escape }}"
+                  data-sold-out-text="{{ block.settings.sold_out_text | escape }}"
+                  data-error-text="{{ block.settings.error_text | escape }}"
                   {% unless current_variant.available %}disabled{% endunless %}
                 >
                   <span data-fpb-add-text>
@@ -219,29 +229,32 @@
 
                 <div class="featured-product-builder__cart-message" data-fpb-cart-message></div>
               </div>
-
             {% when 'whatsapp' %}
-              {% if block.settings.whatsapp_number != blank %}
-                <div class="featured-product-builder__block" {{ block.shopify_attributes }}>
-                  <a
-                    href="#"
-                    class="featured-product-builder__whatsapp"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-fpb-whatsapp
-                    data-number="{{ block.settings.whatsapp_number }}"
-                    data-message="{{ block.settings.message | escape }}"
-                  >
-                    <span class="featured-product-builder__whatsapp-icon" aria-hidden="true">
-                      <svg viewBox="0 0 32 32">
-                        <path d="M16 3C9.383 3 4 8.383 4 15c0 2.225.6 4.384 1.742 6.287L4 29l7.94-1.698A11.93 11.93 0 0 0 16 27c6.617 0 12-5.383 12-12S22.617 3 16 3z"></path>
-                        <path d="M21.86 18.38c-.29-.15-1.71-.84-1.98-.93-.27-.1-.47-.15-.66.15-.2.29-.76.93-.93 1.12-.17.2-.34.22-.63.08-.29-.15-1.22-.45-2.33-1.44-.86-.77-1.44-1.72-1.6-2.01-.17-.29-.02-.45.13-.6.13-.13.29-.34.43-.51.14-.17.2-.29.29-.49.1-.2.05-.37-.02-.52-.08-.15-.66-1.6-.91-2.19-.24-.58-.49-.5-.66-.5h-.56c-.2 0-.52.08-.79.37-.27.29-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.09 4.49.71.31 1.26.5 1.69.64.71.23 1.35.2 1.86.12.57-.09 1.71-.7 1.96-1.38.24-.68.24-1.26.17-1.38-.07-.12-.27-.2-.56-.35z"></path>
-                      </svg>
-                    </span>
-                    {{ block.settings.button_text }}
-                  </a>
-                </div>
-              {% endif %}
+              <div class="featured-product-builder__block" {{ block.shopify_attributes }}>
+                <a
+                  href="#"
+                  class="featured-product-builder__whatsapp {% if block.settings.whatsapp_number == blank %}is-missing-number{% endif %}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-fpb-whatsapp
+                  data-number="{{ block.settings.whatsapp_number }}"
+                  data-message="{{ block.settings.message | escape }}"
+                >
+                  <span class="featured-product-builder__whatsapp-icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32">
+                      <path d="M16 3C9.383 3 4 8.383 4 15c0 2.225.6 4.384 1.742 6.287L4 29l7.94-1.698A11.93 11.93 0 0 0 16 27c6.617 0 12-5.383 12-12S22.617 3 16 3z"></path>
+                      <path d="M21.86 18.38c-.29-.15-1.71-.84-1.98-.93-.27-.1-.47-.15-.66.15-.2.29-.76.93-.93 1.12-.17.2-.34.22-.63.08-.29-.15-1.22-.45-2.33-1.44-.86-.77-1.44-1.72-1.6-2.01-.17-.29-.02-.45.13-.6.13-.13.29-.34.43-.51.14-.17.2-.29.29-.49.1-.2.05-.37-.02-.52-.08-.15-.66-1.6-.91-2.19-.24-.58-.49-.5-.66-.5h-.56c-.2 0-.52.08-.79.37-.27.29-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.09 4.49.71.31 1.26.5 1.69.64.71.23 1.35.2 1.86.12.57-.09 1.71-.7 1.96-1.38.24-.68.24-1.26.17-1.38-.07-.12-.27-.2-.56-.35z"></path>
+                    </svg>
+                  </span>
+                  {{ block.settings.button_text }}
+                </a>
+
+                {% if block.settings.whatsapp_number == blank %}
+                  <p class="featured-product-builder__whatsapp-note">
+                    Add your WhatsApp number in this block setting to make this button work.
+                  </p>
+                {% endif %}
+              </div>
 
             {% when 'urgency' %}
               {% if block.settings.text != blank %}
@@ -252,7 +265,6 @@
                   <span>{{ block.settings.text }}</span>
                 </div>
               {% endif %}
-
             {% when 'video_carousel' %}
               <div class="featured-product-builder__block featured-product-builder__video-proof" aria-label="{{ block.settings.accessibility_label | escape }}" {{ block.shopify_attributes }}>
                 {% if block.settings.heading != blank %}
@@ -260,35 +272,45 @@
                 {% endif %}
 
                 <div class="featured-product-builder__video-row">
-                  {% if block.settings.video_1 != blank %}
-                    <div class="featured-product-builder__video-card">
+                  <div class="featured-product-builder__video-card">
+                    {% if block.settings.video_1 != blank %}
                       {{ block.settings.video_1 | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'featured-product-builder__video' }}
-                    </div>
-                  {% endif %}
+                    {% else %}
+                      <div class="featured-product-builder__video-placeholder">Add video 1</div>
+                    {% endif %}
+                  </div>
 
-                  {% if block.settings.video_2 != blank %}
-                    <div class="featured-product-builder__video-card">
+                  <div class="featured-product-builder__video-card">
+                    {% if block.settings.video_2 != blank %}
                       {{ block.settings.video_2 | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'featured-product-builder__video' }}
-                    </div>
-                  {% endif %}
+                    {% else %}
+                      <div class="featured-product-builder__video-placeholder">Add video 2</div>
+                    {% endif %}
+                  </div>
 
-                  {% if block.settings.video_3 != blank %}
-                    <div class="featured-product-builder__video-card">
+                  <div class="featured-product-builder__video-card">
+                    {% if block.settings.video_3 != blank %}
                       {{ block.settings.video_3 | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'featured-product-builder__video' }}
-                    </div>
-                  {% endif %}
+                    {% else %}
+                      <div class="featured-product-builder__video-placeholder">Add video 3</div>
+                    {% endif %}
+                  </div>
 
-                  {% if block.settings.video_4 != blank %}
-                    <div class="featured-product-builder__video-card">
+                  <div class="featured-product-builder__video-card">
+                    {% if block.settings.video_4 != blank %}
                       {{ block.settings.video_4 | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'featured-product-builder__video' }}
-                    </div>
-                  {% endif %}
+                    {% else %}
+                      <div class="featured-product-builder__video-placeholder">Add video 4</div>
+                    {% endif %}
+                  </div>
 
-                  {% if block.settings.video_5 != blank %}
-                    <div class="featured-product-builder__video-card">
+                  <div class="featured-product-builder__video-card">
+                    {% if block.settings.video_5 != blank %}
                       {{ block.settings.video_5 | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'featured-product-builder__video' }}
-                    </div>
-                  {% endif %}
+                    {% else %}
+                      <div class="featured-product-builder__video-placeholder">Add video 5</div>
+                    {% endif %}
+                  </div>
                 </div>
               </div>
 
@@ -638,7 +660,7 @@
           "type": "textarea",
           "id": "message",
           "label": "Message",
-          "default": "Hello, I am interested in this product."
+          "default": "Hello, I am interested in"
         }
       ]
     },
