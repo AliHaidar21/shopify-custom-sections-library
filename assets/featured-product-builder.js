@@ -4,6 +4,20 @@
     return root.endsWith('/') ? root : root + '/';
   }
 
+  function getCartSectionIds() {
+    return [
+      'cart-drawer',
+      'cart-icon-bubble',
+      'cart-notification-product',
+      'cart-notification-button',
+      'cart-live-region-text',
+      'main-cart-items',
+      'main-cart-footer',
+      'cart-footer',
+      'header'
+    ];
+  }
+
   function formatMoney(cents, format) {
     if (typeof cents === 'string') {
       cents = cents.replace('.', '');
@@ -49,6 +63,7 @@
 
     document.querySelectorAll('.cart-count-bubble').forEach(function (bubble) {
       bubble.style.display = cart.item_count > 0 ? '' : 'none';
+      bubble.classList.remove('hidden');
     });
   }
 
@@ -81,6 +96,133 @@
     }
 
     return response.json();
+  }
+
+  function replaceFromHTML(html, selectors) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    selectors.forEach(function (selector) {
+      const current = document.querySelector(selector);
+      const fresh = doc.querySelector(selector);
+
+      if (current && fresh) {
+        current.innerHTML = fresh.innerHTML;
+        current.className = fresh.className;
+      }
+    });
+  }
+
+  function renderCartSections(sections) {
+    if (!sections) {
+      return false;
+    }
+
+    let rendered = false;
+
+    Object.keys(sections).forEach(function (sectionId) {
+      const html = sections[sectionId];
+
+      if (!html) {
+        return;
+      }
+
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+
+      const currentShopifySection = document.getElementById('shopify-section-' + sectionId);
+      const freshShopifySection = doc.getElementById('shopify-section-' + sectionId);
+
+      if (currentShopifySection && freshShopifySection) {
+        currentShopifySection.innerHTML = freshShopifySection.innerHTML;
+        rendered = true;
+      }
+
+      if (sectionId === 'cart-drawer') {
+        replaceFromHTML(html, [
+          'cart-drawer',
+          '#CartDrawer',
+          '.cart-drawer',
+          '#cart-drawer'
+        ]);
+        rendered = true;
+
+        document.querySelectorAll('cart-drawer, .cart-drawer, #CartDrawer').forEach(function (drawer) {
+          drawer.classList.remove('is-empty');
+          drawer.classList.remove('empty');
+        });
+      }
+
+      if (sectionId === 'cart-icon-bubble') {
+        replaceFromHTML(html, [
+          '#cart-icon-bubble',
+          '.cart-count-bubble',
+          '[data-cart-count-bubble]'
+        ]);
+        rendered = true;
+      }
+
+      if (sectionId === 'cart-notification-product') {
+        replaceFromHTML(html, [
+          '#cart-notification-product',
+          '[data-cart-notification-product]'
+        ]);
+        rendered = true;
+      }
+
+      if (sectionId === 'cart-notification-button') {
+        replaceFromHTML(html, [
+          '#cart-notification-button',
+          '[data-cart-notification-button]'
+        ]);
+        rendered = true;
+      }
+    });
+
+    return rendered;
+  }
+
+  async function fetchAndRenderCartSections(section) {
+    const sectionIds = getCartSectionIds();
+    const url = window.location.pathname + '?sections=' + encodeURIComponent(sectionIds.join(','));
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const sections = await response.json();
+    return renderCartSections(sections);
+  }
+
+  function tryThemeCartRender(addedData) {
+    if (!addedData || !addedData.sections) {
+      return false;
+    }
+
+    const cartDrawer = document.querySelector('cart-drawer');
+    const cartNotification = document.querySelector('cart-notification');
+
+    if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
+      try {
+        cartDrawer.classList.remove('is-empty');
+        cartDrawer.renderContents(addedData);
+        return true;
+      } catch (error) {}
+    }
+
+    if (cartNotification && typeof cartNotification.renderContents === 'function') {
+      try {
+        cartNotification.renderContents(addedData);
+        return true;
+      } catch (error) {}
+    }
+
+    return false;
   }
 
   function parseProduct(section) {
@@ -183,6 +325,7 @@
 
   function updateWhatsApp(section, variant, productTitle) {
     const link = section.querySelector('[data-fpb-whatsapp], [data-cfp-whatsapp]');
+
     if (!link || !variant) {
       return;
     }
@@ -476,11 +619,16 @@
       setMessage(section, '', false);
 
       try {
+        const formData = new FormData(form);
+        formData.set('sections', getCartSectionIds().join(','));
+        formData.set('sections_url', window.location.pathname);
+
         const response = await fetch(getRootUrl(section) + 'cart/add.js', {
           method: 'POST',
-          body: new FormData(form),
+          body: formData,
           headers: {
-            Accept: 'application/json'
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
           }
         });
 
@@ -491,6 +639,16 @@
         }
 
         const cart = await fetchCart(section);
+        updateCartCount(cart);
+
+        const renderedByTheme = tryThemeCartRender(addedData);
+
+        if (!renderedByTheme && addedData.sections) {
+          renderCartSections(addedData.sections);
+        }
+
+        await fetchAndRenderCartSections(section).catch(function () {});
+
         updateCartCount(cart);
         dispatchCartEvents(cart, addedData);
 
@@ -524,6 +682,8 @@
       button.addEventListener('click', function () {
         if (form.requestSubmit) {
           form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
         }
       });
     }
@@ -543,6 +703,7 @@
       (section.querySelector('.featured-product-builder__title') ? section.querySelector('.featured-product-builder__title').textContent.trim() : '');
 
     const variantInput = section.querySelector('[data-cfp-variant-input], [data-fpb-variant-id]');
+
     let currentVariant = variants.find(function (variant) {
       return variantInput && String(variant.id) === String(variantInput.value);
     }) || variants[0];
