@@ -225,6 +225,127 @@
     return false;
   }
 
+
+  function replaceShopifyCartIconFromHTML(html) {
+    if (!html) {
+      return false;
+    }
+
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const freshIcon = doc.querySelector('#cart-icon-bubble');
+    const currentIcon = document.querySelector('#cart-icon-bubble');
+
+    if (!freshIcon || !currentIcon) {
+      return false;
+    }
+
+    currentIcon.innerHTML = freshIcon.innerHTML;
+    currentIcon.className = freshIcon.className;
+    currentIcon.setAttribute('aria-label', freshIcon.getAttribute('aria-label') || currentIcon.getAttribute('aria-label') || 'Cart');
+
+    return true;
+  }
+
+  function createOrUpdateShopifyCartIconCount(cart) {
+    const icon = document.querySelector('#cart-icon-bubble');
+
+    if (!icon || !cart || typeof cart.item_count === 'undefined') {
+      return false;
+    }
+
+    const count = Number(cart.item_count || 0);
+    const countText = String(count);
+    const readableText = count === 1 ? '1 item' : count + ' items';
+
+    let bubble = icon.querySelector('.cart-count-bubble');
+
+    if (count <= 0) {
+      if (bubble) {
+        bubble.remove();
+      }
+
+      return true;
+    }
+
+    if (!bubble) {
+      bubble = document.createElement('div');
+      bubble.className = 'cart-count-bubble';
+
+      const visible = document.createElement('span');
+      visible.setAttribute('aria-hidden', 'true');
+
+      const hidden = document.createElement('span');
+      hidden.className = 'visually-hidden';
+
+      bubble.appendChild(visible);
+      bubble.appendChild(hidden);
+      icon.appendChild(bubble);
+    }
+
+    const visibleNumber = bubble.querySelector('span[aria-hidden="true"]') || bubble.querySelector('span') || bubble;
+    const hiddenText = bubble.querySelector('.visually-hidden');
+
+    visibleNumber.textContent = countText;
+
+    if (hiddenText) {
+      hiddenText.textContent = readableText;
+    }
+
+    bubble.classList.remove('hidden');
+    bubble.style.display = '';
+
+    return true;
+  }
+
+  async function refreshShopifyHeaderCartIcon(section, addedData, cart) {
+    if (addedData && addedData.sections && addedData.sections['cart-icon-bubble']) {
+      if (replaceShopifyCartIconFromHTML(addedData.sections['cart-icon-bubble'])) {
+        return true;
+      }
+    }
+
+    const sectionUrl = window.location.pathname + '?sections=cart-icon-bubble';
+
+    try {
+      const response = await fetch(sectionUrl, {
+        headers: {
+          Accept: 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const sections = await response.json();
+
+        if (sections && sections['cart-icon-bubble']) {
+          if (replaceShopifyCartIconFromHTML(sections['cart-icon-bubble'])) {
+            return true;
+          }
+        }
+      }
+    } catch (error) {}
+
+    try {
+      const headerResponse = await fetch(window.location.pathname + '?sections=header', {
+        headers: {
+          Accept: 'application/json'
+        }
+      });
+
+      if (headerResponse.ok) {
+        const headerSections = await headerResponse.json();
+
+        if (headerSections && headerSections.header) {
+          if (replaceShopifyCartIconFromHTML(headerSections.header)) {
+            return true;
+          }
+        }
+      }
+    } catch (error) {}
+
+    return createOrUpdateShopifyCartIconCount(cart);
+  }
+
+
   function parseProduct(section) {
     const productScript = section.querySelector('[data-product-json]');
     const variantsScript = section.querySelector('[data-cfp-variants]');
@@ -650,6 +771,7 @@
         await fetchAndRenderCartSections(section).catch(function () {});
 
         updateCartCount(cart);
+        await refreshShopifyHeaderCartIcon(section, addedData, cart).catch(function () {});
         dispatchCartEvents(cart, addedData);
 
         const successText = button && button.dataset.successText ? button.dataset.successText : 'Added to cart.';
