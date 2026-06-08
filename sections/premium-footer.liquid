@@ -267,18 +267,7 @@
     </div>
 
     <div class="premium-footer__bottom">
-      {% if section.settings.show_payment_icons %}
-        <div class="premium-footer__payments">
-          <span>{{ section.settings.payment_label }}</span>
-          <div class="premium-footer__payment-icons">
-            {% for type in shop.enabled_payment_types %}
-              {{ type | payment_type_svg_tag: class: 'premium-footer__payment-icon' }}
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
-
-      <div class="premium-footer__copyright">
+<div class="premium-footer__copyright">
         {{ section.settings.copyright_text | replace: '[year]', 'now' | date: '%Y' | replace: '[brand]', section.settings.brand_text }}
       </div>
 
@@ -312,6 +301,7 @@
 <script src="{{ 'premium-footer.js' | asset_url }}" defer></script>
 
 {% schema %}
+
 {
   "name": "Premium footer",
   "tag": "section",
@@ -428,6 +418,10 @@
       "content": "Social links"
     },
     {
+      "type": "paragraph",
+      "content": "Note: Social icons appear automatically only after you paste the matching social media links below. Leave a link empty to hide that icon."
+    },
+    {
       "type": "url",
       "id": "instagram_url",
       "label": "Instagram URL"
@@ -457,22 +451,10 @@
       "content": "Bottom row"
     },
     {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "Show payment icons",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "payment_label",
-      "label": "Payment label",
-      "default": "We accept"
-    },
-    {
       "type": "text",
       "id": "copyright_text",
       "label": "Copyright text",
-      "default": "© [year] [brand]. All rights reserved."
+      "default": "\u00a9 [year] [brand]. All rights reserved."
     },
     {
       "type": "link_list",
@@ -591,7 +573,7 @@
           "type": "text",
           "id": "icon",
           "label": "Icon or emoji",
-          "default": "✦"
+          "default": "\u2726"
         },
         {
           "type": "text",
@@ -637,7 +619,7 @@
           "type": "text",
           "id": "icon",
           "label": "Icon or emoji",
-          "default": "✓"
+          "default": "\u2713"
         },
         {
           "type": "text",
@@ -678,28 +660,28 @@
         {
           "type": "quick_link",
           "settings": {
-            "icon": "✦",
+            "icon": "\u2726",
             "label": "New arrivals"
           }
         },
         {
           "type": "quick_link",
           "settings": {
-            "icon": "♕",
+            "icon": "\u2655",
             "label": "Best sellers"
           }
         },
         {
           "type": "quick_link",
           "settings": {
-            "icon": "▢",
+            "icon": "\u25a2",
             "label": "Shop collections"
           }
         },
         {
           "type": "quick_link",
           "settings": {
-            "icon": "◊",
+            "icon": "\u25ca",
             "label": "Accessories"
           }
         },
@@ -713,14 +695,14 @@
         {
           "type": "care_link",
           "settings": {
-            "icon": "✉",
+            "icon": "\u2709",
             "label": "Contact us"
           }
         },
         {
           "type": "trust_badge",
           "settings": {
-            "icon": "🚚",
+            "icon": "\ud83d\ude9a",
             "heading": "Free shipping",
             "text": "On selected orders"
           }
@@ -728,7 +710,7 @@
         {
           "type": "trust_badge",
           "settings": {
-            "icon": "✓",
+            "icon": "\u2713",
             "heading": "Secure payments",
             "text": "100% safe and encrypted"
           }
@@ -736,7 +718,7 @@
         {
           "type": "trust_badge",
           "settings": {
-            "icon": "✦",
+            "icon": "\u2726",
             "heading": "Premium quality",
             "text": "Excellence in every detail"
           }
@@ -744,7 +726,7 @@
         {
           "type": "trust_badge",
           "settings": {
-            "icon": "☏",
+            "icon": "\u260f",
             "heading": "Dedicated support",
             "text": "Here for you, always"
           }
@@ -753,4 +735,5 @@
     }
   ]
 }
+
 {% endschema %}
