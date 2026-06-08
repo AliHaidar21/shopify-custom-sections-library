@@ -752,3 +752,28 @@
     font-size: 32px;
   }
 }
+
+
+/* Bottom row after removing payment icons */
+.premium-footer__bottom {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto;
+}
+
+.premium-footer__copyright {
+  justify-self: start;
+}
+
+.premium-footer__legal-links {
+  justify-self: end;
+}
+
+@media screen and (max-width: 1200px) {
+  .premium-footer__bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-footer__copyright,
+  .premium-footer__legal-links {
+    justify-self: center;
+  }
+}
