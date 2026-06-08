@@ -1,88 +1,96 @@
 {{ 'premium-announcement-bar.css' | asset_url | stylesheet_tag }}
 
 <section
-  class="premium-announcement-bar premium-announcement-bar--{{ section.id }} {% if section.settings.sticky_bar %}premium-announcement-bar--sticky{% endif %} {% if section.settings.animation_direction == 'right' %}premium-announcement-bar--reverse{% endif %}"
+  class="premium-announcement-bar premium-announcement-bar--{{ section.id }} premium-announcement-bar--{{ section.settings.position_mode }} {% if section.settings.pause_on_hover %}premium-announcement-bar--pause{% endif %}"
   data-premium-announcement-bar
   style="
     --pab-bg: {{ section.settings.background_color }};
-    --pab-panel: {{ section.settings.panel_color }};
     --pab-text: {{ section.settings.text_color }};
-    --pab-muted: {{ section.settings.muted_color }};
     --pab-accent: {{ section.settings.accent_color }};
-    --pab-gold: {{ section.settings.gold_color }};
+    --pab-discount: {{ section.settings.discount_icon_color }};
     --pab-border: {{ section.settings.border_color }};
     --pab-height: {{ section.settings.bar_height }}px;
-    --pab-radius: {{ section.settings.border_radius }}px;
+    --pab-font-size: {{ section.settings.font_size }}px;
+    --pab-gap: {{ section.settings.item_gap }}px;
     --pab-speed: {{ section.settings.animation_speed }}s;
-    --pab-max-width: {{ section.settings.max_width }}px;
+    --pab-z-index: {{ section.settings.z_index }};
   "
 >
-  <div class="premium-announcement-bar__outer {% if section.settings.full_width == false %}premium-announcement-bar__outer--contained{% endif %}">
-    {% if section.settings.show_edge_arrows %}
-      <button class="premium-announcement-bar__edge premium-announcement-bar__edge--left" type="button" aria-label="Previous announcement" data-pab-nudge="left">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M15 5l-7 7 7 7"></path>
-        </svg>
-      </button>
-    {% endif %}
-
-    <div class="premium-announcement-bar__viewport" {% if section.settings.pause_on_hover %}data-pab-pause-hover{% endif %}>
-      <div class="premium-announcement-bar__track" data-pab-track>
-        {% for i in (1..2) %}
-          <div class="premium-announcement-bar__group" aria-hidden="{% if i == 2 %}true{% else %}false{% endif %}">
-            {% for block in section.blocks %}
-              {% if block.type == 'announcement' %}
-                {% if block.settings.link != blank %}
-                  <a
-                    class="premium-announcement-bar__item"
-                    href="{{ block.settings.link }}"
-                    {% if block.settings.open_new_tab %}target="_blank" rel="noopener"{% endif %}
-                    {{ block.shopify_attributes }}
-                  >
-                {% else %}
-                  <div class="premium-announcement-bar__item" {{ block.shopify_attributes }}>
-                {% endif %}
-
-                    <span class="premium-announcement-bar__motion premium-announcement-bar__motion--left" aria-hidden="true"></span>
-
-                    <span class="premium-announcement-bar__icon-wrap" aria-hidden="true">
-                      <span class="premium-announcement-bar__icon">
-                        {{ block.settings.icon }}
-                      </span>
-                    </span>
-
-                    <span class="premium-announcement-bar__copy">
-                      <span class="premium-announcement-bar__title">{{ block.settings.title }}</span>
-                      {% if block.settings.subtitle != blank %}
-                        <span class="premium-announcement-bar__subtitle">{{ block.settings.subtitle }}</span>
-                      {% endif %}
-                    </span>
-
-                    {% if section.settings.show_dividers %}
-                      <span class="premium-announcement-bar__divider" aria-hidden="true">✦</span>
-                    {% endif %}
-
-                    <span class="premium-announcement-bar__motion premium-announcement-bar__motion--right" aria-hidden="true"></span>
-
-                {% if block.settings.link != blank %}
-                  </a>
-                {% else %}
-                  </div>
-                {% endif %}
+  <div class="premium-announcement-bar__viewport">
+    <div class="premium-announcement-bar__track">
+      {% for repeat in (1..2) %}
+        <div class="premium-announcement-bar__group" aria-hidden="{% if repeat == 2 %}true{% else %}false{% endif %}">
+          {% for block in section.blocks %}
+            {% if block.type == 'announcement' %}
+              {% if block.settings.link != blank %}
+                <a
+                  href="{{ block.settings.link }}"
+                  class="premium-announcement-bar__item"
+                  {% if block.settings.open_new_tab %}target="_blank" rel="noopener"{% endif %}
+                  {{ block.shopify_attributes }}
+                >
+              {% else %}
+                <div class="premium-announcement-bar__item" {{ block.shopify_attributes }}>
               {% endif %}
-            {% endfor %}
-          </div>
-        {% endfor %}
-      </div>
-    </div>
 
-    {% if section.settings.show_edge_arrows %}
-      <button class="premium-announcement-bar__edge premium-announcement-bar__edge--right" type="button" aria-label="Next announcement" data-pab-nudge="right">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M9 5l7 7-7 7"></path>
-        </svg>
-      </button>
-    {% endif %}
+                <span class="premium-announcement-bar__icon {% if block.settings.icon == 'discount' or block.settings.icon == 'check' %}premium-announcement-bar__icon--discount{% endif %}" aria-hidden="true">
+                  {% case block.settings.icon %}
+                    {% when 'truck' %}
+                      <svg viewBox="0 0 24 24">
+                        <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                      </svg>
+
+                    {% when 'discount' %}
+                      <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
+
+                    {% when 'check' %}
+                      <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
+
+                    {% when 'shield' %}
+                      <svg viewBox="0 0 24 24">
+                        <path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z"></path>
+                        <path d="M9 12l2 2 4-4"></path>
+                      </svg>
+
+                    {% when 'sparkle' %}
+                      <svg viewBox="0 0 24 24">
+                        <path d="M12 2l2.2 6.2L20 10.5l-5.8 2.3L12 19l-2.2-6.2L4 10.5l5.8-2.3L12 2z"></path>
+                      </svg>
+
+                    {% when 'gift' %}
+                      <svg viewBox="0 0 24 24">
+                        <path d="M20 12v8H4v-8"></path>
+                        <path d="M2 7h20v5H2z"></path>
+                        <path d="M12 7v13"></path>
+                        <path d="M12 7H8.5A2.5 2.5 0 1111 4.5L12 7z"></path>
+                        <path d="M12 7h3.5A2.5 2.5 0 1013 4.5L12 7z"></path>
+                      </svg>
+
+                    {% else %}
+                      <svg viewBox="0 0 24 24">
+                        <path d="M12 2l2.2 6.2L20 10.5l-5.8 2.3L12 19l-2.2-6.2L4 10.5l5.8-2.3L12 2z"></path>
+                      </svg>
+                  {% endcase %}
+                </span>
+
+                <span class="premium-announcement-bar__text">
+                  {{ block.settings.text }}
+                </span>
+
+              {% if block.settings.link != blank %}
+                </a>
+              {% else %}
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
   </div>
 </section>
 
@@ -95,6 +103,10 @@
   "class": "section-premium-announcement-bar",
   "settings": [
     {
+      "type": "paragraph",
+      "content": "Animated announcement bar extracted from the uploaded header style. Add announcement blocks below. The items automatically duplicate for a smooth infinite loop."
+    },
+    {
       "type": "header",
       "content": "Animation"
     },
@@ -102,44 +114,16 @@
       "type": "range",
       "id": "animation_speed",
       "label": "Animation speed",
-      "min": 10,
+      "min": 12,
       "max": 80,
-      "step": 5,
+      "step": 4,
       "unit": "s",
-      "default": 25
-    },
-    {
-      "type": "select",
-      "id": "animation_direction",
-      "label": "Animation direction",
-      "default": "left",
-      "options": [
-        {
-          "value": "left",
-          "label": "Move left"
-        },
-        {
-          "value": "right",
-          "label": "Move right"
-        }
-      ]
+      "default": 40
     },
     {
       "type": "checkbox",
       "id": "pause_on_hover",
-      "label": "Pause animation on hover",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_edge_arrows",
-      "label": "Show side arrows",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_dividers",
-      "label": "Show sparkle dividers",
+      "label": "Pause on hover",
       "default": true
     },
     {
@@ -147,46 +131,67 @@
       "content": "Layout"
     },
     {
-      "type": "checkbox",
-      "id": "full_width",
-      "label": "Full width",
-      "default": true
+      "type": "select",
+      "id": "position_mode",
+      "label": "Position mode",
+      "default": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "sticky",
+          "label": "Sticky"
+        },
+        {
+          "value": "fixed",
+          "label": "Fixed to top"
+        }
+      ]
     },
     {
-      "type": "checkbox",
-      "id": "sticky_bar",
-      "label": "Sticky announcement bar",
-      "default": false
-    },
-    {
-      "type": "range",
-      "id": "max_width",
-      "label": "Maximum width",
-      "min": 900,
-      "max": 1800,
-      "step": 50,
-      "unit": "px",
-      "default": 1700
+      "type": "paragraph",
+      "content": "Use Normal above the header for the safest Shopify layout. Use Fixed only if your theme spacing is adjusted, because fixed bars sit above the page."
     },
     {
       "type": "range",
       "id": "bar_height",
       "label": "Bar height",
-      "min": 54,
-      "max": 120,
+      "min": 30,
+      "max": 60,
       "step": 2,
       "unit": "px",
-      "default": 86
+      "default": 40
     },
     {
       "type": "range",
-      "id": "border_radius",
-      "label": "Corner radius",
-      "min": 0,
-      "max": 40,
-      "step": 2,
+      "id": "font_size",
+      "label": "Text size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
       "unit": "px",
-      "default": 30
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Space between items",
+      "min": 20,
+      "max": 90,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "z_index",
+      "label": "Layer position",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "default": 50
     },
     {
       "type": "header",
@@ -195,68 +200,76 @@
     {
       "type": "color",
       "id": "background_color",
-      "label": "Outer background",
-      "default": "#030B18"
-    },
-    {
-      "type": "color",
-      "id": "panel_color",
-      "label": "Bar background",
-      "default": "#061B45"
+      "label": "Background",
+      "default": "#041F60"
     },
     {
       "type": "color",
       "id": "text_color",
-      "label": "Main text",
+      "label": "Text",
       "default": "#FFFFFF"
     },
     {
       "type": "color",
-      "id": "muted_color",
-      "label": "Subtitle text",
-      "default": "#38B6CC"
-    },
-    {
-      "type": "color",
       "id": "accent_color",
-      "label": "Accent glow",
+      "label": "Main icon color",
       "default": "#38B6CC"
     },
     {
       "type": "color",
-      "id": "gold_color",
-      "label": "Premium gold",
-      "default": "#E8C982"
+      "id": "discount_icon_color",
+      "label": "Discount/check icon color",
+      "default": "#FFD700"
     },
     {
       "type": "color",
       "id": "border_color",
-      "label": "Border",
-      "default": "#244463"
+      "label": "Bottom border",
+      "default": "#38B6CC"
     }
   ],
   "blocks": [
     {
       "type": "announcement",
-      "name": "Announcement",
+      "name": "Announcement item",
       "settings": [
         {
-          "type": "text",
+          "type": "select",
           "id": "icon",
-          "label": "Icon or emoji",
-          "default": "🚚"
+          "label": "Icon",
+          "default": "truck",
+          "options": [
+            {
+              "value": "truck",
+              "label": "Delivery truck"
+            },
+            {
+              "value": "discount",
+              "label": "Discount check"
+            },
+            {
+              "value": "check",
+              "label": "Check circle"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "sparkle",
+              "label": "Sparkle"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            }
+          ]
         },
         {
           "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Free shipping"
-        },
-        {
-          "type": "text",
-          "id": "subtitle",
-          "label": "Subtitle",
-          "default": "On orders $50+"
+          "id": "text",
+          "label": "Announcement text",
+          "default": "FREE DELIVERY on 2+ orders"
         },
         {
           "type": "url",
@@ -279,25 +292,29 @@
         {
           "type": "announcement",
           "settings": {
-            "icon": "🚚",
-            "title": "Free shipping",
-            "subtitle": "On orders $50+"
+            "icon": "truck",
+            "text": "FREE DELIVERY on 2+ orders"
           }
         },
         {
           "type": "announcement",
           "settings": {
-            "icon": "🛡",
-            "title": "30-day",
-            "subtitle": "Money-back guarantee"
+            "icon": "discount",
+            "text": "$10 OFF on 3 orders"
           }
         },
         {
           "type": "announcement",
           "settings": {
-            "icon": "✦",
-            "title": "New arrivals",
-            "subtitle": "Just dropped"
+            "icon": "truck",
+            "text": "FREE DELIVERY on 2+ orders"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "icon": "discount",
+            "text": "$10 OFF on 3 orders"
           }
         }
       ]
