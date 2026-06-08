@@ -104,6 +104,30 @@
         </a>
       {% endif %}
 
+
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when '@app' %}
+            <div class="premium-header__app-slot" {{ block.shopify_attributes }}>
+              {% render block %}
+            </div>
+
+          {% when 'utility_link' %}
+            {% if block.settings.label != blank %}
+              <a
+                class="premium-header__utility-link"
+                href="{{ block.settings.link | default: '#' }}"
+                {{ block.shopify_attributes }}
+              >
+                {% if block.settings.icon != blank %}
+                  <span class="premium-header__utility-icon">{{ block.settings.icon }}</span>
+                {% endif %}
+                <span>{{ block.settings.label }}</span>
+              </a>
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+
       {% if section.settings.show_cart %}
         {% if section.settings.enable_cart_drawer %}
           <button class="premium-header__icon-button premium-header__cart-button" type="button" aria-label="Open cart" data-ph-cart-open>
@@ -201,6 +225,22 @@
         </nav>
       {% endif %}
 
+
+      {% for block in section.blocks %}
+        {% if block.type == 'utility_link' and block.settings.label != blank %}
+          <a
+            class="premium-header__mobile-link premium-header__mobile-link--utility"
+            href="{{ block.settings.link | default: '#' }}"
+            {{ block.shopify_attributes }}
+          >
+            {% if block.settings.icon != blank %}
+              <span>{{ block.settings.icon }}</span>
+            {% endif %}
+            <span>{{ block.settings.label }}</span>
+          </a>
+        {% endif %}
+      {% endfor %}
+
       {% if section.settings.show_search %}
         <form class="premium-header__mobile-search" action="{{ routes.search_url }}" method="get" role="search">
           <input type="search" name="q" placeholder="{{ section.settings.search_placeholder }}" autocomplete="off">
@@ -273,6 +313,18 @@
             <p class="premium-header__cart-note">{{ section.settings.cart_note }}</p>
           {% endif %}
 
+
+          {% if section.settings.show_cart_trustline and section.settings.cart_trust_text != blank %}
+            <div class="premium-header__checkout-trustline">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 11V8a5 5 0 0110 0v3"></path>
+                <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                <path d="M12 15v2"></path>
+              </svg>
+              <span>{{ section.settings.cart_trust_text }}</span>
+            </div>
+          {% endif %}
+
           <a href="/checkout" class="premium-header__checkout-button" data-ph-checkout-button>
             {{ section.settings.checkout_button_text }}
           </a>
@@ -289,6 +341,7 @@
 <script src="{{ 'premium-header.js' | asset_url }}" defer></script>
 
 {% schema %}
+
 
 {
   "name": "Premium header",
@@ -453,6 +506,18 @@
       "default": "Taxes and shipping calculated at checkout."
     },
     {
+      "type": "checkbox",
+      "id": "show_cart_trustline",
+      "label": "Show checkout trust message",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cart_trust_text",
+      "label": "Checkout trust message",
+      "default": "Secure checkout \u2022 Fast support \u2022 Easy order updates"
+    },
+    {
       "type": "header",
       "content": "Colors"
     },
@@ -545,8 +610,35 @@
           "label": "Link"
         }
       ]
+    },
+    {
+      "type": "@app"
+    },
+    {
+      "type": "utility_link",
+      "name": "Header utility link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Optional icon or emoji",
+          "default": "\ud83c\udf0d"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Country"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
     }
   ]
 }
+
 
 {% endschema %}
