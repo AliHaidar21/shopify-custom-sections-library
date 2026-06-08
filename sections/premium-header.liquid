@@ -1,0 +1,512 @@
+{{ 'premium-header.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="premium-header premium-header--{{ section.id }} {% if section.settings.sticky_header %}premium-header--sticky{% endif %}"
+  data-premium-header
+  data-section-id="{{ section.id }}"
+  data-root-url="{{ routes.root_url }}"
+  data-money-format="{{ shop.money_format | escape }}"
+  data-cart-drawer-enabled="{{ section.settings.enable_cart_drawer }}"
+  style="
+    --ph-bg: {{ section.settings.header_background }};
+    --ph-text: {{ section.settings.text_color }};
+    --ph-muted: {{ section.settings.muted_color }};
+    --ph-accent: {{ section.settings.accent_color }};
+    --ph-border: {{ section.settings.border_color }};
+    --ph-drawer-bg: {{ section.settings.drawer_background }};
+    --ph-drawer-text: {{ section.settings.drawer_text_color }};
+    --ph-button-bg: {{ section.settings.button_background }};
+    --ph-button-text: {{ section.settings.button_text_color }};
+    --ph-bubble-bg: {{ section.settings.cart_bubble_background }};
+    --ph-bubble-text: {{ section.settings.cart_bubble_text_color }};
+    --ph-logo-width: {{ section.settings.logo_width }}px;
+    --ph-padding-y: {{ section.settings.header_padding_y }}px;
+    --ph-radius: {{ section.settings.border_radius }}px;
+  "
+>
+  <div class="premium-header__inner">
+    <button class="premium-header__mobile-toggle" type="button" aria-label="Open menu" data-ph-mobile-open>
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <a class="premium-header__brand" href="{{ routes.root_url }}" aria-label="{{ section.settings.brand_text | escape }}">
+      {% if section.settings.logo != blank %}
+        {{
+          section.settings.logo
+          | image_url: width: 520
+          | image_tag:
+            loading: 'eager',
+            class: 'premium-header__logo',
+            alt: section.settings.brand_text
+        }}
+      {% else %}
+        <span class="premium-header__text-logo">{{ section.settings.brand_text }}</span>
+      {% endif %}
+    </a>
+
+    <nav class="premium-header__nav" aria-label="Main navigation">
+      {% if section.settings.menu != blank %}
+        <ul class="premium-header__nav-list">
+          {% for link in section.settings.menu.links %}
+            <li class="premium-header__nav-item {% if link.links != blank %}has-dropdown{% endif %}">
+              <a
+                class="premium-header__nav-link {% if link.active %}is-active{% endif %}"
+                href="{{ link.url }}"
+              >
+                {{ link.title }}
+              </a>
+
+              {% if link.links != blank %}
+                <div class="premium-header__dropdown">
+                  {% for child_link in link.links %}
+                    <a href="{{ child_link.url }}" class="premium-header__dropdown-link {% if child_link.active %}is-active{% endif %}">
+                      {{ child_link.title }}
+                    </a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </nav>
+
+    <div class="premium-header__actions">
+      {% if section.settings.show_search %}
+        <button class="premium-header__icon-button" type="button" aria-label="Open search" data-ph-search-open>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M16.5 16.5L21 21"></path>
+          </svg>
+        </button>
+      {% endif %}
+
+      {% if section.settings.show_account %}
+        <a class="premium-header__icon-button" href="{{ routes.account_url }}" aria-label="Account">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21c1.8-4.2 5-6 8-6s6.2 1.8 8 6"></path>
+          </svg>
+        </a>
+      {% endif %}
+
+      {% if section.settings.show_cart %}
+        {% if section.settings.enable_cart_drawer %}
+          <button class="premium-header__icon-button premium-header__cart-button" type="button" aria-label="Open cart" data-ph-cart-open>
+            {% if section.settings.cart_icon_style == 'cart' %}
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 5h2l2 11h10l2-8H7"></path>
+                <circle cx="10" cy="20" r="1.5"></circle>
+                <circle cx="17" cy="20" r="1.5"></circle>
+              </svg>
+            {% else %}
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 8h12l1 13H5L6 8z"></path>
+                <path d="M9 8V6a3 3 0 016 0v2"></path>
+              </svg>
+            {% endif %}
+
+            <span class="premium-header__cart-count {% if cart.item_count == 0 %}is-hidden{% endif %}" data-ph-cart-count-bubble>
+              <span data-ph-cart-count aria-hidden="true">{{ cart.item_count }}</span>
+              <span class="visually-hidden" data-ph-cart-count-sr>
+                {{ cart.item_count }} items
+              </span>
+            </span>
+          </button>
+        {% else %}
+          <a class="premium-header__icon-button premium-header__cart-button" href="{{ routes.cart_url }}" aria-label="Cart">
+            {% if section.settings.cart_icon_style == 'cart' %}
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 5h2l2 11h10l2-8H7"></path>
+                <circle cx="10" cy="20" r="1.5"></circle>
+                <circle cx="17" cy="20" r="1.5"></circle>
+              </svg>
+            {% else %}
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 8h12l1 13H5L6 8z"></path>
+                <path d="M9 8V6a3 3 0 016 0v2"></path>
+              </svg>
+            {% endif %}
+
+            <span class="premium-header__cart-count {% if cart.item_count == 0 %}is-hidden{% endif %}" data-ph-cart-count-bubble>
+              <span data-ph-cart-count aria-hidden="true">{{ cart.item_count }}</span>
+              <span class="visually-hidden" data-ph-cart-count-sr>
+                {{ cart.item_count }} items
+              </span>
+            </span>
+          </a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="premium-header__mobile-drawer" data-ph-mobile-drawer aria-hidden="true">
+    <div class="premium-header__mobile-overlay" data-ph-mobile-close></div>
+
+    <div class="premium-header__mobile-panel">
+      <div class="premium-header__mobile-top">
+        <span class="premium-header__mobile-title">{{ section.settings.brand_text }}</span>
+        <button type="button" class="premium-header__drawer-close" aria-label="Close menu" data-ph-mobile-close>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12"></path>
+            <path d="M18 6L6 18"></path>
+          </svg>
+        </button>
+      </div>
+
+      {% if section.settings.menu != blank %}
+        <nav class="premium-header__mobile-nav" aria-label="Mobile navigation">
+          {% for link in section.settings.menu.links %}
+            {% if link.links != blank %}
+              <details class="premium-header__mobile-details">
+                <summary>
+                  <span>{{ link.title }}</span>
+                  <span>+</span>
+                </summary>
+
+                <div class="premium-header__mobile-submenu">
+                  <a href="{{ link.url }}">{{ link.title }}</a>
+                  {% for child_link in link.links %}
+                    <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                  {% endfor %}
+                </div>
+              </details>
+            {% else %}
+              <a href="{{ link.url }}" class="premium-header__mobile-link">
+                {{ link.title }}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </nav>
+      {% endif %}
+
+      {% if section.settings.show_search %}
+        <form class="premium-header__mobile-search" action="{{ routes.search_url }}" method="get" role="search">
+          <input type="search" name="q" placeholder="{{ section.settings.search_placeholder }}" autocomplete="off">
+          <button type="submit">Search</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="premium-header__search-modal" data-ph-search-modal aria-hidden="true">
+    <button class="premium-header__search-backdrop" type="button" aria-label="Close search" data-ph-search-close></button>
+
+    <div class="premium-header__search-box">
+      <button type="button" class="premium-header__drawer-close" aria-label="Close search" data-ph-search-close>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12"></path>
+          <path d="M18 6L6 18"></path>
+        </svg>
+      </button>
+
+      <form action="{{ routes.search_url }}" method="get" role="search">
+        <label for="PremiumHeaderSearch-{{ section.id }}">Search store</label>
+        <div class="premium-header__search-row">
+          <input
+            id="PremiumHeaderSearch-{{ section.id }}"
+            type="search"
+            name="q"
+            placeholder="{{ section.settings.search_placeholder }}"
+            autocomplete="off"
+            data-ph-search-input
+          >
+          <button type="submit">{{ section.settings.search_button_text }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if section.settings.enable_cart_drawer %}
+    <div class="premium-header__cart-drawer" data-ph-cart-drawer aria-hidden="true">
+      <button class="premium-header__cart-overlay" type="button" aria-label="Close cart" data-ph-cart-close></button>
+
+      <aside class="premium-header__cart-panel" aria-label="Cart drawer">
+        <div class="premium-header__cart-top">
+          <div>
+            <h2>{{ section.settings.cart_drawer_title }}</h2>
+            <p data-ph-cart-drawer-count>{{ cart.item_count }} items</p>
+          </div>
+
+          <button type="button" class="premium-header__drawer-close" aria-label="Close cart" data-ph-cart-close>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12"></path>
+              <path d="M18 6L6 18"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="premium-header__cart-body" data-ph-cart-body>
+          <div class="premium-header__cart-loading">
+            Loading cart...
+          </div>
+        </div>
+
+        <div class="premium-header__cart-footer" data-ph-cart-footer>
+          <div class="premium-header__subtotal-row">
+            <span>{{ section.settings.subtotal_label }}</span>
+            <strong data-ph-cart-subtotal>{{ cart.total_price | money }}</strong>
+          </div>
+
+          {% if section.settings.cart_note != blank %}
+            <p class="premium-header__cart-note">{{ section.settings.cart_note }}</p>
+          {% endif %}
+
+          <a href="/checkout" class="premium-header__checkout-button" data-ph-checkout-button>
+            {{ section.settings.checkout_button_text }}
+          </a>
+
+          <button type="button" class="premium-header__continue-button" data-ph-cart-close>
+            {{ section.settings.continue_shopping_text }}
+          </button>
+        </div>
+      </aside>
+    </div>
+  {% endif %}
+</section>
+
+<script src="{{ 'premium-header.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Premium header",
+  "tag": "section",
+  "class": "section-premium-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Text logo",
+      "default": "Brand name"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 80,
+      "max": 260,
+      "step": 10,
+      "unit": "px",
+      "default": 170
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "header_padding_y",
+      "label": "Header vertical spacing",
+      "min": 12,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Drawer radius",
+      "min": 0,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Header actions"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search products..."
+    },
+    {
+      "type": "text",
+      "id": "search_button_text",
+      "label": "Search button text",
+      "default": "Search"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "Show cart",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "cart_icon_style",
+      "label": "Cart icon style",
+      "default": "bag",
+      "options": [
+        {
+          "value": "bag",
+          "label": "Bag"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cart_drawer",
+      "label": "Use cart drawer instead of cart page",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Cart drawer"
+    },
+    {
+      "type": "text",
+      "id": "cart_drawer_title",
+      "label": "Cart drawer title",
+      "default": "Your cart"
+    },
+    {
+      "type": "text",
+      "id": "subtotal_label",
+      "label": "Subtotal label",
+      "default": "Subtotal"
+    },
+    {
+      "type": "text",
+      "id": "checkout_button_text",
+      "label": "Checkout button text",
+      "default": "Checkout"
+    },
+    {
+      "type": "text",
+      "id": "continue_shopping_text",
+      "label": "Continue shopping text",
+      "default": "Continue shopping"
+    },
+    {
+      "type": "text",
+      "id": "empty_cart_text",
+      "label": "Empty cart text",
+      "default": "Your cart is empty."
+    },
+    {
+      "type": "textarea",
+      "id": "cart_note",
+      "label": "Cart note",
+      "default": "Taxes and shipping calculated at checkout."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Header background",
+      "default": "#061B45"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted color",
+      "default": "#B8C3D6"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#38B6CC"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#20345E"
+    },
+    {
+      "type": "color",
+      "id": "drawer_background",
+      "label": "Drawer background",
+      "default": "#061B45"
+    },
+    {
+      "type": "color",
+      "id": "drawer_text_color",
+      "label": "Drawer text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#38B6CC"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "cart_bubble_background",
+      "label": "Cart count bubble background",
+      "default": "#38B6CC"
+    },
+    {
+      "type": "color",
+      "id": "cart_bubble_text_color",
+      "label": "Cart count bubble text",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium header"
+    }
+  ]
+}
+{% endschema %}
