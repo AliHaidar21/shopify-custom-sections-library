@@ -1,0 +1,307 @@
+{{ 'premium-announcement-bar.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="premium-announcement-bar premium-announcement-bar--{{ section.id }} {% if section.settings.sticky_bar %}premium-announcement-bar--sticky{% endif %} {% if section.settings.animation_direction == 'right' %}premium-announcement-bar--reverse{% endif %}"
+  data-premium-announcement-bar
+  style="
+    --pab-bg: {{ section.settings.background_color }};
+    --pab-panel: {{ section.settings.panel_color }};
+    --pab-text: {{ section.settings.text_color }};
+    --pab-muted: {{ section.settings.muted_color }};
+    --pab-accent: {{ section.settings.accent_color }};
+    --pab-gold: {{ section.settings.gold_color }};
+    --pab-border: {{ section.settings.border_color }};
+    --pab-height: {{ section.settings.bar_height }}px;
+    --pab-radius: {{ section.settings.border_radius }}px;
+    --pab-speed: {{ section.settings.animation_speed }}s;
+    --pab-max-width: {{ section.settings.max_width }}px;
+  "
+>
+  <div class="premium-announcement-bar__outer {% if section.settings.full_width == false %}premium-announcement-bar__outer--contained{% endif %}">
+    {% if section.settings.show_edge_arrows %}
+      <button class="premium-announcement-bar__edge premium-announcement-bar__edge--left" type="button" aria-label="Previous announcement" data-pab-nudge="left">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 5l-7 7 7 7"></path>
+        </svg>
+      </button>
+    {% endif %}
+
+    <div class="premium-announcement-bar__viewport" {% if section.settings.pause_on_hover %}data-pab-pause-hover{% endif %}>
+      <div class="premium-announcement-bar__track" data-pab-track>
+        {% for i in (1..2) %}
+          <div class="premium-announcement-bar__group" aria-hidden="{% if i == 2 %}true{% else %}false{% endif %}">
+            {% for block in section.blocks %}
+              {% if block.type == 'announcement' %}
+                {% if block.settings.link != blank %}
+                  <a
+                    class="premium-announcement-bar__item"
+                    href="{{ block.settings.link }}"
+                    {% if block.settings.open_new_tab %}target="_blank" rel="noopener"{% endif %}
+                    {{ block.shopify_attributes }}
+                  >
+                {% else %}
+                  <div class="premium-announcement-bar__item" {{ block.shopify_attributes }}>
+                {% endif %}
+
+                    <span class="premium-announcement-bar__motion premium-announcement-bar__motion--left" aria-hidden="true"></span>
+
+                    <span class="premium-announcement-bar__icon-wrap" aria-hidden="true">
+                      <span class="premium-announcement-bar__icon">
+                        {{ block.settings.icon }}
+                      </span>
+                    </span>
+
+                    <span class="premium-announcement-bar__copy">
+                      <span class="premium-announcement-bar__title">{{ block.settings.title }}</span>
+                      {% if block.settings.subtitle != blank %}
+                        <span class="premium-announcement-bar__subtitle">{{ block.settings.subtitle }}</span>
+                      {% endif %}
+                    </span>
+
+                    {% if section.settings.show_dividers %}
+                      <span class="premium-announcement-bar__divider" aria-hidden="true">✦</span>
+                    {% endif %}
+
+                    <span class="premium-announcement-bar__motion premium-announcement-bar__motion--right" aria-hidden="true"></span>
+
+                {% if block.settings.link != blank %}
+                  </a>
+                {% else %}
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if section.settings.show_edge_arrows %}
+      <button class="premium-announcement-bar__edge premium-announcement-bar__edge--right" type="button" aria-label="Next announcement" data-pab-nudge="right">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+    {% endif %}
+  </div>
+</section>
+
+<script src="{{ 'premium-announcement-bar.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Premium announcement bar",
+  "tag": "section",
+  "class": "section-premium-announcement-bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "label": "Animation speed",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "s",
+      "default": 25
+    },
+    {
+      "type": "select",
+      "id": "animation_direction",
+      "label": "Animation direction",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Move left"
+        },
+        {
+          "value": "right",
+          "label": "Move right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause animation on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_edge_arrows",
+      "label": "Show side arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dividers",
+      "label": "Show sparkle dividers",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_bar",
+      "label": "Sticky announcement bar",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 900,
+      "max": 1800,
+      "step": 50,
+      "unit": "px",
+      "default": 1700
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Bar height",
+      "min": 54,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 86
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Outer background",
+      "default": "#030B18"
+    },
+    {
+      "type": "color",
+      "id": "panel_color",
+      "label": "Bar background",
+      "default": "#061B45"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Main text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Subtitle text",
+      "default": "#38B6CC"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent glow",
+      "default": "#38B6CC"
+    },
+    {
+      "type": "color",
+      "id": "gold_color",
+      "label": "Premium gold",
+      "default": "#E8C982"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#244463"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon or emoji",
+          "default": "🚚"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Free shipping"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "On orders $50+"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Optional link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_new_tab",
+          "label": "Open link in new tab",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium announcement bar",
+      "blocks": [
+        {
+          "type": "announcement",
+          "settings": {
+            "icon": "🚚",
+            "title": "Free shipping",
+            "subtitle": "On orders $50+"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "icon": "🛡",
+            "title": "30-day",
+            "subtitle": "Money-back guarantee"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "icon": "✦",
+            "title": "New arrivals",
+            "subtitle": "Just dropped"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
