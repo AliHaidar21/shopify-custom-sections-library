@@ -1,0 +1,111 @@
+.stock-urgency-bar,
+.stock-urgency-bar *,
+.stock-urgency-bar *::before,
+.stock-urgency-bar *::after {
+  box-sizing: border-box;
+}
+
+.stock-urgency-bar {
+  width: 100%;
+  background: var(--sub-section-bg);
+  padding: var(--sub-padding-top) 20px var(--sub-padding-bottom);
+  font-family: inherit;
+}
+
+.stock-urgency-bar__inner {
+  width: min(100%, var(--sub-max-width));
+  margin: 0 auto;
+}
+
+.stock-urgency-bar__heading {
+  margin: 0 0 24px;
+  color: var(--sub-heading-color);
+  text-align: center;
+  font-size: var(--sub-heading-size-desktop);
+  line-height: 1.05;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+
+.stock-urgency-bar__track {
+  position: relative;
+  width: 100%;
+  height: var(--sub-bar-height);
+  border-radius: var(--sub-radius);
+  background: var(--sub-track-color);
+  overflow: hidden;
+}
+
+.stock-urgency-bar__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--sub-target-percent);
+  min-width: 0;
+  height: 100%;
+  border-radius: var(--sub-radius) 0 0 var(--sub-radius);
+  background: var(--sub-fill-color);
+  overflow: hidden;
+  transition: width 1s cubic-bezier(.22,.61,.36,1);
+}
+
+.stock-urgency-bar__track[aria-valuenow="100"] .stock-urgency-bar__fill {
+  border-radius: var(--sub-radius);
+}
+
+.stock-urgency-bar--striped .stock-urgency-bar__fill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 13px,
+    var(--sub-stripe-color) 13px,
+    var(--sub-stripe-color) 26px
+  );
+  opacity: 0.72;
+}
+
+.stock-urgency-bar--animate-stripes .stock-urgency-bar__fill::before {
+  background-size: 38px 38px;
+  animation: stockUrgencyStripes 1s linear infinite;
+}
+
+.stock-urgency-bar__percent-text {
+  margin: 12px 0 0;
+  color: var(--sub-heading-color);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+@keyframes stockUrgencyStripes {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 38px 0;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .stock-urgency-bar {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .stock-urgency-bar__heading {
+    margin-bottom: 18px;
+    font-size: var(--sub-heading-size-mobile);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stock-urgency-bar__fill,
+  .stock-urgency-bar__fill::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}
