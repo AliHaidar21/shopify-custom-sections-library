@@ -1,0 +1,773 @@
+<section
+  class="prime-collections-carousel prime-collections-carousel--{{ section.id }}"
+  data-prime-collections-carousel
+  style="
+    --pcc-section-bg: {{ section.settings.section_background }};
+    --pcc-title-color: {{ section.settings.title_color }};
+    --pcc-arrow-color: {{ section.settings.arrow_color }};
+    --pcc-progress-color: {{ section.settings.progress_color }};
+    --pcc-progress-track: {{ section.settings.progress_track_color }};
+    --pcc-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --pcc-card-radius: {{ section.settings.card_radius }}px;
+    --pcc-card-height-desktop: {{ section.settings.card_height_desktop }}px;
+    --pcc-card-height-mobile: {{ section.settings.card_height_mobile }}px;
+    --pcc-card-width-desktop: {{ section.settings.card_width_desktop }}px;
+    --pcc-card-width-mobile: {{ section.settings.card_width_mobile }}vw;
+    --pcc-padding-top: {{ section.settings.padding_top }}px;
+    --pcc-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="prime-collections-carousel__inner">
+    {% if section.settings.section_title != blank %}
+      <div class="prime-collections-carousel__header">
+        <h2 class="prime-collections-carousel__title">
+          {{ section.settings.section_title }}
+        </h2>
+      </div>
+    {% endif %}
+
+    <div class="prime-collections-carousel__viewport">
+      <div class="prime-collections-carousel__track" data-pcc-track>
+        {% for block in section.blocks %}
+          {% if block.type == 'collection_card' %}
+            {% liquid
+              assign card_image = ''
+              if block.settings.image != blank
+                assign card_image = block.settings.image | image_url: width: 1200
+              elsif block.settings.image_url != blank
+                assign card_image = block.settings.image_url
+              endif
+
+              assign card_title = block.settings.collection_name
+              assign card_link = block.settings.link
+              assign is_clickable = false
+
+              if card_link != blank
+                assign is_clickable = true
+              endif
+            %}
+
+            {% if is_clickable %}
+              <a
+                class="prime-collections-carousel__card"
+                href="{{ card_link }}"
+                {% if block.settings.open_new_tab %}target="_blank" rel="noopener"{% endif %}
+                {{ block.shopify_attributes }}
+              >
+            {% else %}
+              <div
+                class="prime-collections-carousel__card"
+                role="group"
+                aria-label="{{ card_title | escape }}"
+                {{ block.shopify_attributes }}
+              >
+            {% endif %}
+
+              {% if card_image != blank %}
+                <span
+                  class="prime-collections-carousel__card-bg"
+                  style="background-image: url('{{ card_image }}');"
+                  aria-hidden="true"
+                ></span>
+              {% else %}
+                <span class="prime-collections-carousel__card-bg prime-collections-carousel__card-bg--empty" aria-hidden="true"></span>
+              {% endif %}
+
+              <span class="prime-collections-carousel__overlay" aria-hidden="true"></span>
+
+              {% if section.settings.show_coming_soon_badge and block.settings.show_coming_soon %}
+                <span class="prime-collections-carousel__badge">
+                  {% if block.settings.badge_text != blank %}
+                    {{ block.settings.badge_text }}
+                  {% else %}
+                    {{ section.settings.badge_text }}
+                  {% endif %}
+                </span>
+              {% endif %}
+
+              <span class="prime-collections-carousel__card-title">
+                {{ card_title }}
+              </span>
+
+            {% if is_clickable %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="prime-collections-carousel__bottom">
+      {% if section.settings.show_progress %}
+        <div class="prime-collections-carousel__progress" aria-hidden="true">
+          <span class="prime-collections-carousel__progress-fill" data-pcc-progress></span>
+        </div>
+      {% endif %}
+
+      {% if section.settings.show_arrows %}
+        <div class="prime-collections-carousel__arrows">
+          <button class="prime-collections-carousel__arrow" type="button" aria-label="Previous collections" data-pcc-prev>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 5l-7 7 7 7"></path>
+            </svg>
+          </button>
+
+          <button class="prime-collections-carousel__arrow" type="button" aria-label="Next collections" data-pcc-next>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .prime-collections-carousel,
+  .prime-collections-carousel *,
+  .prime-collections-carousel *::before,
+  .prime-collections-carousel *::after {
+    box-sizing: border-box;
+  }
+
+  .prime-collections-carousel {
+    width: 100%;
+    max-width: 100%;
+    background: var(--pcc-section-bg);
+    padding: var(--pcc-padding-top) 0 var(--pcc-padding-bottom);
+    overflow: hidden;
+    font-family: inherit;
+  }
+
+  .prime-collections-carousel__inner {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .prime-collections-carousel__header {
+    padding: 0 clamp(18px, 5vw, 72px);
+    margin-bottom: 24px;
+  }
+
+  .prime-collections-carousel__title {
+    margin: 0;
+    color: var(--pcc-title-color);
+    font-size: clamp(28px, 4vw, 56px);
+    line-height: 1.04;
+    font-weight: 850;
+    letter-spacing: -0.035em;
+  }
+
+  .prime-collections-carousel__viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .prime-collections-carousel__track {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 clamp(18px, 5vw, 72px) 6px;
+    scrollbar-width: none;
+  }
+
+  .prime-collections-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .prime-collections-carousel__card {
+    position: relative;
+    flex: 0 0 var(--pcc-card-width-desktop);
+    width: var(--pcc-card-width-desktop);
+    height: var(--pcc-card-height-desktop);
+    border-radius: var(--pcc-card-radius);
+    overflow: hidden;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    background: #111;
+    box-shadow: 0 18px 42px rgba(7, 30, 34, 0.10);
+    isolation: isolate;
+    transform: translateZ(0);
+  }
+
+  .prime-collections-carousel__card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  .prime-collections-carousel__card-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.01);
+    transition: transform 0.65s ease;
+    z-index: 0;
+  }
+
+  .prime-collections-carousel__card-bg--empty {
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18), transparent 34%),
+      linear-gradient(145deg, #071E22, #1b3d42);
+  }
+
+  .prime-collections-carousel__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at center, rgba(0,0,0,0.05), rgba(0,0,0,0.22)),
+      rgba(0, 0, 0, var(--pcc-overlay-opacity));
+    z-index: 1;
+  }
+
+  .prime-collections-carousel__card-title {
+    position: relative;
+    z-index: 2;
+    max-width: 82%;
+    color: #fff;
+    text-align: center;
+    font-size: clamp(21px, 2vw, 33px);
+    line-height: 1.02;
+    font-weight: 900;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 18px rgba(0,0,0,0.34);
+  }
+
+  .prime-collections-carousel__badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+    min-height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #071E22;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(8px);
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+
+  .prime-collections-carousel__card:hover .prime-collections-carousel__badge,
+  .prime-collections-carousel__card:focus-visible .prime-collections-carousel__badge {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .prime-collections-carousel__card:hover .prime-collections-carousel__card-bg {
+    transform: scale(1.055);
+  }
+
+  .prime-collections-carousel__card:focus-visible {
+    outline: 3px solid rgba(7, 30, 34, 0.22);
+    outline-offset: 4px;
+  }
+
+  .prime-collections-carousel__bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 22px;
+    padding: 24px clamp(18px, 5vw, 72px) 0;
+  }
+
+  .prime-collections-carousel__progress {
+    position: relative;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--pcc-progress-track);
+    overflow: hidden;
+  }
+
+  .prime-collections-carousel__progress-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0%;
+    border-radius: inherit;
+    background: var(--pcc-progress-color);
+    transition: width 0.12s linear;
+  }
+
+  .prime-collections-carousel__arrows {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .prime-collections-carousel__arrow {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(7, 30, 34, 0.16);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--pcc-arrow-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(7, 30, 34, 0.05);
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .prime-collections-carousel__arrow:hover {
+    transform: translateY(-1px);
+    border-color: rgba(7, 30, 34, 0.34);
+    background: rgba(7, 30, 34, 0.035);
+  }
+
+  .prime-collections-carousel__arrow svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media screen and (max-width: 768px) {
+    .prime-collections-carousel {
+      padding-top: calc(var(--pcc-padding-top) * 0.72);
+      padding-bottom: calc(var(--pcc-padding-bottom) * 0.72);
+    }
+
+    .prime-collections-carousel__header {
+      padding: 0 18px;
+      margin-bottom: 18px;
+    }
+
+    .prime-collections-carousel__title {
+      font-size: clamp(26px, 8vw, 38px);
+      letter-spacing: -0.03em;
+    }
+
+    .prime-collections-carousel__track {
+      gap: 16px;
+      padding: 0 18px 5px;
+    }
+
+    .prime-collections-carousel__card {
+      flex-basis: var(--pcc-card-width-mobile);
+      width: var(--pcc-card-width-mobile);
+      height: var(--pcc-card-height-mobile);
+    }
+
+    .prime-collections-carousel__card-title {
+      font-size: clamp(22px, 7vw, 30px);
+    }
+
+    .prime-collections-carousel__bottom {
+      padding: 20px 18px 0;
+      gap: 16px;
+    }
+
+    .prime-collections-carousel__arrow {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  @media screen and (max-width: 420px) {
+    .prime-collections-carousel__bottom {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .prime-collections-carousel__arrows {
+      justify-self: end;
+    }
+
+    .prime-collections-carousel__badge {
+      opacity: 1;
+      transform: none;
+      font-size: 10px;
+      top: 12px;
+      right: 12px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    function initPrimeCollectionsCarousel(section) {
+      if (!section || section.dataset.primeCollectionsReady === 'true') {
+        return;
+      }
+
+      section.dataset.primeCollectionsReady = 'true';
+
+      var track = section.querySelector('[data-pcc-track]');
+      var progress = section.querySelector('[data-pcc-progress]');
+      var prev = section.querySelector('[data-pcc-prev]');
+      var next = section.querySelector('[data-pcc-next]');
+
+      if (!track) {
+        return;
+      }
+
+      function getScrollAmount() {
+        var card = track.querySelector('.prime-collections-carousel__card');
+        var gap = 24;
+
+        if (window.getComputedStyle) {
+          var styles = window.getComputedStyle(track);
+          gap = parseFloat(styles.columnGap || styles.gap || 24) || 24;
+        }
+
+        if (!card) {
+          return track.clientWidth * 0.8;
+        }
+
+        return card.getBoundingClientRect().width + gap;
+      }
+
+      function updateProgress() {
+        if (!progress) {
+          return;
+        }
+
+        var maxScroll = track.scrollWidth - track.clientWidth;
+
+        if (maxScroll <= 0) {
+          progress.style.width = '100%';
+          return;
+        }
+
+        var percent = Math.max(0, Math.min(100, (track.scrollLeft / maxScroll) * 100));
+        progress.style.width = percent + '%';
+      }
+
+      function scrollByCard(direction) {
+        track.scrollBy({
+          left: getScrollAmount() * direction,
+          behavior: 'smooth'
+        });
+      }
+
+      if (prev) {
+        prev.addEventListener('click', function () {
+          scrollByCard(-1);
+        });
+      }
+
+      if (next) {
+        next.addEventListener('click', function () {
+          scrollByCard(1);
+        });
+      }
+
+      track.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+
+      updateProgress();
+      window.setTimeout(updateProgress, 250);
+    }
+
+    function initAllPrimeCollectionsCarousels() {
+      document.querySelectorAll('[data-prime-collections-carousel]').forEach(function (section) {
+        initPrimeCollectionsCarousel(section);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAllPrimeCollectionsCarousels);
+    } else {
+      initAllPrimeCollectionsCarousels();
+    }
+
+    document.addEventListener('shopify:section:load', function (event) {
+      var section = event.target.querySelector('[data-prime-collections-carousel]');
+
+      if (section) {
+        initPrimeCollectionsCarousel(section);
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Prime collections carousel",
+  "tag": "section",
+  "class": "section-prime-collections-carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "Discover our collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_coming_soon_badge",
+      "label": "Show Coming Soon badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Default badge text",
+      "default": "Coming Soon"
+    },
+    {
+      "type": "header",
+      "content": "Carousel controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_progress",
+      "label": "Show progress line",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "card_width_desktop",
+      "label": "Desktop card width",
+      "min": 280,
+      "max": 520,
+      "step": 10,
+      "unit": "px",
+      "default": 360
+    },
+    {
+      "type": "range",
+      "id": "card_width_mobile",
+      "label": "Mobile card width",
+      "min": 70,
+      "max": 90,
+      "step": 1,
+      "unit": "vw",
+      "default": 82
+    },
+    {
+      "type": "range",
+      "id": "card_height_desktop",
+      "label": "Desktop card height",
+      "min": 180,
+      "max": 420,
+      "step": 10,
+      "unit": "px",
+      "default": 260
+    },
+    {
+      "type": "range",
+      "id": "card_height_mobile",
+      "label": "Mobile card height",
+      "min": 170,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "default": 220
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image dark overlay",
+      "min": 10,
+      "max": 70,
+      "step": 5,
+      "unit": "%",
+      "default": 35
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 20,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 20,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#071E22"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow color",
+      "default": "#071E22"
+    },
+    {
+      "type": "color",
+      "id": "progress_color",
+      "label": "Progress active color",
+      "default": "#071E22"
+    },
+    {
+      "type": "color",
+      "id": "progress_track_color",
+      "label": "Progress track color",
+      "default": "#E6ECEE"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "collection_name",
+          "label": "Collection name",
+          "default": "Collection name"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image picker"
+        },
+        {
+          "type": "text",
+          "id": "image_url",
+          "label": "Image URL fallback"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Optional link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_new_tab",
+          "label": "Open link in new tab",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_coming_soon",
+          "label": "Show Coming Soon badge on this card",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text override",
+          "default": "Coming Soon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Prime collections carousel",
+      "blocks": [
+        {
+          "type": "collection_card",
+          "settings": {
+            "collection_name": "Kitchen",
+            "image_url": "https://cdn.shopify.com/s/files/1/0823/7092/0706/files/IMG_9473.jpg?v=1781104685",
+            "show_coming_soon": true,
+            "badge_text": "Coming Soon"
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "collection_name": "Home Essentials",
+            "image_url": "https://cdn.shopify.com/s/files/1/0823/7092/0706/files/7B750BF9-1B92-4B6D-8EAE-D6594F46177C.jpg?v=1781104858",
+            "show_coming_soon": true,
+            "badge_text": "Coming Soon"
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "collection_name": "On Sale",
+            "image_url": "https://cdn.shopify.com/s/files/1/0823/7092/0706/files/IMG_9476.jpg?v=1781105092",
+            "show_coming_soon": true,
+            "badge_text": "Coming Soon"
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "collection_name": "Fitness & Sports",
+            "image_url": "https://cdn.shopify.com/s/files/1/0823/7092/0706/files/D49CAD23-21BF-4722-A37B-C263F11D2FCB.jpg?v=1781104610",
+            "show_coming_soon": true,
+            "badge_text": "Coming Soon"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
