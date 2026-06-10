@@ -275,6 +275,206 @@
                   <span>{{ block.settings.text }}</span>
                 </div>
               {% endif %}
+          {% when 'upsell_pair' %}
+            <div
+              class="featured-product-builder__upsell-section"
+              style="
+                --fpb-upsell-accent: {{ block.settings.accent_color }};
+                --fpb-upsell-text: {{ block.settings.text_color }};
+                --fpb-upsell-muted: {{ block.settings.muted_color }};
+                --fpb-upsell-bg: {{ block.settings.card_background }};
+                --fpb-upsell-border: {{ block.settings.border_color }};
+                --fpb-upsell-soft-bg: {{ block.settings.soft_background }};
+                --fpb-upsell-button-bg: {{ block.settings.button_background }};
+                --fpb-upsell-button-hover-bg: {{ block.settings.button_hover_background }};
+                --fpb-upsell-button-text: {{ block.settings.button_text_color }};
+                --fpb-upsell-radius: {{ block.settings.card_radius }}px;
+                --fpb-upsell-image-height: {{ block.settings.image_height }}px;
+                --fpb-upsell-image-height-mobile: {{ block.settings.image_height_mobile }}px;
+                --fpb-upsell-gap: {{ block.settings.grid_gap }}px;
+                --fpb-upsell-button-width: {{ block.settings.button_width }}%;
+                --fpb-upsell-button-height: {{ block.settings.button_height }}px;
+                --fpb-upsell-button-font-size: {{ block.settings.button_font_size }}px;
+                --fpb-upsell-margin-top: {{ block.settings.margin_top }}px;
+                --fpb-upsell-margin-bottom: {{ block.settings.margin_bottom }}px;
+              "
+              {{ block.shopify_attributes }}
+            >
+              {% if block.settings.title != blank %}
+                <h3 class="featured-product-builder__upsell-title">{{ block.settings.title }}</h3>
+              {% endif %}
+
+              {% if block.settings.subtitle != blank %}
+                <p class="featured-product-builder__upsell-subtitle">{{ block.settings.subtitle }}</p>
+              {% endif %}
+
+              <div class="featured-product-builder__upsell-grid">
+                {% liquid
+                  assign upsell_product_1 = block.settings.product_1
+                  assign upsell_variant_1 = blank
+                  assign upsell_title_1 = block.settings.title_1
+                  assign upsell_image_1 = ''
+                  assign upsell_price_1 = block.settings.manual_price_1
+
+                  if upsell_product_1 != blank
+                    assign upsell_variant_1 = upsell_product_1.selected_or_first_available_variant
+                    if upsell_title_1 == blank
+                      assign upsell_title_1 = upsell_product_1.title
+                    endif
+                    if upsell_price_1 == blank
+                      assign upsell_price_1 = upsell_variant_1.price | money
+                    endif
+                  endif
+
+                  if block.settings.image_1 != blank
+                    assign upsell_image_1 = block.settings.image_1 | image_url: width: 900
+                  elsif upsell_product_1.featured_image != blank
+                    assign upsell_image_1 = upsell_product_1.featured_image | image_url: width: 900
+                  endif
+                %}
+
+                <div class="featured-product-builder__upsell-card" data-fpb-upsell-card>
+                  <div class="featured-product-builder__upsell-image-container">
+                    {% if upsell_image_1 != blank %}
+                      <img
+                        class="featured-product-builder__upsell-image"
+                        src="{{ upsell_image_1 }}"
+                        alt="{{ upsell_title_1 | escape }}"
+                        loading="lazy"
+                      >
+                    {% else %}
+                      <div class="featured-product-builder__upsell-placeholder">
+                        Choose upsell product 1
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="featured-product-builder__upsell-info">
+                    {% if block.settings.show_rating %}
+                      <div class="featured-product-builder__upsell-rating">
+                        <div class="featured-product-builder__upsell-stars">{{ block.settings.stars_1 }}</div>
+                        {% if block.settings.review_count_1 != blank %}
+                          <span class="featured-product-builder__upsell-review-count">{{ block.settings.review_count_1 }}</span>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+
+                    {% if upsell_title_1 != blank %}
+                      <h4 class="featured-product-builder__upsell-product-title">{{ upsell_title_1 }}</h4>
+                    {% endif %}
+
+                    {% if block.settings.feature_1 != blank %}
+                      <div class="featured-product-builder__upsell-feature">{{ block.settings.feature_1 }}</div>
+                    {% endif %}
+
+                    {% if upsell_price_1 != blank %}
+                      <div class="featured-product-builder__upsell-price">{{ upsell_price_1 }}</div>
+                    {% endif %}
+
+                    <button
+                      class="featured-product-builder__upsell-add-btn"
+                      type="button"
+                      data-fpb-upsell-add
+                      data-variant-id="{{ upsell_variant_1.id }}"
+                      data-adding-text="{{ block.settings.adding_text | escape }}"
+                      data-success-text="{{ block.settings.success_text | escape }}"
+                      {% if upsell_variant_1 == blank or upsell_variant_1.available == false %}disabled{% endif %}
+                    >
+                      {% if upsell_variant_1 == blank %}
+                        Choose product
+                      {% elsif upsell_variant_1.available == false %}
+                        {{ block.settings.sold_out_text }}
+                      {% else %}
+                        {{ block.settings.button_text }}
+                      {% endif %}
+                    </button>
+                  </div>
+                </div>
+
+                {% liquid
+                  assign upsell_product_2 = block.settings.product_2
+                  assign upsell_variant_2 = blank
+                  assign upsell_title_2 = block.settings.title_2
+                  assign upsell_image_2 = ''
+                  assign upsell_price_2 = block.settings.manual_price_2
+
+                  if upsell_product_2 != blank
+                    assign upsell_variant_2 = upsell_product_2.selected_or_first_available_variant
+                    if upsell_title_2 == blank
+                      assign upsell_title_2 = upsell_product_2.title
+                    endif
+                    if upsell_price_2 == blank
+                      assign upsell_price_2 = upsell_variant_2.price | money
+                    endif
+                  endif
+
+                  if block.settings.image_2 != blank
+                    assign upsell_image_2 = block.settings.image_2 | image_url: width: 900
+                  elsif upsell_product_2.featured_image != blank
+                    assign upsell_image_2 = upsell_product_2.featured_image | image_url: width: 900
+                  endif
+                %}
+
+                <div class="featured-product-builder__upsell-card" data-fpb-upsell-card>
+                  <div class="featured-product-builder__upsell-image-container">
+                    {% if upsell_image_2 != blank %}
+                      <img
+                        class="featured-product-builder__upsell-image"
+                        src="{{ upsell_image_2 }}"
+                        alt="{{ upsell_title_2 | escape }}"
+                        loading="lazy"
+                      >
+                    {% else %}
+                      <div class="featured-product-builder__upsell-placeholder">
+                        Choose upsell product 2
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="featured-product-builder__upsell-info">
+                    {% if block.settings.show_rating %}
+                      <div class="featured-product-builder__upsell-rating">
+                        <div class="featured-product-builder__upsell-stars">{{ block.settings.stars_2 }}</div>
+                        {% if block.settings.review_count_2 != blank %}
+                          <span class="featured-product-builder__upsell-review-count">{{ block.settings.review_count_2 }}</span>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+
+                    {% if upsell_title_2 != blank %}
+                      <h4 class="featured-product-builder__upsell-product-title">{{ upsell_title_2 }}</h4>
+                    {% endif %}
+
+                    {% if block.settings.feature_2 != blank %}
+                      <div class="featured-product-builder__upsell-feature">{{ block.settings.feature_2 }}</div>
+                    {% endif %}
+
+                    {% if upsell_price_2 != blank %}
+                      <div class="featured-product-builder__upsell-price">{{ upsell_price_2 }}</div>
+                    {% endif %}
+
+                    <button
+                      class="featured-product-builder__upsell-add-btn"
+                      type="button"
+                      data-fpb-upsell-add
+                      data-variant-id="{{ upsell_variant_2.id }}"
+                      data-adding-text="{{ block.settings.adding_text | escape }}"
+                      data-success-text="{{ block.settings.success_text | escape }}"
+                      {% if upsell_variant_2 == blank or upsell_variant_2.available == false %}disabled{% endif %}
+                    >
+                      {% if upsell_variant_2 == blank %}
+                        Choose product
+                      {% elsif upsell_variant_2.available == false %}
+                        {{ block.settings.sold_out_text }}
+                      {% else %}
+                        {{ block.settings.button_text }}
+                      {% endif %}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           {% when 'stock_urgency_bar' %}
             <div
               class="featured-product-builder__stock-bar {% if block.settings.show_stripes %}featured-product-builder__stock-bar--striped{% endif %} {% if block.settings.animate_stripes %}featured-product-builder__stock-bar--animate-stripes{% endif %} {% if block.settings.animate_fill %}featured-product-builder__stock-bar--animate-fill{% endif %}"
@@ -443,6 +643,7 @@
 <script src="{{ 'featured-product-builder.js' | asset_url }}" defer></script>
 
 {% schema %}
+
 
 {
   "name": "Featured product builder",
@@ -994,6 +1195,292 @@
           "default": "#D91515"
         }
       ]
+    },
+    {
+      "type": "upsell_pair",
+      "name": "Upsell pair",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Complete Your Routine"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Perfect pairings for better results"
+        },
+        {
+          "type": "header",
+          "content": "Upsell product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Custom image 1"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Custom title 1"
+        },
+        {
+          "type": "text",
+          "id": "feature_1",
+          "label": "Feature text 1",
+          "default": "Night repair \u2022 Anti-aging \u2022 Brightening"
+        },
+        {
+          "type": "text",
+          "id": "manual_price_1",
+          "label": "Manual price 1",
+          "info": "Leave empty to use Shopify product price."
+        },
+        {
+          "type": "text",
+          "id": "stars_1",
+          "label": "Stars 1",
+          "default": "\u2605\u2605\u2605\u2605\u2605"
+        },
+        {
+          "type": "text",
+          "id": "review_count_1",
+          "label": "Review count 1",
+          "default": "(189)"
+        },
+        {
+          "type": "header",
+          "content": "Upsell product 2"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Custom image 2"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Custom title 2"
+        },
+        {
+          "type": "text",
+          "id": "feature_2",
+          "label": "Feature text 2",
+          "default": "Deep hydration \u2022 Barrier repair \u2022 Soothing"
+        },
+        {
+          "type": "text",
+          "id": "manual_price_2",
+          "label": "Manual price 2",
+          "info": "Leave empty to use Shopify product price."
+        },
+        {
+          "type": "text",
+          "id": "stars_2",
+          "label": "Stars 2",
+          "default": "\u2605\u2605\u2605\u2605\u2605"
+        },
+        {
+          "type": "text",
+          "id": "review_count_2",
+          "label": "Review count 2",
+          "default": "(245)"
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Add to Cart"
+        },
+        {
+          "type": "text",
+          "id": "adding_text",
+          "label": "Adding text",
+          "default": "Adding..."
+        },
+        {
+          "type": "text",
+          "id": "success_text",
+          "label": "Success message",
+          "default": "Upsell added to cart."
+        },
+        {
+          "type": "text",
+          "id": "sold_out_text",
+          "label": "Sold out text",
+          "default": "Sold Out"
+        },
+        {
+          "type": "range",
+          "id": "button_width",
+          "label": "Button width",
+          "min": 50,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "button_height",
+          "label": "Button height",
+          "min": 30,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "default": 40
+        },
+        {
+          "type": "range",
+          "id": "button_font_size",
+          "label": "Button font size",
+          "min": 8,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "default": 12
+        },
+        {
+          "type": "header",
+          "content": "Design"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_rating",
+          "label": "Show rating row",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "image_height",
+          "label": "Image height desktop",
+          "min": 100,
+          "max": 320,
+          "step": 10,
+          "unit": "px",
+          "default": 200
+        },
+        {
+          "type": "range",
+          "id": "image_height_mobile",
+          "label": "Image height mobile",
+          "min": 90,
+          "max": 220,
+          "step": 10,
+          "unit": "px",
+          "default": 130
+        },
+        {
+          "type": "range",
+          "id": "card_radius",
+          "label": "Card radius",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "grid_gap",
+          "label": "Gap between cards",
+          "min": 6,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "label": "Top spacing",
+          "min": 0,
+          "max": 70,
+          "step": 2,
+          "unit": "px",
+          "default": 32
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "label": "Bottom spacing",
+          "min": 0,
+          "max": 70,
+          "step": 2,
+          "unit": "px",
+          "default": 20
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent color",
+          "default": "#57ADAE"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#1F2D2A"
+        },
+        {
+          "type": "color",
+          "id": "muted_color",
+          "label": "Muted text",
+          "default": "#5F706B"
+        },
+        {
+          "type": "color",
+          "id": "card_background",
+          "label": "Card background",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "soft_background",
+          "label": "Image background",
+          "default": "#F8F9FA"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border color",
+          "default": "#DCEFEB"
+        },
+        {
+          "type": "color",
+          "id": "button_background",
+          "label": "Button background",
+          "default": "#57ADAE"
+        },
+        {
+          "type": "color",
+          "id": "button_hover_background",
+          "label": "Button hover background",
+          "default": "#1F2D2A"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Button text color",
+          "default": "#FFFFFF"
+        }
+      ]
     }
   ],
   "presets": [
@@ -1076,5 +1563,6 @@
     }
   ]
 }
+
 
 {% endschema %}
